@@ -1,6 +1,6 @@
 label b11kadr1:
-    $ screens = ["recognition_decision", "butforwardback"]
-    show screen recognition_decision("посмотри на эту схемку")
+    $ screens = ["implementation_process", "butforwardback"]
+    show screen implementation_process("посмотри на эту схемку")
     show screen butforwardback
     pause
 

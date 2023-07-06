@@ -168,14 +168,31 @@ screen b1kadr3:
             background "gui/frame1.png"
             text "{size=+0}[s]{/size}" xpos 20 ypos 450 xsize 600 ysize 400 color "#000000" line_spacing 4
 
+
+
 label b1kadr1:
-    $ global screens
-    $ screens = ["task", "butforwardback"]
-    show screen task(task_text1)
+    $ screens = ["symptom_identification", "butforwardback"]
+    show screen symptom_identification(symptom1)
     show screen butforwardback
     pause
 
 
+init python:
+    def kadrb1():
+        global nkadr
+        global vkadr
+        global screens
+        dnk = 2 if nkadr == 9 and not b1bt and b1amcor == 0 else "" # and b1scores0
+        # renpy.show(f"kadr b1{nkadr}{dnk}",at_list=[top])
+        for scr in screens:
+            renpy.hide_screen(scr)
+        
+        if not renpy.has_label(f"b2kadr{nkadr}"):
+            return
+        renpy.call(f"b2kadr{nkadr}")
+        #renpy.with_statement(fade)
+        
+        renpy.pause()
 
 
 # screen b1kadr4:

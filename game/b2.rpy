@@ -1,6 +1,6 @@
 label b2kadr1:
-    $ screens = ["symptom_identification", "butforwardback"]
-    show screen symptom_identification(symptom1)
+    $ screens = ["goal_defenition", "butforwardback"]
+    show screen goal_defenition(relevance_task1)
     show screen butforwardback
     pause
 
@@ -13,8 +13,7 @@ init python:
         dnk = 2 if nkadr == 9 and not b1bt and b1amcor == 0 else "" # and b1scores0
         # renpy.show(f"kadr b1{nkadr}{dnk}",at_list=[top])
         for scr in screens:
-            renpy.hide_screen(scr)
-        
+            renpy.hide_screen(scr) 
         if not renpy.has_label(f"b2kadr{nkadr}"):
             return
         renpy.call(f"b2kadr{nkadr}")

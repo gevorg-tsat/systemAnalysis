@@ -1604,3 +1604,7 @@ screen managment_of_proccess(text):
 screen eval_implementation(text):
     text "Оценка реализации решения и её последствий." color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
     text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
+
+screen goal_defenition(text):
+    text "Определение цели." color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900

@@ -223,7 +223,14 @@ label startgame0:
     pause(2)
     show screen stkadr1but
     pause
-    return    
+    return
+ 
+label task:
+    $ global screens
+    $ screens = ["task", "butforwardback"]
+    show screen task(task_text1)
+    show screen butforwardback
+    pause
 
 label startgame2:
     hide screen stkadr1but with dissolve
