@@ -1546,9 +1546,61 @@ screen splashscreen_frame():
         #т.к. в label нельзя задать цвет, то пишем с помощью text
             text "ИГРА-ТРЕНАЖЕР" color "#FFFFFF"
             #null height 10
-            xsize 250
+            xsize 260
             ysize 40
 
 screen task(task_text):
-    text "Описание задачи" color "#000000" xpos 40 ypos 40 xsize 500 ysize 50 style style.big_text
-    text "[task_text1]"  color "#000000" xpos 800 ypos 100 xsize 1000 ysize 900
+    text "Описание задачи" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 80
+    text "[task_text]"  color "#000000" xpos 800 ypos 150 xsize 1000 ysize 900
+
+screen symptom_identification(symptom_text):
+    text "Идентификация симптомов" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 80
+    text "[symptom_text]"  color "#000000" xpos 800 ypos 150 xsize 1000 ysize 900
+
+screen relevance_definition(task):
+    text "Определение актуальности" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 80
+    text "[task]"  color "#000000" xpos 800 ypos 150 xsize 1000 ysize 900
+
+screen structure_of_system(scheme, text):
+    text "Вскрытие структуры системы и её дефектных элементов" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
+    #$ renpy.show("picture", scheme)
+    #$ renpy.show("picture", at_list=["left"])
+    add "[scheme]" xpos 1000 ypos 200 xsize 700 ysize 800
+
+screen ability_structure(text):
+    text "Определение структуры возможностей" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
+    
+screen finding_alternative(text):
+    text "Нахождение альтернатив" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
+
+
+screen eval_alternative(text):
+    text "Оценка альтернатив" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
+
+screen choose_alternative(text):
+    text "Выбор альтернатив" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
+
+screen decision_draft(text):
+    text "Составление решения" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
+
+screen recognition_decision(text):
+    text "Составление решения" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
+
+screen implementation_process(text):
+    text "Запуск процесса реализации решения" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
+
+screen managment_of_proccess(text):
+    text "Управление процессом реализации решения" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
+
+screen eval_implementation(text):
+    text "Оценка реализации решения и её последствий." color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900

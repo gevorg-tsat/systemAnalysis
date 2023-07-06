@@ -29,25 +29,168 @@ label startb1:
     $ vkadr = "b1"
     $ nkadr = 1
     $ renpy.show_screen("butforwardback")
-    $ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
     #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
-    $ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
     $ kadrb1()
     scene black with fade
     return
 
 label startb2:
+    hide screen start
+    scene white with dissolve
     $ vkadr = "b2"
     $ nkadr = 1
-    hide screen b1endt
-    hide screen b1endm
-    hide screen b1endb
+    $ renpy.show_screen("butforwardback")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    $ kadrb2()
     scene black with fade
     return
 
+label startb3:
+    hide screen start
+    scene white with dissolve
+    $ vkadr = "b3"
+    $ nkadr = 1
+    $ renpy.show_screen("butforwardback")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    $ kadrb3()
+    scene black with fade
+    return
 
+label startb4:
+    hide screen start
+    scene white with dissolve
+    $ vkadr = "b4"
+    $ nkadr = 1
+    $ renpy.show_screen("butforwardback")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    $ kadrb4()
+    scene black with fade
+    return
 
+label startb5:
+    hide screen start
+    scene white with dissolve
+    $ vkadr = "b5"
+    $ nkadr = 1
+    $ renpy.show_screen("butforwardback")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    $ kadrb5()
+    scene black with fade
+    return
 
+label startb6:
+    hide screen start
+    scene white with dissolve
+    $ vkadr = "b6"
+    $ nkadr = 1
+    $ renpy.show_screen("butforwardback")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    $ kadrb6()
+    scene black with fade
+    return
+
+label startb7:
+    hide screen start
+    scene white with dissolve
+    $ vkadr = "b7"
+    $ nkadr = 1
+    $ renpy.show_screen("butforwardback")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    $ kadrb7()
+    scene black with fade
+    return
+
+label startb8:
+    hide screen start
+    scene white with dissolve
+    $ vkadr = "b8"
+    $ nkadr = 1
+    $ renpy.show_screen("butforwardback")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    $ kadrb8()
+    scene black with fade
+    return
+
+label startb9:
+    hide screen start
+    scene white with dissolve
+    $ vkadr = "b9"
+    $ nkadr = 1
+    $ renpy.show_screen("butforwardback")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    $ kadrb9()
+    scene black with fade
+    return
+
+label startb10:
+    hide screen start
+    scene white with dissolve
+    $ vkadr = "b10"
+    $ nkadr = 1
+    $ renpy.show_screen("butforwardback")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    $ kadrb10()
+    scene black with fade
+    return
+
+label startb11:
+    hide screen start
+    scene white with dissolve
+    $ vkadr = "b11"
+    $ nkadr = 1
+    $ renpy.show_screen("butforwardback")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    $ kadrb11()
+    scene black with fade
+    return
+
+label startb12:
+    hide screen start
+    scene white with dissolve
+    $ vkadr = "b12"
+    $ nkadr = 1
+    $ renpy.show_screen("butforwardback")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    $ kadrb12()
+    scene black with fade
+    return
+
+label startb13:
+    hide screen start
+    scene white with dissolve
+    $ vkadr = "b13"
+    $ nkadr = 1
+    $ renpy.show_screen("butforwardback")
+    #$ for i in range(3,10): renpy.show_screen(f"b1kadr{i}")
+    #$ for i in range(1,5): renpy.show_screen(f"b1kadr4v{i}")
+    #$ for i in range(1,4): renpy.show_screen(f"b1kadr8v{i}")
+    $ kadrb13()
+    scene black with fade
+    return
 
 
 
