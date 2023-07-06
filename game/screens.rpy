@@ -1544,7 +1544,11 @@ screen splashscreen_frame():
         yalign 0.625
         hbox:
         #т.к. в label нельзя задать цвет, то пишем с помощью text
-            text "ДЕЛОВАЯ ИГРА" color "#FFFFFF"
+            text "ИГРА-ТРЕНАЖЕР" color "#FFFFFF"
             #null height 10
             xsize 250
             ysize 40
+
+screen task(task_text):
+    text "Описание задачи" color "#000000" xpos 40 ypos 40 xsize 500 ysize 50 style style.big_text
+    text "[task_text1]"  color "#000000" xpos 800 ypos 100 xsize 1000 ysize 900

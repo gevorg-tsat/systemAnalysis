@@ -61,8 +61,9 @@ init python:
             renpy.jump("b1end")
             return
         dnk = 2 if nkadr == 9 and not b1bt and b1amcor == 0 else "" # and b1scores0
-        renpy.show(f"kadr b1{nkadr}{dnk}",at_list=[top])
-        renpy.with_statement(fade)
+        # renpy.show(f"kadr b1{nkadr}{dnk}",at_list=[top])
+        renpy.call(f"b1kadr{nkadr}")
+        #renpy.with_statement(fade)
         if nkadr == 6:
             #renpy.hide_screen("butforwardback")
             #renpy.show_screen("butforwardback")
@@ -190,6 +191,12 @@ screen b1kadr3:
         frame:
             background "gui/frame1.png"
             text "{size=+0}[s]{/size}" xpos 20 ypos 450 xsize 600 ysize 400 color "#000000" line_spacing 4
+
+label b1kadr1:
+    # $ global task_text1
+    show screen task(task_text1)
+    show screen butforwardback
+    pause
 
 screen b1kadr4:
     zorder 100
