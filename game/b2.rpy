@@ -1,6 +1,6 @@
 label b2kadr1:
-    $ screens = ["goal_defenition", "butforwardback"]
-    show screen goal_defenition(relevance_task1)
+    $ screens = ["relevance_definition", "butforwardback"]
+    show screen relevance_definition(relevance_task1)
     show screen butforwardback
     pause
 

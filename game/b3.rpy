@@ -1,6 +1,6 @@
 label b3kadr1:
-    $ screens = ["relevance_definition", "butforwardback"]
-    show screen relevance_definition(relevance_task1)
+    $ screens = ["goal_defenition", "butforwardback"]
+    show screen goal_defenition("Sample text")
     show screen butforwardback
     pause
 

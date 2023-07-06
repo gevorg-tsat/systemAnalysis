@@ -187,9 +187,9 @@ init python:
         for scr in screens:
             renpy.hide_screen(scr)
         
-        if not renpy.has_label(f"b2kadr{nkadr}"):
+        if not renpy.has_label(f"b1kadr{nkadr}"):
             return
-        renpy.call(f"b2kadr{nkadr}")
+        renpy.call(f"b1kadr{nkadr}")
         #renpy.with_statement(fade)
         
         renpy.pause()
