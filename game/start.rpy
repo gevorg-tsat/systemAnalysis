@@ -4,13 +4,19 @@
         ground "#FFFFFF"
         idle "kadr start.png"
         hover "kadr start_.png"
-        hotspot(783,312,327,288) action Call("startb1")
-        hotspot(1164,312,327,288) action Call("startb1")
-        hotspot(1546,312,327,288) action Call("startb1")
-        hotspot(783,572,327,288) action Call("startb1")
-        hotspot(1164,572,327,288) action Call("startb1")
-        hotspot(1546,572,327,288) action Call("startb1")
-        hotspot(783,824,327,288) action Call("startb1")
+        hotspot(1006,36,253,150) action Call("startb1")
+        hotspot(1315,36,253,150) action Call("startb2")
+        hotspot(1626,36,253,150) action Call("startb3")
+        hotspot(1006,259,253,150) action Call("startb4")
+        hotspot(1315,259,253,150) action Call("startb5")
+        hotspot(1626,259,253,150) action Call("startb6")
+        hotspot(1006,457,253,150) action Call("startb7")
+        hotspot(1315,457,253,150) action Call("startb8")
+        hotspot(1626,457,253,150) action Call("startb9")
+        hotspot(1006,660,253,150) action Call("startb10")
+        hotspot(1315,660,253,150) action Call("startb11")
+        hotspot(1626,660,253,150) action Call("startb12")
+        hotspot(1006,869,253,150) action Call("startb13")
         text "{size=+10}{cps=10}Итак, ты — в Игре!\nЭтот путь будет только твоим. Качай задания, смотри подсказки, следи за волшебными кнопкам, стань лучшим!\nУдачи!{/cps}{/size}" xpos 50 ypos 50 xsize 830 ysize 400 color "#000000"
 
 label startgame:
@@ -224,7 +230,7 @@ label startgame0:
     show screen stkadr1but
     pause
     return
- 
+
 label task:
     $ global screens
     $ screens = ["task", "butforwardback"]
