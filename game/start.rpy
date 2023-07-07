@@ -1,4 +1,14 @@
-﻿screen start:
+﻿label task:
+    $ global screens
+    $ screens = ["task", "butforwardback"]
+    scene white
+    hide screen main_menu
+    show screen task(task_text1)
+    $ vkadr = "start"
+    show screen butforwardback
+    pause
+
+screen start:
     modal True
     imagemap:
         ground "#FFFFFF"
@@ -20,7 +30,7 @@
         text "{size=+10}{cps=10}Итак, ты — в Игре!\nЭтот путь будет только твоим. Качай задания, смотри подсказки, следи за волшебными кнопкам, стань лучшим!\nУдачи!{/cps}{/size}" xpos 50 ypos 50 xsize 830 ysize 400 color "#000000"
 
 label startgame:
-    hide screen main_menu
+    hide screen task
     #jump b1kadr9scores0bt
     scene white
     #show kadr start at center with fade
@@ -231,12 +241,7 @@ label startgame0:
     pause
     return
 
-label task:
-    $ global screens
-    $ screens = ["task", "butforwardback"]
-    show screen task(task_text1)
-    show screen butforwardback
-    pause
+
 
 label startgame2:
     hide screen stkadr1but with dissolve

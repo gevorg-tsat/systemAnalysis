@@ -132,6 +132,9 @@ label KadrForward:
     elif vkadr == "b13":
         $ nkadr += 1
         $ kadrb13()
+    elif vkadr == "start":
+        hide screen butforwardback
+        call startgame
     elif vkadr == "ha":
         hide kadr ha3 at top with dissolve
         $ vkadr = ""
@@ -189,7 +192,7 @@ label KadrBack:
         $ kadrb1()
     elif vkadr == "ha":
         hide screen butforwardback
-        call hakadr2 from _call_hakadr2        
+        call hakadr2 from _call_hakadr2
     return
 
 
@@ -225,7 +228,7 @@ screen main_menu():
         hotspot(1457,404,430,75) action Call("rez")
         hotspot(1457,524,430,75) action Call("sg")
         hotspot(1457,639,430,75) action Quit(confirm=True)
-        hotspot(1495,850,355,205) action Call("startgame")
+        hotspot(1495,850,355,205) action Call("task")
 
     text "{size=+5}Текст {b}Текст ТекстТекст{/b} Текст Текст Текст{/size}" xpos 40 ypos 950 xsize 800 ysize 50 color "#000000"
     

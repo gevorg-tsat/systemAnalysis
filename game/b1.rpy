@@ -42,6 +42,17 @@ init python:
     #lim = [Image(f"m{i+1}.png", pos=mXY0) for i in range(2)]
     b1immy = 0
     b1imyet = 0
+    import requests
+    import json
+    TOKEN = 'AIzaSyDKUQ4mmvMcjY2ed3BaR-y_m2vc-Z8I6G8'
+    header = {"Authorization" : f"Bearer {TOKEN}"}
+    req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
+    # TODO дергает ручку с гугл таблицы
+    row_number = 0
+    google_sheet_data = json.loads(req.text)["sheets"][0]["data"][row_number]["rowData"][0]["values"]
+    symptoms_task1_label = "Определите правильно симптомы" 
+    symptoms_task1_options = list(map(str.strip, google_sheet_data[0]["userEnteredValue"]["stringValue"].split(";")))
+    symptoms_task1_correct_answers = list(map(str.strip, google_sheet_data[1]["userEnteredValue"]["stringValue"].split(";")))
 
     def kadrb1():
         global nkadr
@@ -172,27 +183,135 @@ screen b1kadr3:
 
 label b1kadr1:
     $ screens = ["symptom_identification", "butforwardback"]
-    show screen symptom_identification(symptom1)
+    $ sample = " ".join(symptoms_task1_correct_answers)
+    show screen symptom_identification(sample)
     show screen butforwardback
     pause
+    # zorder 100
+    # if vkadr == "b1" and nkadr == 6:
+    #     $ s = symptoms_task1
+    #     text "{size=+10}{b}Задание 1.2{/b}{/size}" xpos 80 ypos 34 xsize 1000 ysize 10 color "#ffffff"
+    #     if not b1nc:
+    #         frame:
+    #             background "gui/frame1.png"    
+    #             text "{size=+3}[s]{/size}" xpos 80 ypos 80 xsize 1600 ysize 800 color "#000000" line_spacing 4
+    #             text "{size=+3}{b}Ответ:{/b}{/size}" xpos 80 ypos 700 xsize 1720 ysize 800 color "#000000" line_spacing 4
+    #             add "intern.jpg" xpos 1680 ypos 120
+    #             if b1tabcor == 1:
+    #                 add "b1cor.png" xpos 1525 ypos 835
+    #             elif (debet == debet0 and kredit == kredit0 and summa == summa0):
+    #                 add "b1ncor.png" xpos 1525 ypos 835
+    #             if b1tab and b1tabcor != 1 and b1tabn != 2 and not (debet == debet0 and kredit == kredit0 and summa == summa0):
+    #                 imagebutton:
+    #                     xpos 1590 ypos 830
+    #                     idle "b1butch.png"
+    #                     hover "b1butch_.png"
+    #                     action Call("b1kadr6nc")
+    #             frame:
+    #                 background Frame([ "gui/confirm_frame.png", "gui/frameyel.png"], gui.confirm_frame_borders, tile=gui.frame_tile)
+    #                 #background im.Scale("gui/frameyel.png", 120, 28)
+    #                 xpos 80 ypos 750
+    #                 xsize 175 ysize 60
+    #                 text "Дата" color "#000000" size 28 xalign 0.5 yalign 0.5
+    #             frame:
+    #                 xpos 80 ypos 806
+    #                 xsize 175 ysize 100
+    #                 frame:
+    #                     background Frame([ "gui/confirm_frame.png", "gui/framegrey.png"], gui.frame_borders, tile=gui.frame_tile)
+    #                     xpos 1 ypos 11 xsize 163 ysize 65
+    #                 text "31.12.2022" color "#000000" size 24 xalign 0.5 yalign 0.5
+    #             frame:
+    #                 background Frame([ "gui/confirm_frame.png", "gui/frameyel.png"], gui.confirm_frame_borders, tile=gui.frame_tile)
+    #                 xpos 251 ypos 750
+    #                 xsize 560 ysize 60
+    #                 text "Дебет" color "#000000" size 28 xalign 0.5 yalign 0.5
+    #             frame:
+    #                 background Frame([ "gui/confirm_frame.png", "gui/frameyel.png"], gui.confirm_frame_borders, tile=gui.frame_tile)
+    #                 xpos 807 ypos 750
+    #                 xsize 560 ysize 60
+    #                 text "Кредит" color "#000000" size 28 xalign 0.5 yalign 0.5
+    #             frame:
+    #                 background Frame([ "gui/confirm_frame.png", "gui/frameyel.png"], gui.confirm_frame_borders, tile=gui.frame_tile)
+    #                 xpos 1363 ypos 750
+    #                 xsize 160 ysize 60
+    #                 text "Сумма" color "#000000" size 28 xalign 0.5 yalign 0.5                 
+    #         draggroup:
+    #             drag:
+    #                 drag_name "debet"
+    #                 xpos 257 ypos 812
+    #                 draggable False
+    #                 xysize(560, 100)
+    #                 frame:
+    #                     xsize 560 ysize 100
+    #             drag:
+    #                 drag_name "kredit"
+    #                 xpos 813 ypos 812
+    #                 draggable False
+    #                 xysize(560, 100)
+    #                 frame:
+    #                     xsize 560 ysize 100
+    #             drag:
+    #                 drag_name "summa"
+    #                 xpos 1369 ypos 812
+    #                 frame:
+    #                     xsize 160 ysize 100
+    #                 draggable False
+    #                 xysize(160, 100)            
+    #             for i in range(6):
+    #                 drag:
+    #                     drag_name b1tabvq[0][i]
+    #                     if debet is not None and debet == b1tabvq[0][i]:
+    #                         xpos debetXY[0] ypos debetXY[1]
+    #                     elif kredit is not None and kredit == b1tabvq[0][i]:
+    #                         xpos kreditXY[0] ypos kreditXY[1]
+    #                     else:
+    #                         xpos 80 ypos 275 + i*70
+    #                     droppable False
+    #                     draggable not (b1tabcor == 1 or b1tabn == 2)
+    #                     dragged drag_placed
+    #                     frame:
+    #                         background Frame([ "gui/confirm_frame.png", "gui/framegrey.png"], gui.frame_borders, tile=gui.frame_tile)
+    #                         xsize 550 ysize 65
+    #                         xpadding 5
+    #                         ypadding 5
+    #                         text b1tabvq[0][i] color "#000000" size 24 xalign 0.5 yalign 0.5
+    #             for i in range(6):
+    #                 drag:
+    #                     drag_name b1tabvq[1][i]
+    #                     if debet is not None and debet == b1tabvq[1][i]:
+    #                         xpos debetXY[0] ypos debetXY[1]
+    #                     elif kredit is not None and kredit == b1tabvq[1][i]:
+    #                         xpos kreditXY[0] ypos kreditXY[1]
+    #                     else:
+    #                         xpos 700 ypos 275 + i*70
+    #                     droppable False
+    #                     draggable not (b1tabcor == 1 or b1tabn == 2)
+    #                     dragged drag_placed
+    #                     frame:
+    #                         background Frame([ "gui/confirm_frame.png", "gui/framegrey.png"], gui.frame_borders, tile=gui.frame_tile)
+    #                         xsize 550 ysize 65
+    #                         xpadding 5
+    #                         ypadding 5
+    #                         text b1tabvq[1][i] color "#000000" size 24 xalign 0.5 yalign 0.5
+    #             for i in range(6):
+    #                 drag:
+    #                     drag_name b1tabvq[2][i]
+    #                     if summa is not None and summa == b1tabvq[2][i]:
+    #                         xpos summaXY[0] ypos summaXY[1]
+    #                     else:
+    #                         xpos 1320 ypos 275 + i*70
+    #                     droppable False
+    #                     draggable not (b1tabcor == 1 or b1tabn == 2)
+    #                     #mouse_drop False
+    #                     #drag_raise False
+    #                     dragged drag_placed
+    #                     frame:
+    #                         background Frame([ "gui/confirm_frame.png", "gui/framegrey.png"], gui.frame_borders, tile=gui.frame_tile)
+    #                         xsize 150 ysize 65
+    #                         xpadding 5
+    #                         ypadding 5
+    #                         text str(b1tabvq[2][i]) color "#000000" size 24 xalign 0.5 yalign 0.5
 
-
-init python:
-    def kadrb1():
-        global nkadr
-        global vkadr
-        global screens
-        dnk = 2 if nkadr == 9 and not b1bt and b1amcor == 0 else "" # and b1scores0
-        # renpy.show(f"kadr b1{nkadr}{dnk}",at_list=[top])
-        for scr in screens:
-            renpy.hide_screen(scr)
-        
-        if not renpy.has_label(f"b1kadr{nkadr}"):
-            return
-        renpy.call(f"b1kadr{nkadr}")
-        #renpy.with_statement(fade)
-        
-        renpy.pause()
 
 
 # screen b1kadr4:
