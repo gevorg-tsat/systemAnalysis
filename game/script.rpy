@@ -35,7 +35,7 @@ define b1amcor = 0
 define b1mtcor = 0
 define b1naccor = 0
 define b1amn = 0
-
+define allow_forward = 1
 define b1nc = False
 
 define b1tab = False
@@ -60,7 +60,7 @@ screen butforwardback:
             #background "gui/frame1.png"
             xalign 0.5 yalign 1.0
             xsize 400 ysize 100
-            if vkadr == "rez" or vkadr == "ha" or not (vkadr == "b1" and nkadr == 4 and (not (b1gcor == 1 or (b1gcor == 2 and b1gn == 2)) and b1kadr4rez == -1)) and not (vkadr == "b1" and nkadr == 6 and not (b1tabcor == 1 or (b1tabcor == 2 and b1tabn == 2))) and not (vkadr == "b1" and nkadr == 8 and not ((b1amcor == 1 and b1mtcor == 1 and b1naccor == 1) or (b1amn == 2))) and not (vkadr == "b1" and nkadr == 9 and b1kadr8rez == 0 and not b1bt):
+            if vkadr == "rez" or vkadr == "ha" or allow_forward:
                 imagebutton:
                     xalign 0.7 yalign 0.8
                     idle "butforward.png"

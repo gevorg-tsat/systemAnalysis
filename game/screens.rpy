@@ -1553,9 +1553,6 @@ screen task(task_text):
     text "Описание задачи" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 80
     text "[task_text]"  color "#000000" xpos 800 ypos 150 xsize 1000 ysize 900
 
-screen symptom_identification(symptom_text):
-    text "Идентификация симптомов" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 80
-    text "[symptom_text]"  color "#000000" xpos 800 ypos 150 xsize 1000 ysize 900
 
 screen relevance_definition(task):
     text "Определение актуальности" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 80
