@@ -35,7 +35,7 @@ define b1amcor = 0
 define b1mtcor = 0
 define b1naccor = 0
 define b1amn = 0
-define allow_forward = 1
+define allow_forward = True
 define b1nc = False
 
 define b1tab = False
@@ -43,6 +43,10 @@ define b1tab = False
 define task_text1 = "Пример задачи.\n Процесс подготовки требований неразрывно связан с проектированием. Например, погружаясь в требования и разбирая их, специалист проектирует сценарии использования системы, то есть то, как она должна вести себя и отвечать на действия пользователя, разрабатывает пользовательские интерфейсы (как правило, в связке с дизайнером) и пр. Он является носителем знаний о предметной области. Это позволяет ему проектировать какую-либо концептуальную модель данных. Затем системный аналитик передает информацию разработчикам, чтобы они могли написать правильный код, корректно спроектировать базу данных и пр. Конечно, системный аналитик не полностью заменяет стейкхолдера, однако является одним из специалистов, наиболее погруженных в проект. Но тем не менее системный аналитик — связующее звено между клиентом, пользователями и командой разработки, способный либо самостоятельно ответить на возникающие вопросы с обеих сторон, либо передать их ответственным лицам."
 define symptom1 = "Что-то допольнительное про задание"
 define relevance_task1 = "Разузнай актуально ли это вообще??"
+define winner_text = "Поздравляю. Верно. Можешь двигаться дальше"
+define loser_text = "Неверно. Можешь попытаться еще раз"
+define loser_no_tries_text = "Неверно. Попытки закончилось, повезет в следующий раз"
+
 init python:
     def play1():
         Rollback()
@@ -66,12 +70,12 @@ screen butforwardback:
                     idle "butforward.png"
                     hover "butforward_.png"
                     action Call("KadrForward")
-            if vkadr == "ha" or (vkadr != "rez" and (nkadr > 1 and not (nkadr >= len(ldrg) + 1 and vkadr == "rg") and not b1kadr8back)):
-                imagebutton:
-                    xalign 0.3 yalign 0.8
-                    idle "butback.png"
-                    hover "butback_.png"
-                    action Call("KadrBack")
+            # if vkadr == "ha" or (vkadr != "rez"):
+            imagebutton:
+                xalign 0.3 yalign 0.8
+                idle "butback.png"
+                hover "butback_.png"
+                action Call("KadrBack")
 label KadrForward:
     if vkadr == "rg":
         $ nkadr += 1

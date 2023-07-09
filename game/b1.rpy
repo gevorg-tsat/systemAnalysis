@@ -110,7 +110,44 @@ init python:
         drags[0].snap(xy_answer_symp_task1[0], xy_answer_symp_task1[1] + find_index(user_answers1, drags[0]) * 65)
         renpy.restart_interaction()
         return
+    def check_answer():
+        global xy_answer_symp_task1
+        global xy_options_symp_task1
+        global tries
+        global initial_tries
+        global symptoms_task1_correct_answers
+        global symptoms_task1_options
+        global user_answers1
+        global allow_forward
+        global is_correct
+        answers = [drag.drag_name for drag in user_answers1]
+        if tries == 0:
+            renpy.hide("mytext")
+            t = Text(loser_no_tries_text,  xpos=xy_answer_symp_task1[0], ypos=(xy_answer_symp_task1[1] + 65 * len(symptoms_task1_options) + 85), xsize=550, ysize=20, color="#000000")
+            renpy.show("mytext", what=t)
+            renpy.hide_screen("butforwardback")
+            renpy.show_screen('butforwardback', _zorder=1)
+            return
+        tries -= 1
+        if set(map(str.lower, answers)) == set(map(str.lower, symptoms_task1_correct_answers)):
+            is_correct = True
+        else:
+            is_correct = False
+        if is_correct:
+            t = Text(winner_text, xpos=xy_answer_symp_task1[0], ypos=(xy_answer_symp_task1[1] + 65 * len(symptoms_task1_options) + 85), xsize=550, ysize=20, color="#000000")
+            allow_forward = True
+        else:
+            if tries != 0:
+                t = Text(loser_text, xpos=xy_answer_symp_task1[0], ypos=(xy_answer_symp_task1[1] + 65 * len(symptoms_task1_options) + 85), xsize=550, ysize=20, color="#000000")
+            else:
+                t = Text(loser_no_tries_text,  xpos=xy_answer_symp_task1[0], ypos=(xy_answer_symp_task1[1] + 65 * len(symptoms_task1_options) + 85), xsize=550, ysize=20, color="#000000")
+                allow_forward = True
+        renpy.show("mytext", what=t)
+        renpy.hide_screen("butforwardback")
+        renpy.show_screen('butforwardback', _zorder=1)
+        renpy.restart_interaction()
 
+        
 
 image b1kadrnclup = Movie(play="b1kadrnc.ogv", pos=(50,1000),side_mask=False) #, anchor=(50,1000) 
 image b1kadr9 = Movie(play="b1kadr9.ogv", pos=(730,740), side_mask=False)
@@ -150,7 +187,8 @@ screen b1kadr3:
             text "{size=+0}[s]{/size}" xpos 20 ypos 450 xsize 600 ysize 400 color "#000000" line_spacing 4
 
 
-screen symptom_identification(symptom_text):
+
+screen symptom_identification(symptom_text, allow_forward):
     zorder 100
     text "Идентификация симптомов" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 80
     text "[symptom_text]"  color "#000000" xpos 800 ypos 150 xsize 1000 ysize 900
@@ -160,7 +198,7 @@ screen symptom_identification(symptom_text):
                 drag_name symptoms_task1_options[i]
                 xpos xy_options_symp_task1[0] ypos xy_options_symp_task1[1] + i*70
                 droppable False
-                draggable True
+                draggable not allow_forward
                 drag_raise True
                 dragged drag_placed
                 # mouse_drop True
@@ -181,154 +219,35 @@ screen symptom_identification(symptom_text):
                 ysize 65 * len(symptoms_task1_options)
     text "Ваш(-и) ответ(-ы)" color "#000000" xpos xy_answer_symp_task1[0] ypos xy_answer_symp_task1[1] - 40 xsize 550 ysize 20
     if len(user_answers1) > 0:
-        imagebutton:
-            idle "b1butch"
-            hover "b1butch_"
-            xpos xy_answer_symp_task1[0]
-            ypos xy_answer_symp_task1[1] + 65 * len(symptoms_task1_options) + 20
-            xsize 100
-            ysize 65
-            action 
-
+        if not is_correct and tries:
+            imagebutton:
+                idle "b1butch"
+                hover "b1butch_"
+                xpos xy_answer_symp_task1[0]
+                ypos xy_answer_symp_task1[1] + 65 * len(symptoms_task1_options) + 80
+                # xsize 100
+                # ysize 65
+                action Function(check_answer)
 
 
 label b1kadr1:
+    $ allow_forward = False
     $ screens = ["symptom_identification", "butforwardback"]
     scene white
     $ user_answers1 = []
+    $ is_correct = False
     $ xy_options_symp_task1 = [80, 600]
     $ xy_answer_symp_task1 = [1000, 600]
     $ tries = 2
+    $ initial_tries = 2
     show screen butforwardback
-    show screen symptom_identification(symptoms_task1_label)
+    show screen symptom_identification(symptoms_task1_label, allow_forward)
     
     pause
-    # pause
-    # zorder 100
-    # if vkadr == "b1" and nkadr == 6:
-    #     $ s = symptoms_task1
-    #     text "{size=+10}{b}Задание 1.2{/b}{/size}" xpos 80 ypos 34 xsize 1000 ysize 10 color "#ffffff"
-    #     if not b1nc:
-    #         frame:
-    #             background "gui/frame1.png"    
-    #             text "{size=+3}[s]{/size}" xpos 80 ypos 80 xsize 1600 ysize 800 color "#000000" line_spacing 4
-    #             text "{size=+3}{b}Ответ:{/b}{/size}" xpos 80 ypos 700 xsize 1720 ysize 800 color "#000000" line_spacing 4
-    #             add "intern.jpg" xpos 1680 ypos 120
-    #             if b1tabcor == 1:
-    #                 add "b1cor.png" xpos 1525 ypos 835
-    #             elif (debet == debet0 and kredit == kredit0 and summa == summa0):
-    #                 add "b1ncor.png" xpos 1525 ypos 835
-    #             if b1tab and b1tabcor != 1 and b1tabn != 2 and not (debet == debet0 and kredit == kredit0 and summa == summa0):
-    #                 imagebutton:
-    #                     xpos 1590 ypos 830
-    #                     idle "b1butch.png"
-    #                     hover "b1butch_.png"
-    #                     action Call("b1kadr6nc")
-    #             frame:
-    #                 background Frame([ "gui/confirm_frame.png", "gui/frameyel.png"], gui.confirm_frame_borders, tile=gui.frame_tile)
-    #                 #background im.Scale("gui/frameyel.png", 120, 28)
-    #                 xpos 80 ypos 750
-    #                 xsize 175 ysize 60
-    #                 text "Дата" color "#000000" size 28 xalign 0.5 yalign 0.5
-    #             frame:
-    #                 xpos 80 ypos 806
-    #                 xsize 175 ysize 100
-    #                 frame:
-    #                     background Frame([ "gui/confirm_frame.png", "gui/framegrey.png"], gui.frame_borders, tile=gui.frame_tile)
-    #                     xpos 1 ypos 11 xsize 163 ysize 65
-    #                 text "31.12.2022" color "#000000" size 24 xalign 0.5 yalign 0.5
-    #             frame:
-    #                 background Frame([ "gui/confirm_frame.png", "gui/frameyel.png"], gui.confirm_frame_borders, tile=gui.frame_tile)
-    #                 xpos 251 ypos 750
-    #                 xsize 560 ysize 60
-    #                 text "Дебет" color "#000000" size 28 xalign 0.5 yalign 0.5
-    #             frame:
-    #                 background Frame([ "gui/confirm_frame.png", "gui/frameyel.png"], gui.confirm_frame_borders, tile=gui.frame_tile)
-    #                 xpos 807 ypos 750
-    #                 xsize 560 ysize 60
-    #                 text "Кредит" color "#000000" size 28 xalign 0.5 yalign 0.5
-    #             frame:
-    #                 background Frame([ "gui/confirm_frame.png", "gui/frameyel.png"], gui.confirm_frame_borders, tile=gui.frame_tile)
-    #                 xpos 1363 ypos 750
-    #                 xsize 160 ysize 60
-    #                 text "Сумма" color "#000000" size 28 xalign 0.5 yalign 0.5                 
-    #         draggroup:
-    #             drag:
-    #                 drag_name "debet"
-    #                 xpos 257 ypos 812
-    #                 draggable False
-    #                 xysize(560, 100)
-    #                 frame:
-    #                     xsize 560 ysize 100
-    #             drag:
-    #                 drag_name "kredit"
-    #                 xpos 813 ypos 812
-    #                 draggable False
-    #                 xysize(560, 100)
-    #                 frame:
-    #                     xsize 560 ysize 100
-    #             drag:
-    #                 drag_name "summa"
-    #                 xpos 1369 ypos 812
-    #                 frame:
-    #                     xsize 160 ysize 100
-    #                 draggable False
-    #                 xysize(160, 100)            
-    #             for i in range(6):
-    #                 drag:
-    #                     drag_name b1tabvq[0][i]
-    #                     if debet is not None and debet == b1tabvq[0][i]:
-    #                         xpos debetXY[0] ypos debetXY[1]
-    #                     elif kredit is not None and kredit == b1tabvq[0][i]:
-    #                         xpos kreditXY[0] ypos kreditXY[1]
-    #                     else:
-    #                         xpos 80 ypos 275 + i*70
-    #                     droppable False
-    #                     draggable not (b1tabcor == 1 or b1tabn == 2)
-    #                     dragged drag_placed
-    #                     frame:
-    #                         background Frame([ "gui/confirm_frame.png", "gui/framegrey.png"], gui.frame_borders, tile=gui.frame_tile)
-    #                         xsize 550 ysize 65
-    #                         xpadding 5
-    #                         ypadding 5
-    #                         text b1tabvq[0][i] color "#000000" size 24 xalign 0.5 yalign 0.5
-    #             for i in range(6):
-    #                 drag:
-    #                     drag_name b1tabvq[1][i]
-    #                     if debet is not None and debet == b1tabvq[1][i]:
-    #                         xpos debetXY[0] ypos debetXY[1]
-    #                     elif kredit is not None and kredit == b1tabvq[1][i]:
-    #                         xpos kreditXY[0] ypos kreditXY[1]
-    #                     else:
-    #                         xpos 700 ypos 275 + i*70
-    #                     droppable False
-    #                     draggable not (b1tabcor == 1 or b1tabn == 2)
-    #                     dragged drag_placed
-    #                     frame:
-    #                         background Frame([ "gui/confirm_frame.png", "gui/framegrey.png"], gui.frame_borders, tile=gui.frame_tile)
-    #                         xsize 550 ysize 65
-    #                         xpadding 5
-    #                         ypadding 5
-    #                         text b1tabvq[1][i] color "#000000" size 24 xalign 0.5 yalign 0.5
-    #             for i in range(6):
-    #                 drag:
-    #                     drag_name b1tabvq[2][i]
-    #                     if summa is not None and summa == b1tabvq[2][i]:
-    #                         xpos summaXY[0] ypos summaXY[1]
-    #                     else:
-    #                         xpos 1320 ypos 275 + i*70
-    #                     droppable False
-    #                     draggable not (b1tabcor == 1 or b1tabn == 2)
-    #                     #mouse_drop False
-    #                     #drag_raise False
-    #                     dragged drag_placed
-    #                     frame:
-    #                         background Frame([ "gui/confirm_frame.png", "gui/framegrey.png"], gui.frame_borders, tile=gui.frame_tile)
-    #                         xsize 150 ysize 65
-    #                         xpadding 5
-    #                         ypadding 5
-    #                         text str(b1tabvq[2][i]) color "#000000" size 24 xalign 0.5 yalign 0.5
 
+
+label b1kadr2:
+    
 
 
 # screen b1kadr4:
