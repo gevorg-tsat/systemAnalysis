@@ -84,77 +84,33 @@ init python:
     
     def clearlup():
         renpy.hide("b1kadrnclup")
-        
+    
+    def find_index(array, drag):
+        for i in range(len(array)):
+            if array[i].drag_name == drag.drag_name:
+                return i
+        return -1
+
     def drag_placed(drags, drop):
-        #global debet
-        #global kredit
-        #global summa
-        #global b1tab
-        #global nnn
-        #nnn = store.nnn
-        #store.nextstep1 = False
-        # global user_answers1
         if not drop:
-            if drags[0].drag_name in user_answers1:
-                i = symptoms_task1_options.index(drags[0].drag_name)
-                user_answers1.pop(user_answers1.index(drags[0].drag_name))
-                drags[0].snap(80, 275 + i*70)
+            if find_index(user_answers1, drags[0]) != -1:
+                ind = symptoms_task1_options.index(drags[0].drag_name)
+                user_answers1.pop(find_index(user_answers1, drags[0]))
+                drags[0].snap(xy_options_symp_task1[0], xy_options_symp_task1[1] + ind*70)
+                for i in range(len(user_answers1)):
+                    user_answers1[i].snap(xy_answer_symp_task1[0], xy_answer_symp_task1[1] + i*65)
                 renpy.restart_interaction()
             return
         store.draggable = drags[0].drag_name
         store.droppable = drop.drag_name
 
-        if droppable == "тест2":
-            if draggable not in user_answers1:
-                user_answers1.append(draggable)
-            xpos_var = 600
-        else:
-            xpos_var = 640
-        drags[0].snap(xpos_var, 600 + user_answers1.index(draggable) * 65)
+        if droppable == "ответы":
+            if find_index(user_answers1, drags[0]) == -1:
+                user_answers1.append(drags[0])
+        drags[0].snap(xy_answer_symp_task1[0], xy_answer_symp_task1[1] + find_index(user_answers1, drags[0]) * 65)
         renpy.restart_interaction()
         return
 
-
-        # store.draggable = drags[0].drag_name
-        # if not drop:
-        #     return
-        # else:
-        #     store.droppable = drop.drag_name
-        #     if ((draggable in b1tabvq[2]) and (droppable != 'summa')) or ((draggable not in b1tabvq[2]) and (droppable == 'summa')) or ((debet is not None) and (droppable == "debet")) or ((kredit is not None) and (droppable == "kredit")) or ((summa is not None) and (draggable in b1tabvq[2])) or ((droppable == "debet") and (debet is not None) and (kredit is not None) and (kredit == draggable)) or ((droppable == "kredit") and (kredit is not None) and (debet is not None) and (debet == draggable)):
-        #         if (droppable == "debet") and (debet is not None) and (kredit is not None) and (kredit == draggable):
-        #             drags[0].snap(kreditXY[0], kreditXY[1], 0.25)
-        #         elif (droppable == "kredit") and (kredit is not None) and (debet is not None) and (debet == draggable):
-        #             drags[0].snap(debetXY[0], debetXY[1], 0.25)
-        #         elif (draggable in b1tabvq[2]) and (summa is not None) and (summa == draggable):
-        #             drags[0].snap(summaXY[0], summaXY[1], 0.25)
-        #         elif (droppable == "debet") and (debet == draggable):
-        #             drags[0].snap(debetXY[0], debetXY[1], 0.25)
-        #         elif (droppable == "kredit") and (kredit == draggable):
-        #             drags[0].snap(kreditXY[0], kreditXY[1], 0.25)
-        #         else:
-        #             drags[0].snap(int(drags[0].start_x-drags[0].w//2), int(drags[0].start_y-drags[0].h//2), 0.25)
-        #     else:
-        #         drags[0].snap(drop.x + 5, drop.y + 17, 0.25)
-        #         if (droppable == "debet") and (draggable == kredit):
-        #             store.kredit = None
-        #         if (droppable == "kredit") and (draggable == debet):
-        #             store.debet = None
-        #         if droppable == "debet":
-        #             store.debet = draggable
-        #             store.debetXY = [drop.x + 5, drop.y + 17]
-        #         elif droppable == "kredit":
-        #             store.kredit = draggable
-        #             store.kreditXY = [drop.x + 5, drop.y + 17]
-        #         elif droppable == "summa":
-        #             store.summa = draggable
-        #             store.summaXY = [drop.x + 5, drop.y + 17]
-        # if (debet is not None) and (kredit is not None) and (summa is not None):
-        #     store.b1tab = True
-        # else:
-        #     store.b1tab = False
-        # renpy.restart_interaction()
-        # return
-        #return True
 
 image b1kadrnclup = Movie(play="b1kadrnc.ogv", pos=(50,1000),side_mask=False) #, anchor=(50,1000) 
 image b1kadr9 = Movie(play="b1kadr9.ogv", pos=(730,740), side_mask=False)
@@ -202,7 +158,7 @@ screen symptom_identification(symptom_text):
         for i in range(len(symptoms_task1_options)):
             drag:
                 drag_name symptoms_task1_options[i]
-                xpos 80 ypos 275 + i*70
+                xpos xy_options_symp_task1[0] ypos xy_options_symp_task1[1] + i*70
                 droppable False
                 draggable True
                 drag_raise True
@@ -215,20 +171,24 @@ screen symptom_identification(symptom_text):
                     ypadding 5
                     text symptoms_task1_options[i] color "#000000" size 24 xalign 0.5 yalign 0.5 
         drag:
-            drag_name "тест2"
-            xpos 600
-            ypos 600
+            drag_name "ответы"
+            xpos xy_answer_symp_task1[0]
+            ypos xy_answer_symp_task1[1]
             draggable False
             droppable True
             frame:
                 xsize 550
                 ysize 65 * len(symptoms_task1_options)
+    text "Ваш(-и) ответ(-ы)" color "#000000" xpos xy_answer_symp_task1[0] ypos xy_answer_symp_task1[1] - 40 xsize 550 ysize 20
     if len(user_answers1) > 0:
-        frame:
-            xpos 1200
-            ypos 600
+        imagebutton:
+            idle "b1butch"
+            hover "b1butch_"
+            xpos xy_answer_symp_task1[0]
+            ypos xy_answer_symp_task1[1] + 65 * len(symptoms_task1_options) + 20
             xsize 100
             ysize 65
+            action 
 
 
 
@@ -236,6 +196,9 @@ label b1kadr1:
     $ screens = ["symptom_identification", "butforwardback"]
     scene white
     $ user_answers1 = []
+    $ xy_options_symp_task1 = [80, 600]
+    $ xy_answer_symp_task1 = [1000, 600]
+    $ tries = 2
     show screen butforwardback
     show screen symptom_identification(symptoms_task1_label)
     
