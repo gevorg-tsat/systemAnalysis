@@ -93,20 +93,25 @@ init python:
         #global nnn
         #nnn = store.nnn
         #store.nextstep1 = False
+        # global user_answers1
         if not drop:
+            if drags[0].drag_name in user_answers1:
+                i = symptoms_task1_options.index(drags[0].drag_name)
+                user_answers1.pop(user_answers1.index(drags[0].drag_name))
+                drags[0].snap(80, 275 + i*70)
+                renpy.restart_interaction()
             return
-
         store.draggable = drags[0].drag_name
         store.droppable = drop.drag_name
 
-        if droppable == "тест1":
-            xpos_var = 150
-        elif droppable == "тест2":
-            xpos_var = 790
+        if droppable == "тест2":
+            if draggable not in user_answers1:
+                user_answers1.append(draggable)
+            xpos_var = 600
         else:
             xpos_var = 640
-        drags[0].snap(xpos_var, 460)
-        #renpy.restart_interaction()
+        drags[0].snap(xpos_var, 600 + user_answers1.index(draggable) * 65)
+        renpy.restart_interaction()
         return
 
 
@@ -202,6 +207,7 @@ screen symptom_identification(symptom_text):
                 draggable True
                 drag_raise True
                 dragged drag_placed
+                # mouse_drop True
                 frame:
                     background Frame([ "gui/confirm_frame.png", "gui/framegrey.png"], gui.frame_borders, tile=gui.frame_tile)
                     xsize 550 ysize 65
@@ -209,23 +215,27 @@ screen symptom_identification(symptom_text):
                     ypadding 5
                     text symptoms_task1_options[i] color "#000000" size 24 xalign 0.5 yalign 0.5 
         drag:
-            drag_name "тест1"
-            xpos 0.1
-            ypos 0.6
-            child "gui/framegrey.png"
-            draggable False
-            droppable True
-        drag:
             drag_name "тест2"
-            xpos 0.6
-            ypos 0.6
-            child "gui/framegrey.png"
+            xpos 600
+            ypos 600
             draggable False
             droppable True
+            frame:
+                xsize 550
+                ysize 65 * len(symptoms_task1_options)
+    if len(user_answers1) > 0:
+        frame:
+            xpos 1200
+            ypos 600
+            xsize 100
+            ysize 65
+
+
 
 label b1kadr1:
     $ screens = ["symptom_identification", "butforwardback"]
     scene white
+    $ user_answers1 = []
     show screen butforwardback
     show screen symptom_identification(symptoms_task1_label)
     
