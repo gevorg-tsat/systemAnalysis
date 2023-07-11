@@ -68,6 +68,16 @@ label b7kadr1:
     show screen butforwardback
     pause
 
+label b7kadr2:
+    $ screens = ["check_exp_eval", "butforwardback"]
+    $ allow_forward = False
+    $ xy_ev_al_table = [100, 200]
+    $ xsize_ev_al_table = 1000
+    $ ysize_ev_al_table = 700
+    show screen check_exp_eval(ev_al_task1_label)
+    show screen butforwardback
+    pause
+
 
 
     
@@ -154,4 +164,41 @@ screen task1_go_to_next:
         xpos 50 ypos 800
         xsize 500 ysize 200
         text "Ты заполнил(-а) таблицу, можешь двигаться дальше ->"color "#000000" 
-    
+
+
+screen check_exp_eval(text):
+    text "Проверка экспертных оценок" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 100 xsize 1800 ysize 100
+
+
+    #text "[ev_al_task1_info]" color "#000000" xpos 50 ypos 200 xsize 700 ysize 300
+    #text "[ev_al_task1_alternatives_info]" color "#000000" xpos 50 ypos 500 xsize 700 ysize 300
+    frame:
+        xpos xy_ev_al_table[0]
+        ypos xy_ev_al_table[1]
+        xsize xsize_ev_al_table
+        ysize ysize_ev_al_table
+    for i in range(len(ev_al_task1_alternatives)):
+        frame:
+            text "A" + str(i+1) color "#000000" xalign 0.5 yalign 0.5 
+            xpos int(xy_ev_al_table[0] + (i+1)*(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
+            ypos xy_ev_al_table[1]
+            xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+            ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+        frame:
+            text "A" + str(i+1) color "#000000" xalign 0.5 yalign 0.5 
+            xpos xy_ev_al_table[0] 
+            ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
+            xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+            ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+    for i in range(len(ev_al_task1_alternatives)):
+        for j in range(len(ev_al_task1_alternatives)):
+            frame:
+                xpos int(xy_ev_al_table[0] + (i+1)*(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
+                ypos int(xy_ev_al_table[1]  + (j+1)*(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
+                xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+                ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+                if ev_al_task1_table_data[i][j] != 0:
+                    text str(round(ev_al_task1_table_data[i][j], 2)) color "#000000" xalign 0.5 yalign 0.5
+                elif i == j:
+                    text "1" color "#000000" xalign 0.5 yalign 0.5
