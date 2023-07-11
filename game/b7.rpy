@@ -47,12 +47,12 @@ init python:
         if sec == len(ev_al_task1_alternatives) + 1:
             allow_forward = True
             renpy.hide_screen("ev_al_task1_input")
-        renpy.clear_attributes("input")
+            renpy.show_screen("task1_go_to_next")
         renpy.restart_interaction()
     
 
 label b7kadr1:
-    $ screens = ["eval_alternative", "butforwardback"]
+    $ screens = ["eval_alternative", "butforwardback", "ev_al_task1_input", "task1_go_to_next"]
     $ allow_forward = False
     $ xy_ev_al_table = [800, 200]
     $ xsize_ev_al_table = 1000
@@ -149,4 +149,9 @@ screen ev_al_task1_input:
                 #     length 8
                 #     allow "0123456789"
                 #     size 20
+screen task1_go_to_next:
+    frame:
+        xpos 50 ypos 800
+        xsize 500 ysize 200
+        text "Ты заполнил(-а) таблицу, можешь двигаться дальше ->"color "#000000" 
     
