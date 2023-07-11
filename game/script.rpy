@@ -57,7 +57,7 @@ define n = Character(None, kind=nvl, what_bold=True, what_color="#0000ff")
 #centered "{cps=5}Test Typewrite Effect"
 
 screen butforwardback:
-    zorder 100
+    zorder 99
     modal True
     if True:
         frame:

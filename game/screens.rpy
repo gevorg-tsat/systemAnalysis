@@ -1574,9 +1574,6 @@ screen finding_alternative(text):
     text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
 
 
-screen eval_alternative(text):
-    text "Оценка альтернатив" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
-    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
 
 screen choose_alternative(text):
     text "Выбор альтернатив" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50

@@ -4,30 +4,6 @@ transform mmove(x0, x1):
     linear 1 xpos x1[0] ypos x1[1]
     
 init python:
-    import random
-    b1a = renpy.random.randint(150000,180000)
-    b1d = renpy.random.randint(4000,8000)
-    b1b = renpy.random.randint(5000,8000)
-    b1aq0 = "0"
-    b1z0 = "0"
-    b1x0 = "0"
-    b1g0 = "0"
-    b1am0 = "0"
-    b1mt0 = "0"
-    b1nac0 = "0"
-    b1i = 0
-    b1nsh = [0, 1, 2, 3]
-    b1quest = ""
-    b1aq = round((b1a + b1d + b1b) / 1.2)
-    b1z = round(b1aq / 48)
-    b1x = b1z * 2
-    b1g = b1aq - b1x
-    b1am = b1z + 36
-    b1mt = 287088 + b1g - 36
-    b1nac = round(4410 + b1aq * 0.2)
-    b1tabvq = [["Расчетный счет", "Амортизация основных средств", "Основное производство", "Расчеты с персоналом по оплате труда", "Товары", "Основные средства"],
-            ["Расчеты с покупателями и заказчиками", "Материалы", "Общехозяйственные расходы", "Прибыли и убытки", "Добавочный капитал", "Выручка"],
-            [str(b1z), str(b1x), str(b1z * 3), str((b1aq + 100000)//48), str(b1aq//4), str(b1z * 4)]]
     debet0 = ""
     kredit0 = ""
     summa0 = ""    
@@ -50,7 +26,7 @@ init python:
     # TODO дергает ручку с гугл таблицы
     row_number = 0
     google_sheet_data = json.loads(req.text)["sheets"][0]["data"][row_number]["rowData"][0]["values"]
-    symptoms_task1_label = "Определите правильно симптомы"
+    symptoms_task1_label = "Определите правильно симптомы/причины этого проишествия"
     symptoms_task1_options = list(map(str.strip, google_sheet_data[0]["userEnteredValue"]["stringValue"].split(";")))
     symptoms_task1_correct_answers = list(map(str.strip, google_sheet_data[1]["userEnteredValue"]["stringValue"].split(";")))
 
@@ -191,7 +167,7 @@ screen b1kadr3:
 screen symptom_identification(symptom_text, allow_forward):
     zorder 100
     text "Идентификация симптомов" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 80
-    text "[symptom_text]"  color "#000000" xpos 800 ypos 150 xsize 1000 ysize 900
+    text "[symptom_text]"  color "#000000" xpos 40 ypos 150 xsize 1800 ysize 900
     draggroup:
         for i in range(len(symptoms_task1_options)):
             drag:
