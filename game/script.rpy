@@ -197,7 +197,45 @@ label KadrBack:
     elif vkadr == "ha":
         hide screen butforwardback
         call hakadr2 from _call_hakadr2
-    return
+    elif vkadr == "b2":
+        $ nkadr -= 1
+        $ kadrb2()
+    elif vkadr == "b3":
+        $ nkadr -= 1
+        $ kadrb3()
+    elif vkadr == "b4":
+        $ nkadr -= 1
+        $ kadrb4()
+    elif vkadr == "b5":
+        $ nkadr -= 1
+        $ kadrb5()
+    elif vkadr == "b6":
+        $ nkadr -= 1
+        $ kadrb6()
+    elif vkadr == "b7":
+        $ nkadr -= 1
+        $ kadrb7()
+    elif vkadr == "b7":
+        $ nkadr -= 1
+        $ kadrb7()
+    elif vkadr == "b8":
+        $ nkadr -= 1
+        $ kadrb8()
+    elif vkadr == "b9":
+        $ nkadr -= 1
+        $ kadrb9()
+    elif vkadr == "b10":
+        $ nkadr -= 1
+        $ kadrb10()
+    elif vkadr == "b11":
+        $ nkadr -= 1
+        $ kadr11()
+    elif vkadr == "b12":
+        $ nkadr -= 1
+        $ kadrb12()
+    elif vkadr == "b13":
+        $ nkadr -= 1
+        $ kadrb13()
 
 
 # Игра начинается здесь:

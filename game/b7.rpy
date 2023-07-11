@@ -9,6 +9,9 @@ init python:
     ev_al_task1_info += "\nМожно ставить промежуточные баллы. И обратные(0.2, 0.33 и тд)"
     ev_al_task1_alternatives = list(map(str.strip, google_sheet_data[0]["userEnteredValue"]["stringValue"].split(";")))
     ev_al_task1_alternatives_info = "Альтерантивы:"
+
+    fir = 1
+    sec = 2
     for i in range(len(ev_al_task1_alternatives)):
         ev_al_task1_alternatives_info += f"\nA{i+1} - {ev_al_task1_alternatives[i]}"
     # init table
@@ -57,8 +60,6 @@ label b7kadr1:
     $ xy_ev_al_table = [800, 200]
     $ xsize_ev_al_table = 1000
     $ ysize_ev_al_table = 700
-    $ fir = 1
-    $ sec = 2
     show screen eval_alternative(ev_al_task1_label)
     if fir == len(ev_al_task1_alternatives) and sec == len(ev_al_task1_alternatives) + 1:
         hide screen ev_al_task1_input
