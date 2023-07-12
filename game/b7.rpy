@@ -133,7 +133,22 @@ init python:
             IS_value = value
             return
         if OS_value is None:
-            pass
+            OS_correct = (IS_value)/(sls_info_table[len(ev_al_task1_alternatives) - 3])
+            if abs(value - OS_correct) > 0.05:
+                return
+            OS_correct = value
+            renpy.hide_screen("ev_al_task3_input")
+    def check_sogl(sogl):
+        global OS_value
+        global allow_forward
+        if (sogl and OS_value <=0.2) or (sogl == False ans OS_value > 0.2):
+            text = "Верно! Поздравляю! переходи вперед, в меню"
+        else:
+            text = "К сожалению ты ошибься. переходи вперед, в меню"
+        renpy.hide_screen("eval_trueness_of_expert")
+        renpy.show_screen("final_go_to_next", text)
+        renpy.restart_interaction
+
     
 
 label b7kadr1:
@@ -177,6 +192,8 @@ label b7kadr3:
     $ xsize_sls_info = 700
     $ ysize_sls_info = 200
     show screen check_sls_eval(ev_al_task3_label)
+    if OS_correct is None:
+        show screen ev_al_task3_input
     show screen butforwardback
     pause
 
@@ -523,3 +540,28 @@ screen ev_al_task3_input:
                 xalign 0.5
                 spacing 100
                 textbutton _("ввод") action Function(rewrite_data_task3, table_input)
+
+screen eval_trueness_of_expert:
+    frame:
+        xpos 1450 ypos 800
+        xsize 400 ysize 200
+        vbox:
+            xalign .5
+            yalign .5
+            spacing 30
+
+            label _("Отношение"):
+                    style "confirm_prompt"
+                    xalign 0.5
+            
+            hbox:
+                xalign 0.5
+                spacing 100
+                textbutton _("согласовано") action Function(check_sogl, True)
+                textbutton _("не согласовано") action Function(check_sogl, False)
+
+screen final_go_to_next(text):
+    frame:
+        xpos 1450 ypos 800
+        xsize 400 ysize 200
+        text "[text]" color "#000000" 
