@@ -104,8 +104,8 @@ label b7kadr1:
     $ screens = ["eval_alternative", "butforwardback", "ev_al_task1_input", "task1_go_to_next"]
     $ allow_forward = False
     $ xy_ev_al_table = [800, 200]
-    $ xsize_ev_al_table = 1000
-    $ ysize_ev_al_table = 700
+    $ xsize_ev_al_table = 800
+    $ ysize_ev_al_table = 600
     $ ev_al_task1_table_data[0][0] = 1
     show screen eval_alternative(ev_al_task1_label)
     if fir == len(ev_al_task1_alternatives) and sec == len(ev_al_task1_alternatives) + 1:
@@ -120,8 +120,8 @@ label b7kadr2:
     $ screens = ["check_exp_eval", "butforwardback", "ev_al_task2_input"]
     $ allow_forward = False
     $ xy_ev_al_table = [100, 225]
-    $ xsize_ev_al_table = 1000
-    $ ysize_ev_al_table = 700
+    $ xsize_ev_al_table = 800
+    $ ysize_ev_al_table = 600
     show screen check_exp_eval(ev_al_task2_label)
     show screen ev_al_task2_input
     show screen butforwardback
