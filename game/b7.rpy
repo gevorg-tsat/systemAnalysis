@@ -15,6 +15,9 @@ init python:
     sec = 2
     C_index = 1
     V_index = 1
+    I_value = None
+    IS_value = None
+    OS_value = None
     for i in range(len(ev_al_task1_alternatives)):
         ev_al_task1_alternatives_info += f"\nA{i+1} - {ev_al_task1_alternatives[i]}"
     # init table
@@ -28,6 +31,14 @@ init python:
         for x in myList:
             result = result * x
         return result**(1/len(myList))
+    def get_I_value(table, V_table):
+        result = 0
+        for i in range(len(table)):
+            sum_var = 0
+            for j in range(len(table)):
+                sum_var += table[i][j]
+            result += (sum_var * V_table[i])
+        return result
     def kadrb7():
         global nkadr
         global vkadr
@@ -100,6 +111,30 @@ init python:
             renpy.show_screen("task2_go_to_next")
         renpy.restart_interaction()
     
+    def rewrite_data_task3(inp):
+        global I_value
+        global IS_value
+        global OS_value
+        global ev_al_task2_V_index_data
+        global ev_al_task1_table_data
+        if not inp:
+            return
+        value = float(inp)
+        if I_value is None:
+            I_correct = get_I_value(ev_al_task1_table_data, ev_al_task2_V_index_data)
+            if abs(value - I_correct) > 0.1:
+                return
+            I_value = value
+            return
+        if IS_value is None:
+            IS_correct = ((I_value - len(ev_al_task1_alternatives))/ (len(ev_al_task1_alternatives) - 1))
+            if abs(value - IS_correct) > 0.1:
+                return
+            IS_value = value
+            return
+        if OS_value is None:
+            pass
+    
 
 label b7kadr1:
     $ screens = ["eval_alternative", "butforwardback", "ev_al_task1_input", "task1_go_to_next"]
@@ -124,12 +159,16 @@ label b7kadr2:
     $ xsize_ev_al_table = 800
     $ ysize_ev_al_table = 600
     show screen check_exp_eval(ev_al_task2_label)
-    show screen ev_al_task2_input
+    if V_index != len(ev_al_task1_alternatives) + 1:
+        show screen ev_al_task2_input
+    else:
+        $ allow_forward = True
+        show screen task2_go_to_next
     show screen butforwardback
     pause
 
 label b7kadr3:
-    $ screens = ["check_exp_eval", "butforwardback", "ev_al_task2_input"]
+    $ screens = ["check_sls_eval", "butforwardback", "ev_al_task3_input"]
     $ allow_forward = False
     $ xy_ev_al_table = [100, 225]
     $ xsize_ev_al_table = 800
@@ -408,10 +447,43 @@ screen check_sls_eval(text):
         ypos int(xy_sls_info[1] + ysize_sls_info/2)
         xsize int(xsize_sls_info/(len(sls_info_table) + 1))
         ysize int(ysize_sls_info/2)
-        text "SlS" color "#000000" xalign 0.5 yalign 0.5
-    # for i in range(len(sls_info_table)):
-    #     frame:
-    #         text str(i+3) 
+        text "SLS" color "#000000" xalign 0.5 yalign 0.5
+    for i in range(len(sls_info_table)):
+        frame:
+            text str(i+3) color "#000000" xalign 0.5 yalign 0.5
+            xpos int(xy_sls_info[0] + (i+1)*(xsize_sls_info/(len(sls_info_table) + 1)))
+            ypos xy_sls_info[1]
+            xsize int(xsize_sls_info/(len(sls_info_table) + 1))
+            ysize int(ysize_sls_info/2)
+        frame:
+            text str(sls_info_table[i]) color "#000000" xalign 0.5 yalign 0.5
+            xpos int(xy_sls_info[0] + (i+1)*(xsize_sls_info/(len(sls_info_table) + 1)))
+            ypos int(xy_sls_info[1] + ysize_sls_info/2)
+            xsize int(xsize_sls_info/(len(sls_info_table) + 1))
+            ysize int(ysize_sls_info/2)
+    if I_value:
+        frame:
+            xpos xy_sls_info[0]
+            ypos int(xy_sls_info[1] + ysize_sls_info)
+            xsize int(2*xsize_sls_info/(len(sls_info_table) + 1))
+            ysize int(ysize_sls_info/2)
+            text "I = [round(I_value, 2)]" color "#000000" xalign 0.5 yalign 0.5
+    if IS_value:
+        frame:
+            xpos xy_sls_info[0]
+            ypos int(xy_sls_info[1] + 2*ysize_sls_info)
+            xsize int(2*xsize_sls_info/(len(sls_info_table) + 1))
+            ysize int(ysize_sls_info/2)
+            text "ИС = [round(IS_value, 2)]" color "#000000" xalign 0.5 yalign 0.5
+    if OS_value:
+        frame:
+            xpos xy_sls_info[0]
+            ypos int(xy_sls_info[1] + 3*ysize_sls_info)
+            xsize int(2*xsize_sls_info/(len(sls_info_table) + 1))
+            ysize int(ysize_sls_info/2)
+            text "ОС = [round(OS_value, 2)]" color "#000000" xalign 0.5 yalign 0.5
+    
+
     
 
 
@@ -424,9 +496,18 @@ screen ev_al_task3_input:
             xalign .5
             yalign .5
             spacing 30
-            label _("C{size=-10}[C_index]{/size}"):
-                style "confirm_prompt"
-                xalign 0.5
+            if I_value is None:
+                label _("Величина I"):
+                    style "confirm_prompt"
+                    xalign 0.5
+            elif IS_value is None:
+                label _("Величина ИС"):
+                    style "confirm_prompt"
+                    xalign 0.5
+            elif OS_value is None:
+                label _("Величина ОС"):
+                    style "confirm_prompt"
+                    xalign 0.5
 
             input:
                 default "None"
@@ -441,4 +522,4 @@ screen ev_al_task3_input:
 
                 xalign 0.5
                 spacing 100
-                textbutton _("ввод") action Function(rewrite_table_task2, table_input)
+                textbutton _("ввод") action Function(rewrite_data_task3, table_input)
