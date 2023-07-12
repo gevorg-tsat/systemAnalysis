@@ -125,29 +125,34 @@ init python:
             if abs(value - I_correct) > 0.1:
                 return
             I_value = value
+            renpy.restart_interaction()
             return
         if IS_value is None:
             IS_correct = ((I_value - len(ev_al_task1_alternatives))/ (len(ev_al_task1_alternatives) - 1))
             if abs(value - IS_correct) > 0.1:
                 return
             IS_value = value
+            renpy.restart_interaction()
             return
         if OS_value is None:
             OS_correct = (IS_value)/(sls_info_table[len(ev_al_task1_alternatives) - 3])
             if abs(value - OS_correct) > 0.05:
                 return
-            OS_correct = value
+            OS_value = value
+            renpy.show_screen("eval_trueness_of_expert")
             renpy.hide_screen("ev_al_task3_input")
+            renpy.restart_interaction()
     def check_sogl(sogl):
         global OS_value
         global allow_forward
-        if (sogl and OS_value <=0.2) or (sogl == False ans OS_value > 0.2):
+        if (sogl and OS_value <=0.2) or (sogl == False and OS_value > 0.2):
             text = "Верно! Поздравляю! переходи вперед, в меню"
         else:
             text = "К сожалению ты ошибься. переходи вперед, в меню"
+        allow_forward = True
         renpy.hide_screen("eval_trueness_of_expert")
         renpy.show_screen("final_go_to_next", text)
-        renpy.restart_interaction
+        renpy.restart_interaction()
 
     
 
@@ -183,7 +188,7 @@ label b7kadr2:
     pause
 
 label b7kadr3:
-    $ screens = ["check_sls_eval", "butforwardback", "ev_al_task3_input"]
+    $ screens = ["check_sls_eval", "butforwardback", "ev_al_task3_input","final_go_to_next" , "eval_trueness_of_expert"]
     $ allow_forward = False
     $ xy_ev_al_table = [100, 225]
     $ xsize_ev_al_table = 800
@@ -192,8 +197,10 @@ label b7kadr3:
     $ xsize_sls_info = 700
     $ ysize_sls_info = 200
     show screen check_sls_eval(ev_al_task3_label)
-    if OS_correct is None:
+    if OS_value is None:
         show screen ev_al_task3_input
+    else:
+        $ allow_forward = True
     show screen butforwardback
     pause
 
@@ -478,27 +485,27 @@ screen check_sls_eval(text):
             ypos int(xy_sls_info[1] + ysize_sls_info/2)
             xsize int(xsize_sls_info/(len(sls_info_table) + 1))
             ysize int(ysize_sls_info/2)
-    if I_value:
+    if I_value is not None:
         frame:
             xpos xy_sls_info[0]
             ypos int(xy_sls_info[1] + ysize_sls_info)
             xsize int(2*xsize_sls_info/(len(sls_info_table) + 1))
             ysize int(ysize_sls_info/2)
-            text "I = [round(I_value, 2)]" color "#000000" xalign 0.5 yalign 0.5
-    if IS_value:
+            text "I = " + str(round(I_value, 2)) color "#000000" xalign 0.5 yalign 0.5
+    if IS_value is not None:
+        frame:
+            xpos xy_sls_info[0]
+            ypos int(xy_sls_info[1] + 1.5*ysize_sls_info)
+            xsize int(2*xsize_sls_info/(len(sls_info_table) + 1))
+            ysize int(ysize_sls_info/2)
+            text "ИС = " + str(round(IS_value, 2)) color "#000000" xalign 0.5 yalign 0.5
+    if OS_value is not None:
         frame:
             xpos xy_sls_info[0]
             ypos int(xy_sls_info[1] + 2*ysize_sls_info)
             xsize int(2*xsize_sls_info/(len(sls_info_table) + 1))
             ysize int(ysize_sls_info/2)
-            text "ИС = [round(IS_value, 2)]" color "#000000" xalign 0.5 yalign 0.5
-    if OS_value:
-        frame:
-            xpos xy_sls_info[0]
-            ypos int(xy_sls_info[1] + 3*ysize_sls_info)
-            xsize int(2*xsize_sls_info/(len(sls_info_table) + 1))
-            ysize int(ysize_sls_info/2)
-            text "ОС = [round(OS_value, 2)]" color "#000000" xalign 0.5 yalign 0.5
+            text "ОС = " + str(round(OS_value, 2)) color "#000000" xalign 0.5 yalign 0.5
     
 
     
@@ -542,6 +549,7 @@ screen ev_al_task3_input:
                 textbutton _("ввод") action Function(rewrite_data_task3, table_input)
 
 screen eval_trueness_of_expert:
+    zorder 100
     frame:
         xpos 1450 ypos 800
         xsize 400 ysize 200
@@ -554,11 +562,8 @@ screen eval_trueness_of_expert:
                     style "confirm_prompt"
                     xalign 0.5
             
-            hbox:
-                xalign 0.5
-                spacing 100
-                textbutton _("согласовано") action Function(check_sogl, True)
-                textbutton _("не согласовано") action Function(check_sogl, False)
+            textbutton _("согласовано") xalign 0.5 action Function(check_sogl, True) 
+            textbutton _("не согласовано") xalign 0.5 action Function(check_sogl, False)
 
 screen final_go_to_next(text):
     frame:
