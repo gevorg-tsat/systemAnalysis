@@ -1554,9 +1554,6 @@ screen task(task_text):
     text "[task_text]"  color "#000000" xpos 800 ypos 150 xsize 1000 ysize 900
 
 
-screen relevance_definition(task):
-    text "Определение актуальности" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 80
-    text "[task]"  color "#000000" xpos 800 ypos 150 xsize 1000 ysize 900
 
 screen structure_of_system(scheme, text):
     text "Вскрытие структуры системы и её дефектных элементов" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
