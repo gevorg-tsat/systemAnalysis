@@ -6,11 +6,25 @@ label b2kadr1:
     $ xy_ev_al_table = [100, 225]
     $ xsize_ev_al_table = 800
     $ ysize_ev_al_table = 600
+    if is_correct_pareto_table_answer:
+        $ allow_forward = True
     show screen relevance_definition(pareto_task1)
     show screen check_pareto_table_answer
     show screen butforwardback
     pause
 
+label b2kadr2:
+    $ screens = ["scolar_method_input", "butforwardback", "scolar_method", "task2_go_to_next"]
+    $ allow_forward = False
+    $ xy_ev_al_table = [100, 225]
+    $ xsize_ev_al_table = 800
+    $ ysize_ev_al_table = 600
+    if is_correct_pareto_table_answer:
+        $ allow_forward = True
+    show screen scolar_method(pareto_task1)
+    show screen scolar_method_input
+    show screen butforwardback
+    pause
 
 init python:
     req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
@@ -23,11 +37,14 @@ init python:
     method1_task1_valid_alternatives = list() #list(map(str.strip, google_sheet_data[1]["userEnteredValue"]["stringValue"].split(";")))
     criteries = list(map(str.strip, second_row_data[2]["userEnteredValue"]["stringValue"].split(";")))
     min_maxing_criteries = list(map(int,map(str.strip, third_row_data[2]["userEnteredValue"]["stringValue"].split(";"))))
+    alphas_task2 = list(map(float,map(str.strip, third_row_data[3]["userEnteredValue"]["stringValue"].split(";"))))
     pareto_table=[]
     criteries_txt = ""
     alts_txt = ""
     is_correct_pareto_table_answer = None
-    lbl_txt = ""
+    K_index = 1
+    R_index = 1
+    rangs_method1 = [0] * len(method1_task1_alternatives)
     for i in range(len(criteries)):
         criteries_txt += f"{'максимизация' if min_maxing_criteries[i] else 'минимизация'} K{i+1} - {criteries[i]}\n"
     for i in range(len(method1_task1_alternatives)):
@@ -43,7 +60,15 @@ init python:
     pareto_table_line_status = []
     for i in range(len(method1_task1_alternatives)):
         pareto_table_line_status.append(0)
-    
+    K_index_data = [-1] * len(method1_task1_alternatives)
+    def init_K_index():
+        global pareto_table_line_status
+        global K_index
+        global R_index
+        K_index = 1
+        while K_index - 1 < len(pareto_table_line_status) and pareto_table_line_status[K_index-1]:
+            K_index+=1
+        R_index = K_index
     def compare_line(line1, line2, min_maxing_criteries):
         # True - line1 if absolutely worser then line2
         is_better = False
@@ -55,6 +80,20 @@ init python:
                 return False
         return is_better
 
+    def ranging(inp):
+        global rangs_method1
+        global R_index
+        if not inp:
+            return
+        value = int(inp)
+        rangs_method1[R_index-1] = value
+        R_index += 1
+        while R_index - 1 < len(pareto_table_line_status) and pareto_table_line_status[R_index-1]:
+            R_index+=1
+        if R_index > len(pareto_table_line_status):
+            renpy.hide_screen("scolar_method_input")
+            renpy.show_screen("task2_go_to_next")
+        renpy.restart_interaction()
 
     def get_valid_alernatives(parreto_table, alternative, min_maxing_criteries):
         result = []
@@ -69,6 +108,25 @@ init python:
                 
     method1_task1_valid_alternatives = get_valid_alernatives(pareto_table, method1_task1_alternatives, min_maxing_criteries)
     
+    def add_data_K_index(inp):
+        global alphas_task2
+        global K_index_data
+        global pareto_table
+        global K_index
+        K_corr = 0
+        if not inp:
+            return
+        for i in range(len(pareto_table[K_index-1])):
+            K_corr += pareto_table[K_index-1][i] * alphas_task2[i]
+        if abs(K_corr - float(inp)) > 0.1:
+            return
+        K_index_data[K_index-1] = float(inp)
+        K_index += 1
+        while K_index - 1 < len(pareto_table_line_status) and pareto_table_line_status[K_index-1]:
+            K_index+=1
+        renpy.restart_interaction()
+        
+
     def kadrb2():
         global nkadr
         global vkadr
@@ -100,6 +158,7 @@ init python:
         global method1_task1_alternatives
         global method1_task1_valid_alternatives
         global allow_forward
+        init_K_index()
         user_answer = []
         for i in range(len(pareto_table_line_status)):
             if not pareto_table_line_status[i]:
@@ -167,3 +226,104 @@ screen check_pareto_table_answer:
             if not allow_forward:
                 textbutton _("Проверить") xalign 0.5 action Function(check_pareto_answ)
             
+
+screen scolar_method(text):
+    text "Формирование обобщающего критерия" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "[text]"  color "#000000" xpos 50 ypos 100 xsize 1800 ysize 100
+
+
+    #text "[ev_al_task1_info]" color "#000000" xpos 50 ypos 200 xsize 700 ysize 300
+    #text "[ev_al_task1_alternatives_info]" color "#000000" xpos 50 ypos 500 xsize 700 ysize 300
+    for i in range(len(method1_task1_alternatives)):
+        frame:
+            textbutton _("A" + str(i+1)) xalign 0.5 yalign 0.5 action Function(strikeout, int(i)) 
+            xpos xy_ev_al_table[0] 
+            ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(method1_task1_alternatives) + 1)))
+            xsize int(xsize_ev_al_table/(len(method1_task1_alternatives) + 1))
+            ysize int(ysize_ev_al_table/(len(method1_task1_alternatives) + 1))
+    for i in range(len(criteries)):
+        frame:
+            text "k" + str(i+1) color "#000000" xalign 0.5 yalign 0.5 
+            xpos int(xy_ev_al_table[0]  + (i+1)*(xsize_ev_al_table/(len(method1_task1_alternatives) + 1)))
+            ypos int(xy_ev_al_table[1])
+            xsize int(xsize_ev_al_table/(len(method1_task1_alternatives) + 1))
+            ysize int(ysize_ev_al_table/(len(method1_task1_alternatives) + 1))
+    frame:
+        text "Ki" color "#000000" xalign 0.5 yalign 0.5 
+        xpos int(xy_ev_al_table[0]  + (len(criteries) + 1)*(xsize_ev_al_table/(len(method1_task1_alternatives) + 1)))
+        ypos int(xy_ev_al_table[1])
+        xsize int(xsize_ev_al_table/(len(method1_task1_alternatives) + 1))
+        ysize int(ysize_ev_al_table/(len(method1_task1_alternatives) + 1))
+    for i in range(len(method1_task1_alternatives)):
+        for j in range(len(criteries)):
+            frame:
+                if pareto_table_line_status[i] == 1:
+                    image "kadr b14v" xsize int(xsize_ev_al_table/(len(method1_task1_alternatives) + 1)) ypos 0.2
+                else:
+                    text str(pareto_table[i][j]) color "#000000" xalign 0.5 yalign 0.5 #pareto_table[i][j]
+                xpos int(xy_ev_al_table[0]  + (j+1)*(xsize_ev_al_table/(len(method1_task1_alternatives) + 1)))
+                ypos int(xy_ev_al_table[1] + (i+1)*(ysize_ev_al_table/(len(method1_task1_alternatives) + 1)))
+                xsize int(xsize_ev_al_table/(len(method1_task1_alternatives) + 1))
+                ysize int(ysize_ev_al_table/(len(method1_task1_alternatives) + 1))
+    for i in range(len(K_index_data)):
+        if K_index_data[i] != -1:
+            frame:
+                text str(round(K_index_data[i], 2)) color "#000000" xalign 0.5 yalign 0.5 
+                xpos int(xy_ev_al_table[0] + (xsize_ev_al_table/(len(method1_task1_alternatives) + 1)) * (len(criteries)+1))
+                ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(method1_task1_alternatives) + 1)))
+                xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+                ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+    if K_index > len(method1_task1_alternatives):
+        frame:
+            text "Ri" color "#000000" xalign 0.5 yalign 0.5 
+            xpos int(xy_ev_al_table[0]  + (len(criteries) + 2)*(xsize_ev_al_table/(len(method1_task1_alternatives) + 1)))
+            ypos int(xy_ev_al_table[1])
+            xsize int(xsize_ev_al_table/(len(method1_task1_alternatives) + 1))
+            ysize int(ysize_ev_al_table/(len(method1_task1_alternatives) + 1))
+        for i in range(len(rangs_method1)):
+            if rangs_method1[i] != 0:
+                frame:
+                    text str(round(rangs_method1[i], 2)) color "#000000" xalign 0.5 yalign 0.5 
+                    xpos int(xy_ev_al_table[0] + (xsize_ev_al_table/(len(method1_task1_alternatives) + 1)) * (len(criteries)+2))
+                    ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(method1_task1_alternatives) + 1)))
+                    xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+                    ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+
+screen scolar_method_input:
+    zorder 100
+    frame:
+        xpos 1450 ypos 800
+        xsize 400 ysize 200
+        vbox:
+            xalign .5
+            yalign .5
+            spacing 30
+            if K_index <= len(method1_task1_alternatives):
+                label _("K{size=-10}[K_index]{/size}"):
+                    style "confirm_prompt"
+                    xalign 0.5
+            else:
+                label _("R{size=-10}[R_index]{/size}"):
+                    style "confirm_prompt"
+                    xalign 0.5
+            input:
+                default "None"
+                color "#000000"
+                value VariableInputValue("table_input", returnable=True)
+                xalign 0.5
+                length 8
+                if K_index <= len(method1_task1_alternatives):
+                    allow "0123456789."
+                else:
+                    allow "0123456789"
+                size 24
+                        
+            hbox:
+
+                xalign 0.5
+                spacing 100
+                if K_index != len(method1_task1_alternatives) + 1:
+                    textbutton _("ввод") action Function(add_data_K_index, table_input)
+                else:
+                    textbutton _("ввод") action Function(ranging, table_input)
+
