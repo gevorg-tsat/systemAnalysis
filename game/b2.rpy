@@ -1,12 +1,13 @@
 define pareto_task1 = "Выбор лучшей альтернативы из множества Парето"
 
 label b2kadr1:
-    $ screens = ["check_exp_eval", "butforwardback", "ev_al_task2_input"]
+    $ screens = ["check_pareto_table_answer", "butforwardback", "relevance_definition"]
     $ allow_forward = False
     $ xy_ev_al_table = [100, 225]
     $ xsize_ev_al_table = 800
     $ ysize_ev_al_table = 600
     show screen relevance_definition(pareto_task1)
+    show screen check_pareto_table_answer
     show screen butforwardback
     pause
 
@@ -19,12 +20,14 @@ init python:
     third_row_data = json.loads(req.text)["sheets"][1]["data"][0]["rowData"][2]["values"]
     second_sheet_data= json.loads(req.text)["sheets"][1]["data"]
     method1_task1_alternatives = list(map(str.strip, google_sheet_data[0]["userEnteredValue"]["stringValue"].split(";")))
-    method1_task1_valid_alternatives = list(map(str.strip, google_sheet_data[1]["userEnteredValue"]["stringValue"].split(";")))
+    method1_task1_valid_alternatives = list() #list(map(str.strip, google_sheet_data[1]["userEnteredValue"]["stringValue"].split(";")))
     criteries = list(map(str.strip, second_row_data[2]["userEnteredValue"]["stringValue"].split(";")))
     min_maxing_criteries = list(map(int,map(str.strip, third_row_data[2]["userEnteredValue"]["stringValue"].split(";"))))
     pareto_table=[]
     criteries_txt = ""
     alts_txt = ""
+    is_correct_pareto_table_answer = None
+    lbl_txt = ""
     for i in range(len(criteries)):
         criteries_txt += f"{'максимизация' if min_maxing_criteries[i] else 'минимизация'} K{i+1} - {criteries[i]}\n"
     for i in range(len(method1_task1_alternatives)):
@@ -40,6 +43,32 @@ init python:
     pareto_table_line_status = []
     for i in range(len(method1_task1_alternatives)):
         pareto_table_line_status.append(0)
+    
+    def compare_line(line1, line2, min_maxing_criteries):
+        # True - line1 if absolutely worser then line2
+        is_better = False
+        for k in range(len(line1)):
+            if (line1[k] <= line2[k] and min_maxing_criteries[k]) or (line1[k] >= line2[k] and not min_maxing_criteries[k]):
+                if (line1[k] < line2[k] and min_maxing_criteries[k]) or (line1[k] > line2[k] and not min_maxing_criteries[k]):
+                    is_better = True
+            else:
+                return False
+        return is_better
+
+
+    def get_valid_alernatives(parreto_table, alternative, min_maxing_criteries):
+        result = []
+        for i in range(len(alternative)):
+            is_valid = True
+            for j in range(len(alternative)):
+                if compare_line(parreto_table[i], parreto_table[j], min_maxing_criteries):
+                    is_valid = False
+            if is_valid:
+                result.append(alternative[i])
+        return result
+                
+    method1_task1_valid_alternatives = get_valid_alernatives(pareto_table, method1_task1_alternatives, min_maxing_criteries)
+    
     def kadrb2():
         global nkadr
         global vkadr
@@ -63,6 +92,26 @@ init python:
             pareto_table_line_status[number] = 1
         renpy.restart_interaction()
         return
+    
+    def check_pareto_answ():
+        global is_correct_pareto_table_answer
+        global pareto_table_line_status
+        global pareto_table
+        global method1_task1_alternatives
+        global method1_task1_valid_alternatives
+        global allow_forward
+        user_answer = []
+        for i in range(len(pareto_table_line_status)):
+            if not pareto_table_line_status[i]:
+                user_answer.append(method1_task1_alternatives[i])
+        if len(user_answer) == len(method1_task1_valid_alternatives) and set(user_answer) == set(method1_task1_valid_alternatives):
+            is_correct_pareto_table_answer = True
+            allow_forward = True
+        else:
+            is_correct_pareto_table_answer = False
+        renpy.restart_interaction()
+                
+
 
 
 screen relevance_definition(task):
@@ -95,4 +144,26 @@ screen relevance_definition(task):
                 ypos int(xy_ev_al_table[1] + (i+1)*(ysize_ev_al_table/(len(method1_task1_alternatives) + 1)))
                 xsize int(xsize_ev_al_table/(len(method1_task1_alternatives) + 1))
                 ysize int(ysize_ev_al_table/(len(method1_task1_alternatives) + 1))
-    
+
+screen check_pareto_table_answer:
+    zorder 100
+    frame:
+        xpos 1450 ypos 800
+        xsize 400 ysize 200
+        vbox:
+            spacing 30
+            xalign .5
+            yalign .5
+            
+            if is_correct_pareto_table_answer is not None:
+                if is_correct_pareto_table_answer:
+                    label _("[winner_text]"):
+                        style "confirm_prompt"
+                        xalign 0.5
+                else:
+                    label _("[loser_text]"):
+                        style "confirm_prompt"
+                        xalign 0.5
+            if not allow_forward:
+                textbutton _("Проверить") xalign 0.5 action Function(check_pareto_answ)
+            
