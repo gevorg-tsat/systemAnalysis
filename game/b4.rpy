@@ -20,8 +20,10 @@ init python:
     ranging_method4_table = list()
     sum_R_index_method4 = 1
     r_index_method4 = 1
+    W_data = -1
     sum_R_values = list()
     r_values = list()
+    method4_sogl = 0 # 0 == None, 1 == weak, 2 == medium, 3 == strong
     for i in range(len(alts_methods4)):
         ranging_method4_table.append(list())
         for j in range(EXPERTS_COUNT_METHOD4):
@@ -42,9 +44,33 @@ init python:
             return
         sum_R_values.append(value)
         sum_R_index_method4+=1
-        
-            # renpy.show_screen("task1_go_to_next")
         renpy.restart_interaction()
+    def write_r(inp):
+        global r_index_method4
+        global allow_forward
+        if not inp:
+            return
+        value = int(inp)
+        global r_values
+        r_values.append(value)
+        r_index_method4 += 1
+        renpy.restart_interaction()
+    def write_W(inp):
+        global sum_R_values
+        global allow_forward
+        global EXPERTS_COUNT_METHOD4
+        if not inp:
+            return
+        value = float(inp)
+        sum_sq = 0
+        for i in range(len(sum_R_values)):
+            sum_sq += ((sum_R_values[i] - 0.5 * (len(sum_R_values) + 1) * EXPERTS_COUNT_METHOD4) ** 2)
+        W_corr = 12*sum_sq/((EXPERTS_COUNT_METHOD4 ** 2) * (len(sum_R_values)**3 - len(sum_R_values)))
+        if abs(value - W_corr) > 0.1:
+            return
+        W_data = value
+        renpy.restart_interaction()
+    
     def kadrb4():
         global nkadr
         global vkadr
@@ -96,10 +122,10 @@ screen ranging_method(text):
 
     for i in range(len(sum_R_values)):
         frame:
-            text str(C_values_method3[i]) color "#000000" xalign 0.5 yalign 0.5 size 25
-            xpos int(xy_ev_al_table[0]  + (xsize_ev_al_table))
+            text str(sum_R_values[i]) color "#000000" xalign 0.5 yalign 0.5 size 25
+            xpos int(xy_ev_al_table[0]  + (EXPERTS_COUNT_METHOD4 + 1)*(xsize_ev_al_table/(EXPERTS_COUNT_METHOD4)))
             ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(alts_methods4) + 1)))
-            xsize int(xsize_ev_al_table/(len(alts_methods4) + 1))
+            xsize int(xsize_ev_al_table/(EXPERTS_COUNT_METHOD4))
             ysize int(ysize_ev_al_table/(len(alts_methods4) + 1))
     
     if sum_R_index_method4 == len(alts_methods4) + 1:
@@ -112,9 +138,9 @@ screen ranging_method(text):
         for i in range(len(r_values)):
             frame:
                 text str(r_values[i]) color "#000000" xalign 0.5 yalign 0.5 size 25
-                xpos int(xy_ev_al_table[0] + ((EXPERTS_COUNT_METHOD4+2)*(xsize_ev_al_table) + (EXPERTS_COUNT-1)*30) + (len(method1_task1_valid_alternatives)+1)*(xsize_ev_al_table/(len(method1_task1_valid_alternatives) + 1))) + 30
+                xpos int(xy_ev_al_table[0]  + (EXPERTS_COUNT_METHOD4 + 2)*(xsize_ev_al_table/(EXPERTS_COUNT_METHOD4)))
                 ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(alts_methods4) + 1)))
-                xsize int(xsize_ev_al_table/(len(alts_methods4) + 1))
+                xsize int(xsize_ev_al_table/(EXPERTS_COUNT_METHOD4))
                 ysize int(ysize_ev_al_table/(len(alts_methods4) + 1))
 
 screen method4_input:
@@ -134,21 +160,30 @@ screen method4_input:
                 label _("r{size=-10}[r_index_method4]{/size}"):
                     style "confirm_prompt"
                     xalign 0.5
-            else:
+            elif W_data == -1:
                 label _("W"):
                     style "confirm_prompt"
                     xalign 0.5
-            input:
-                default "None"
-                color "#000000"
-                value VariableInputValue("table_input", returnable=True)
-                xalign 0.5
-                length 8
-                if r_index_method4 != len(alts_methods4) + 1 or sum_R_index_method4 != len(alts_methods4) + 1:
-                    allow "1234567890"
-                else:
-                    allow "0123456789."
-                size 24
+            elif method4_sogl == 0:
+                label _("Согласованность"):
+                    style "confirm_prompt"
+                    xalign 0.5
+            else:
+                label _("Критерий Пирсона. Расчетный"):
+                    style "confirm_prompt"
+                    xalign 0.5
+            if W_data == -1:
+                input:
+                    default "None"
+                    color "#000000"
+                    value VariableInputValue("table_input", returnable=True)
+                    xalign 0.5
+                    length 8
+                    if r_index_method4 != len(alts_methods4) + 1 or sum_R_index_method4 != len(alts_methods4) + 1:
+                        allow "1234567890"
+                    else:
+                        allow "0123456789."
+                    size 24
                         
             hbox:
 
@@ -156,7 +191,13 @@ screen method4_input:
                 spacing 100
                 if sum_R_index_method4 != len(alts_methods4) + 1:
                     textbutton _("ввод") action Function(write_sum_R, table_input)
-                elif V_ir_index_method4ndex_method3 != len(alts_methods4) + 1:
-                    textbutton _("ввод") action Function(rewrite_table_method3_V, table_input)
+                elif r_index_method4 != len(alts_methods4) + 1:
+                    textbutton _("ввод") action Function(write_r, table_input)
+                elif W_data == -1:
+                    textbutton _("ввод") action Function(write_W, table_input)
+                elif not method4_sogl:
+                    textbutton _("слабая") action VariableInputValue(method4_sogl, 1)
+                    textbutton _("средняя") action VariableInputValue(method4_sogl, 2)
+                    textbutton _("сильная") action VariableInputValue(method4_sogl, 3)
                 else:
-                    textbutton _("ввод") action Function(rewrite_table_method3_R, table_input)
+                    textbutton _("ввод") action Function(write_W, table_input)
