@@ -1555,12 +1555,6 @@ screen task(task_text):
 
 
 
-screen structure_of_system(scheme, text):
-    text "Вскрытие структуры системы и её дефектных элементов" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
-    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
-    #$ renpy.show("picture", scheme)
-    #$ renpy.show("picture", at_list=["left"])
-    add "[scheme]" xpos 1000 ypos 200 xsize 700 ysize 800
 
 screen ability_structure(text):
     text "Определение структуры возможностей" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
