@@ -30,7 +30,21 @@ init python:
     for i in range(len(alts_methods4)):
         alts_methods4_txt += f"A{i+1} - {alts_methods4[i]}, "
     alts_methods4_txt = alts_methods4_txt[:-2]
-
+    def write_sum_R(inp):
+        global sum_R_index_method4
+        global allow_forward
+        if not inp:
+            return
+        value = int(inp)
+        global sum_R_values
+        global ranging_method4_table
+        if abs(sum(ranging_method4_table[sum_R_index_method4-1]) - value) > 1:
+            return
+        sum_R_values.append(value)
+        sum_R_index_method4+=1
+        
+            # renpy.show_screen("task1_go_to_next")
+        renpy.restart_interaction()
     def kadrb4():
         global nkadr
         global vkadr
@@ -80,6 +94,28 @@ screen ranging_method(text):
         xsize int(xsize_ev_al_table/(EXPERTS_COUNT_METHOD4))
         ysize int(ysize_ev_al_table/(len(alts_methods4) + 1))
 
+    for i in range(len(sum_R_values)):
+        frame:
+            text str(C_values_method3[i]) color "#000000" xalign 0.5 yalign 0.5 size 25
+            xpos int(xy_ev_al_table[0]  + (xsize_ev_al_table))
+            ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(alts_methods4) + 1)))
+            xsize int(xsize_ev_al_table/(len(alts_methods4) + 1))
+            ysize int(ysize_ev_al_table/(len(alts_methods4) + 1))
+    
+    if sum_R_index_method4 == len(alts_methods4) + 1:
+        frame:
+            text "r" color "#000000" xalign 0.5 yalign 0.5 
+            xpos int(xy_ev_al_table[0]  + (EXPERTS_COUNT_METHOD4 + 2)*(xsize_ev_al_table/(EXPERTS_COUNT_METHOD4)))
+            ypos xy_ev_al_table[1]
+            xsize int(xsize_ev_al_table/(EXPERTS_COUNT_METHOD4))
+            ysize int(ysize_ev_al_table/(len(alts_methods4) + 1))
+        for i in range(len(r_values)):
+            frame:
+                text str(r_values[i]) color "#000000" xalign 0.5 yalign 0.5 size 25
+                xpos int(xy_ev_al_table[0] + ((EXPERTS_COUNT_METHOD4+2)*(xsize_ev_al_table) + (EXPERTS_COUNT-1)*30) + (len(method1_task1_valid_alternatives)+1)*(xsize_ev_al_table/(len(method1_task1_valid_alternatives) + 1))) + 30
+                ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(alts_methods4) + 1)))
+                xsize int(xsize_ev_al_table/(len(alts_methods4) + 1))
+                ysize int(ysize_ev_al_table/(len(alts_methods4) + 1))
 
 screen method4_input:
     zorder 100
@@ -108,8 +144,8 @@ screen method4_input:
                 value VariableInputValue("table_input", returnable=True)
                 xalign 0.5
                 length 8
-                if r_index_method4 != len(alts_methods4) + 1 and sum_R_index_method4 == len(alts_methods4) + 1:
-                    allow "123456789"
+                if r_index_method4 != len(alts_methods4) + 1 or sum_R_index_method4 != len(alts_methods4) + 1:
+                    allow "1234567890"
                 else:
                     allow "0123456789."
                 size 24
@@ -118,9 +154,9 @@ screen method4_input:
 
                 xalign 0.5
                 spacing 100
-                if C_index_method3 != len(method1_task1_valid_alternatives) + 1:
-                    textbutton _("ввод") action Function(rewrite_table_method3_C, table_input)
-                elif V_index_method3 != len(method1_task1_valid_alternatives) + 1:
+                if sum_R_index_method4 != len(alts_methods4) + 1:
+                    textbutton _("ввод") action Function(write_sum_R, table_input)
+                elif V_ir_index_method4ndex_method3 != len(alts_methods4) + 1:
                     textbutton _("ввод") action Function(rewrite_table_method3_V, table_input)
                 else:
                     textbutton _("ввод") action Function(rewrite_table_method3_R, table_input)
