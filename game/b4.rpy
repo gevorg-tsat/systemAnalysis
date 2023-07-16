@@ -5,7 +5,7 @@ label b4kadr1:
     $ xy_ev_al_table = [50, 300]
     $ xsize_ev_al_table = 500
     $ ysize_ev_al_table = 500
-    $ alts_methods4_txt += ", ΣRi - сумма рангов, r - общий ранг альтерантивы, W - коэффициента конкордации Кенделла, "
+    $ alts_methods4_txt += ", ΣRi - сумма рангов, r - общий ранг альтерантивы, W - коэффициента конкордации Кенделла, P = 90%"
     show screen ranging_method(alts_methods4_txt)
     show screen method4_input
     show screen butforwardback
@@ -31,7 +31,7 @@ init python:
         ranging_method4_table.append(list())
         for j in range(EXPERTS_COUNT_METHOD4):
             ranging_method4_table[i].append(int(ranging_method4_google_data[i]["values"][j]["userEnteredValue"]["numberValue"]))
-    alts_methods4_txt = ""
+    alts_methods4_txt = "Задача состоит в сопоставлении оцениваемой альтернативе ранга: чем меньше ранг, тем альтернатива приоритетнее по мнению эксперта. "
     for i in range(len(alts_methods4)):
         alts_methods4_txt += f"A{i+1} - {alts_methods4[i]}, "
     alts_methods4_txt = alts_methods4_txt[:-2]
@@ -124,7 +124,7 @@ init python:
         renpy.pause()
 
 screen ranging_method(text):
-    text "Алгоритм парных сравнений для группы экспертов" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
+    text "Ранжирование" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
     text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
 
     zorder 100
