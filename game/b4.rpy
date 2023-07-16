@@ -1,10 +1,11 @@
 label b4kadr1:
     # TODO
-    $ screens = ["goal_defenition", "butforwardback", "method3_input", "method3_go_to_next"]
+    $ screens = ["ranging_method", "butforwardback", "method4_input", "pearson_table_image", "final_go_to_next_method4"]
     $ allow_forward = False
     $ xy_ev_al_table = [50, 300]
     $ xsize_ev_al_table = 500
     $ ysize_ev_al_table = 500
+    $ alts_methods4_txt += ", ΣRi - сумма рангов, r - общий ранг альтерантивы, W - коэффициента конкордации Кенделла, "
     show screen ranging_method(alts_methods4_txt)
     show screen method4_input
     show screen butforwardback
@@ -24,6 +25,8 @@ init python:
     sum_R_values = list()
     r_values = list()
     method4_sogl = 0 # 0 == None, 1 == weak, 2 == medium, 3 == strong
+    pearson_data = -1
+
     for i in range(len(alts_methods4)):
         ranging_method4_table.append(list())
         for j in range(EXPERTS_COUNT_METHOD4):
@@ -59,6 +62,7 @@ init python:
         global sum_R_values
         global allow_forward
         global EXPERTS_COUNT_METHOD4
+        global W_data
         if not inp:
             return
         value = float(inp)
@@ -70,7 +74,40 @@ init python:
             return
         W_data = value
         renpy.restart_interaction()
-    
+    def write_Pearson(inp):
+        global sum_R_values
+        global allow_forward
+        global EXPERTS_COUNT_METHOD4
+        global W_data
+        global pearson_data
+        if not inp:
+            return
+        value = float(inp)
+        Pearson_corr = W_data * EXPERTS_COUNT_METHOD4 * (len(sum_R_values) - 1)
+        if abs(value - Pearson_corr) > 0.1:
+            return
+        pearson_data = value
+        renpy.show_screen("pearson_table_image")
+        renpy.restart_interaction()
+    def pearson_90_table(n_m1):
+        table=[2.71, 4.61, 6.25, 7.78, 9.24, 10.64, 12.02, 13.36, 14.68, 50.99]
+        return table[n_m1-1]
+    def write_sogl(inp):
+        global method4_sogl
+        method4_sogl = inp
+    def check_correctness(signif):
+        global allow_forward
+        global pearson_data
+        pearson_from_table = pearson_90_table(len(sum_R_values) - 2)
+        if (signif and pearson_data > pearson_from_table) or (signif == False and pearson_data <= pearson_from_table):
+            text = "Верно! Поздравляю! переходи вперед, в меню"
+        else:
+            text = "К сожалению ты ошибься. переходи вперед, в меню"
+        allow_forward = True
+        renpy.hide_screen("method4_input")
+        renpy.show_screen("final_go_to_next_method4", text)
+        renpy.restart_interaction()
+
     def kadrb4():
         global nkadr
         global vkadr
@@ -142,7 +179,21 @@ screen ranging_method(text):
                 ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(alts_methods4) + 1)))
                 xsize int(xsize_ev_al_table/(EXPERTS_COUNT_METHOD4))
                 ysize int(ysize_ev_al_table/(len(alts_methods4) + 1))
-
+    if W_data != -1:
+        frame:
+            text "W = " + str(round(W_data,2)) color "#000000" xalign 0.5 yalign 0.5 size 25
+            xpos int(xy_ev_al_table[0])
+            ypos xy_ev_al_table[1] + int(ysize_ev_al_table) + 20
+            xsize int(xsize_ev_al_table/(EXPERTS_COUNT_METHOD4))
+            ysize int(ysize_ev_al_table/(len(alts_methods4) + 1))
+    if pearson_data != -1:
+        frame:
+            text "X2_расч = " + str(round(pearson_data,2)) color "#000000" xalign 0.5 yalign 0.5 size 25
+            xpos int(xy_ev_al_table[0])
+            ypos xy_ev_al_table[1] + int(ysize_ev_al_table) + int(ysize_ev_al_table/(len(alts_methods4) + 1)) + 20
+            xsize int(xsize_ev_al_table/(EXPERTS_COUNT_METHOD4))
+            ysize int(ysize_ev_al_table/(len(alts_methods4) + 1))
+    
 screen method4_input:
     zorder 100
     frame:
@@ -151,7 +202,7 @@ screen method4_input:
         vbox:
             xalign .5
             yalign .5
-            spacing 30
+            spacing 10
             if sum_R_index_method4 != len(alts_methods4) + 1:
                 label _("ΣR{size=-10}[sum_R_index_method4]{/size}"):
                     style "confirm_prompt"
@@ -168,11 +219,15 @@ screen method4_input:
                 label _("Согласованность"):
                     style "confirm_prompt"
                     xalign 0.5
-            else:
+            elif pearson_data == -1:
                 label _("Критерий Пирсона. Расчетный"):
                     style "confirm_prompt"
                     xalign 0.5
-            if W_data == -1:
+            else:
+                label _("W - статистически"):
+                    style "confirm_prompt"
+                    xalign 0.5
+            if W_data == -1 or (method4_sogl != 0 and pearson_data == -1):
                 input:
                     default "None"
                     color "#000000"
@@ -184,20 +239,36 @@ screen method4_input:
                     else:
                         allow "0123456789."
                     size 24
-                        
-            hbox:
+            
+            if not method4_sogl and W_data != -1:
+                vbox:
+                    xalign 0.5
+                    spacing 5
+                    textbutton _("слабая") action Function(write_sogl, 1)
+                    textbutton _("средняя") action Function(write_sogl, 2)
+                    textbutton _("сильная") action Function(write_sogl, 3)        
+            else:    
+                hbox:
+                    xalign 0.5
+                    spacing 100
+                    if sum_R_index_method4 != len(alts_methods4) + 1:
+                        textbutton _("ввод") action Function(write_sum_R, table_input)
+                    elif r_index_method4 != len(alts_methods4) + 1:
+                        textbutton _("ввод") action Function(write_r, table_input)
+                    elif W_data == -1:
+                        textbutton _("ввод") action Function(write_W, table_input)
+                    elif pearson_data == -1:
+                        textbutton _("ввод") action Function(write_Pearson, table_input)
+                    else:
+                        textbutton _("значим") action Function(check_correctness, True)
+                        textbutton _("не значим") action Function(check_correctness, False)
 
-                xalign 0.5
-                spacing 100
-                if sum_R_index_method4 != len(alts_methods4) + 1:
-                    textbutton _("ввод") action Function(write_sum_R, table_input)
-                elif r_index_method4 != len(alts_methods4) + 1:
-                    textbutton _("ввод") action Function(write_r, table_input)
-                elif W_data == -1:
-                    textbutton _("ввод") action Function(write_W, table_input)
-                elif not method4_sogl:
-                    textbutton _("слабая") action VariableInputValue(method4_sogl, 1)
-                    textbutton _("средняя") action VariableInputValue(method4_sogl, 2)
-                    textbutton _("сильная") action VariableInputValue(method4_sogl, 3)
-                else:
-                    textbutton _("ввод") action Function(write_W, table_input)
+screen final_go_to_next_method4(text):
+    frame:
+        xpos 1450 ypos 810
+        xsize 400 ysize 200
+        text "[text]" color "#000000" 
+
+screen pearson_table_image:
+    image "pearson_table.png":
+        xpos 1400 ypos 300 xsize 500 ysize 500
