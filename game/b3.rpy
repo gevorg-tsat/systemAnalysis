@@ -15,7 +15,7 @@ init python:
     alts_methods3_txt = ""
     for i in range(len(method1_task1_valid_alternatives)):
         alts_methods3_txt += f"A{i+1} - {method1_task1_valid_alternatives[i]}, "
-    alts_methods3_txt = alts_methods3_txt[:-2]
+    alts_methods3_txt = alts_methods3_txt[:-2] + ". Каждый эксперт независимо от других заполнил все ячейки матрицы попарных сравнений в соответствии с правилами сравнения. Определить обобщенные оценки предпочтения альтернатив над другими, вес каждой альтернативы и ранжировать в зависимости от полученных значений весов."
     experts_evals_google_data = json.loads(req.text)["sheets"][2]["data"][0]["rowData"]
     EXPERTS_COUNT = 3
     experts_evals = list()

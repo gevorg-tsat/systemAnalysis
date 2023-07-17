@@ -1,5 +1,4 @@
-define pareto_task1 = "Выбор лучшей альтернативы из множества Парето"
-
+define pareto_task1 = "Выбор лучшей альтернативы из множества Парето. Чтобы исключить альтернативу, нажми на номер строки"
 label b2kadr1:
     $ screens = ["check_pareto_table_answer", "butforwardback", "relevance_definition"]
     $ allow_forward = False
@@ -19,14 +18,13 @@ label b2kadr2:
     $ xy_ev_al_table = [100, 225]
     $ xsize_ev_al_table = 800
     $ ysize_ev_al_table = 600
-    if is_correct_pareto_table_answer:
-        $ allow_forward = True
-    show screen scolar_method(pareto_task1)
+    show screen scolar_method(pareto_task2)
     show screen scolar_method_input
     show screen butforwardback
     pause
 
 init python:
+    pareto_task2 = "Формирование обобщающего критерия Ki. Весовые коэффициенты i-о критерия: "
     req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     # TODO дергает ручку с гугл таблицы
     google_sheet_data = json.loads(req.text)["sheets"][1]["data"][row_number]["rowData"][0]["values"]
@@ -38,6 +36,9 @@ init python:
     criteries = list(map(str.strip, second_row_data[2]["userEnteredValue"]["stringValue"].split(";")))
     min_maxing_criteries = list(map(int,map(str.strip, third_row_data[2]["userEnteredValue"]["stringValue"].split(";"))))
     alphas_task2 = list(map(float,map(str.strip, third_row_data[3]["userEnteredValue"]["stringValue"].split(";"))))
+    for i in range(len(alphas_task2)):
+        pareto_task2 += f"a{i+1} = {alphas_task2[i]}, "
+    pareto_task2 = pareto_task2[:-2]
     pareto_table=[]
     criteries_txt = ""
     alts_txt = ""
@@ -83,6 +84,7 @@ init python:
     def ranging(inp):
         global rangs_method1
         global R_index
+        global allow_forward
         if not inp:
             return
         value = int(inp)
@@ -91,6 +93,7 @@ init python:
         while R_index - 1 < len(pareto_table_line_status) and pareto_table_line_status[R_index-1]:
             R_index+=1
         if R_index > len(pareto_table_line_status):
+            allow_forward = True
             renpy.hide_screen("scolar_method_input")
             renpy.show_screen("task2_go_to_next")
         renpy.restart_interaction()

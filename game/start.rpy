@@ -11,23 +11,17 @@
 screen start:
     modal True
     imagemap:
-        ground "#FFFFFF"
+        ground "kadr start_.png"
         idle "kadr start.png"
         hover "kadr start_.png"
-        hotspot(1006,36,253,150) action Call("startb1")
-        hotspot(1315,36,253,150) action Call("startb2")
-        hotspot(1626,36,253,150) action Call("startb3")
-        hotspot(1006,259,253,150) action Call("startb4")
-        hotspot(1315,259,253,150) action Call("startb5")
-        hotspot(1626,259,253,150) action Call("startb6")
-        hotspot(1006,457,253,150) action Call("startb7")
-        hotspot(1315,457,253,150) action Call("startb8")
-        hotspot(1626,457,253,150) action Call("startb9")
-        hotspot(1006,660,253,150) action Call("startb10")
-        hotspot(1315,660,253,150) action Call("startb11")
-        hotspot(1626,660,253,150) action Call("startb12")
-        hotspot(1006,869,253,150) action Call("startb13")
+        hotspot(1016,364,253,150) action Call("startb2")
+        hotspot(1325,364,253,150) action Call("startb7")
+        hotspot(1636,364,253,150) action Call("startb3")
+        hotspot(1016,575,253,150) action Call("startb4")
+        hotspot(1325,575,253,150) action Call("startb5")
         text "{size=+10}{cps=10}Итак, ты — в Игре!\nЭтот путь будет только твоим. Качай задания, смотри подсказки, следи за волшебными кнопкам, стань лучшим!\nУдачи!{/cps}{/size}" xpos 50 ypos 50 xsize 830 ysize 400 color "#000000"
+
+
 
 label startgame:
     hide screen task

@@ -125,7 +125,7 @@ init python:
 
 screen ranging_method(text):
     text "Ранжирование" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
-    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1000 ysize 900
+    text "[text]"  color "#000000" xpos 50 ypos 150 xsize 1800 ysize 900
 
     zorder 100
     for i in range(len(alts_methods4)):
