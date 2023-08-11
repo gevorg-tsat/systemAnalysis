@@ -198,15 +198,14 @@ screen relevance_definition(task):
     for i in range(len(method1_task1_alternatives)):
         for j in range(len(criteries)):
             frame:
-                if pareto_table_line_status[i] == 1:
-                    image "kadr b14v" xsize int(xsize_ev_al_table/(len(method1_task1_alternatives) + 1)) ypos 0.2
-                else:
-                    text str(pareto_table[i][j]) color "#000000" xalign 0.5 yalign 0.5 #pareto_table[i][j]
+                text str(pareto_table[i][j]) color "#000000" xalign 0.5 yalign 0.5 #pareto_table[i][j]
                 xpos int(xy_ev_al_table[0]  + (j+1)*(xsize_ev_al_table/(len(method1_task1_alternatives) + 1)))
                 ypos int(xy_ev_al_table[1] + (i+1)*(ysize_ev_al_table/(len(method1_task1_alternatives) + 1)))
                 xsize int(xsize_ev_al_table/(len(method1_task1_alternatives) + 1))
                 ysize int(ysize_ev_al_table/(len(method1_task1_alternatives) + 1))
-
+    for i in range(len(method1_task1_alternatives)):
+        if pareto_table_line_status[i] == 1:
+            image "kadr b14v" xsize int(xsize_ev_al_table/(len(method1_task1_alternatives) + 1))*len(criteries) ypos int(xy_ev_al_table[1] + (i+1)*(ysize_ev_al_table/(len(method1_task1_alternatives) + 1)) + ysize_ev_al_table/len(method1_task1_alternatives)/4) xpos int(xy_ev_al_table[0] + (xsize_ev_al_table/(len(method1_task1_alternatives) + 1)))
 screen check_pareto_table_answer:
     zorder 100
     frame:
