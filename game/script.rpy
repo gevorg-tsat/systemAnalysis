@@ -49,6 +49,17 @@ define loser_no_tries_text = "Неверно. Попытки закончило�
 init python:
     def play1():
         Rollback()
+    config.keymap['dismiss'].remove('K_KP_ENTER')
+    config.keymap['button_select'].remove('K_KP_ENTER')
+    config.keymap['input_enter'].remove('K_KP_ENTER')
+    config.keymap['bar_activate'].remove('K_KP_ENTER')
+    config.keymap['bar_deactivate'].remove('K_KP_ENTER')
+    config.keymap['dismiss'].remove('K_RETURN')
+    config.keymap['button_select'].remove('K_RETURN')
+    config.keymap['input_enter'].remove('K_RETURN')
+    config.keymap['bar_activate'].remove('K_RETURN')
+    config.keymap['bar_deactivate'].remove('K_RETURN')
+
     
 define but = Character("", color="#ffcc77", window_left_padding=100, image="gui/frame1.png", left_margin = 0)
 image kadr1 = "images/splashscreen 1.png"
