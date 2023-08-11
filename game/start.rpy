@@ -225,7 +225,6 @@ screen stkadr2but:
 label startgame0:
     hide screen main_menu
     scene black
-    
     return
     show stkadr1 at center with fade
     pause(1)

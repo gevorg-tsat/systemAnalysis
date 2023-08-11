@@ -13,6 +13,7 @@ label b3kadr1:
 init python:
     req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     alts_methods3_txt = ""
+    show_error = False
     for i in range(len(method1_task1_valid_alternatives)):
         alts_methods3_txt += f"A{i+1} - {method1_task1_valid_alternatives[i]}, "
     alts_methods3_txt = alts_methods3_txt[:-2] + ". Каждый эксперт независимо от других заполнил все ячейки матрицы попарных сравнений в соответствии с правилами сравнения. Определить обобщенные оценки предпочтения альтернатив над другими, вес каждой альтернативы и ранжировать в зависимости от полученных значений весов."
@@ -55,6 +56,7 @@ init python:
         return res
 
     def rewrite_table_method3_C(inp):
+        global show_error
         global C_index_method3
         global allow_forward
         global table_input
@@ -65,14 +67,16 @@ init python:
         global C_values_method3
         global experts_evals
         if abs(sum_all_exps(C_index_method3) - value) > 0.1:
+            show_error = True
             return
         C_values_method3.append(value)
         C_index_method3+=1
-        
+        show_error = False
             # renpy.show_screen("task1_go_to_next")
         renpy.restart_interaction()
     
     def rewrite_table_method3_V(inp):
+        global show_error
         global V_index_method3
         global allow_forward
         global table_input
@@ -83,12 +87,15 @@ init python:
         global C_values_method3
         global V_values_method3
         if abs(C_values_method3[V_index_method3-1]/sum(C_values_method3) - value) > 0.05:
+            show_error = True
             return
         V_values_method3.append(value)
+        show_error = False
         V_index_method3 += 1
         renpy.restart_interaction()
 
     def rewrite_table_method3_R(inp):
+        global show_error
         global R_values_method3
         global R_method3
         global allow_forward
@@ -98,12 +105,15 @@ init python:
         try:
             value = int(inp)
         except:
+            show_error = True
             return
         table_input = ''
         if value == 0:
+            show_error = True
             return
         R_values_method3.append(value)
         R_method3 += 1
+        show_error = False
         if R_method3 == len(method1_task1_valid_alternatives) + 1:
             allow_forward = True
             renpy.hide_screen("method3_input")
@@ -228,6 +238,8 @@ screen method3_input:
                     textbutton _("ввод") action Function(rewrite_table_method3_V, table_input)
                 else:
                     textbutton _("ввод") action Function(rewrite_table_method3_R, table_input)
+    if show_error:
+        text "Ошибка" xpos 1560 ypos 1030  color '#000000'
 
 screen method3_go_to_next:
     frame:

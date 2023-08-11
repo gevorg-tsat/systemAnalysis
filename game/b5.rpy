@@ -13,6 +13,7 @@ label b5kadr1:
 
 init python:
     import math
+    show_error = False
     req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     method5_google_data = json.loads(req.text)["sheets"][4]["data"][0]["rowData"]
     EXPERTS_COUNT_METHOD5 = method5_google_data[0]["values"][1]["userEnteredValue"]["numberValue"]
@@ -43,6 +44,7 @@ init python:
         
         renpy.pause()
     def check_mean(inp):
+        global show_error
         global x_data
         global table_input
         global alpha_data
@@ -54,11 +56,14 @@ init python:
         table_input = ''
         mean_corr = sum([x_data[i] * alpha_data[i] for i in range(len(x_data))])/sum(alpha_data)
         if abs(value - mean_corr) > 0.1:
+            show_error = True
             return
         mean_exps = value
+        show_error = False
         renpy.restart_interaction()
 
     def check_desp(inp):
+        global show_error
         global x_data
         global alpha_data
         global EXPERTS_COUNT_METHOD5
@@ -71,11 +76,14 @@ init python:
         table_input = ''
         despersion_corr = sum([((x_data[i] - mean_exps)**2) * alpha_data[i] for i in range(len(x_data))])/sum(alpha_data)
         if abs(value - despersion_corr) > 0.1:
+            show_error = True
             return
+        show_error = False
         despersion_exps = value
         renpy.restart_interaction()
     
     def check_delta(inp):
+        global show_error
         student_coef = [6.3137, 2.9199, 2.3533, 2.1318, 2.01504, 1.94318, 1.8945, 1.8595, 1.83311]
         global x_data
         global alpha_data
@@ -89,11 +97,14 @@ init python:
         table_input = ''
         delta_corr = student_coef[EXPERTS_COUNT_METHOD5 - 2] * math.sqrt(despersion_exps)/ math.sqrt(EXPERTS_COUNT_METHOD5)
         if abs(value - delta_corr) > 0.1:
+            show_error = True
             return
         delta_exps = value
+        show_error = False
         renpy.restart_interaction()
     
     def check_left_diap(inp):
+        global show_error
         global x_data
         global alpha_data
         global despersion_exps
@@ -108,8 +119,10 @@ init python:
         table_input = ''
         left_corr = mean_exps - delta_exps
         if abs(value - left_corr) > 0.1:
+            show_error = True
             return
         left_diaposon = value
+        show_error = False
         renpy.restart_interaction()
     
     def check_right_diap(inp):
@@ -122,14 +135,17 @@ init python:
         global right_diaposon
         global allow_forward
         global table_input
+        global show_error
         if not inp:
             return
         value = float(inp)
         table_input = ''
         right_corr = mean_exps + delta_exps
         if abs(value - right_corr) > 0.1:
+            show_error = True
             return
         right_diaposon = value
+        show_error = False
         text = "Верно! Поздравляю! переходи вперед, в меню"
         allow_forward = True
         renpy.hide_screen("method5_input")
@@ -243,7 +259,8 @@ screen method5_input:
                     textbutton _("ввод") action Function(check_left_diap, table_input)
                 elif right_diaposon is None:
                     textbutton _("ввод") action Function(check_right_diap, table_input)
-
+    if show_error:
+        text "Ошибка" xpos 1560 ypos 1030  color '#000000'
 screen student_table_image:
     image "student-table.png":
         xpos 1200 ypos 50 xsize 600 ysize 700

@@ -29,6 +29,7 @@ init python:
     req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     # TODO дергает ручку с гугл таблицы
     table_input = ''
+    show_error = False
     google_sheet_data = json.loads(req.text)["sheets"][1]["data"][row_number]["rowData"][0]["values"]
     second_row_data = json.loads(req.text)["sheets"][1]["data"][0]["rowData"][1]["values"]
     third_row_data = json.loads(req.text)["sheets"][1]["data"][0]["rowData"][2]["values"]
@@ -121,6 +122,7 @@ init python:
         global pareto_table
         global K_index
         global table_input
+        global show_error
         K_corr = 0
         if not inp:
             return
@@ -129,11 +131,13 @@ init python:
         for i in range(len(pareto_table[K_index-1])):
             K_corr += pareto_table[K_index-1][i] * alphas_task2[i]
         if abs(K_corr - data) > 0.1:
+            show_error = True
             return
         K_index_data[K_index-1] = data
         K_index += 1
         while K_index - 1 < len(pareto_table_line_status) and pareto_table_line_status[K_index-1]:
             K_index+=1
+        show_error = False
         renpy.restart_interaction()
         
 
@@ -335,4 +339,5 @@ screen scolar_method_input:
                     textbutton _("ввод") action Function(add_data_K_index, table_input)
                 else:
                     textbutton _("ввод") action Function(ranging, table_input)
-
+    if show_error:
+        text "Ошибка" xpos 1560 ypos 1030  color '#000000'

@@ -1,5 +1,6 @@
 default table_input = ""
 init python:
+    show_error = False
     req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     # TODO дергает ручку с гугл таблицы
     row_number = 0
@@ -79,6 +80,7 @@ init python:
             renpy.show_screen("task1_go_to_next")
         renpy.restart_interaction()
     def rewrite_table_task2(inp):
+        global show_error
         global table_input
         global C_index
         global allow_forward
@@ -89,7 +91,9 @@ init python:
         global ev_al_task2_C_index_data
         global ev_al_task1_table_data
         if abs(geom_mean(ev_al_task1_table_data[C_index-1]) - value) > 0.2:
+            show_error = True
             return
+        show_error = False
         ev_al_task2_C_index_data.append(value)
         C_index+=1
         
@@ -97,6 +101,7 @@ init python:
         renpy.restart_interaction()
     
     def rewrite_table_task2_V(inp):
+        global show_error
         global V_index
         global allow_forward
         global table_input
@@ -108,9 +113,11 @@ init python:
         global ev_al_task2_V_index_data
         global ev_al_task1_table_data
         if abs(ev_al_task2_C_index_data[V_index-1]/sum(ev_al_task2_C_index_data) - value) > 0.05:
+            show_error = True
             return
         ev_al_task2_V_index_data.append(value)
         V_index+=1
+        show_error = False
         if V_index == len(ev_al_task1_alternatives) + 1:
             allow_forward = True
             renpy.hide_screen("ev_al_task2_input")
@@ -118,6 +125,7 @@ init python:
         renpy.restart_interaction()
     
     def rewrite_data_task3(inp):
+        global show_error
         global table_input
         global I_value
         global IS_value
@@ -131,22 +139,28 @@ init python:
         if I_value is None:
             I_correct = get_I_value(ev_al_task1_table_data, ev_al_task2_V_index_data)
             if abs(value - I_correct) > 0.1:
+                show_error = True
                 return
             I_value = value
+            show_error = False
             renpy.restart_interaction()
             return
         if IS_value is None:
             IS_correct = ((I_value - len(ev_al_task1_alternatives))/ (len(ev_al_task1_alternatives) - 1))
             if abs(value - IS_correct) > 0.1:
+                show_error = True
                 return
             IS_value = value
             renpy.restart_interaction()
+            show_error = False
             return
         if OS_value is None:
             OS_correct = (IS_value)/(sls_info_table[len(ev_al_task1_alternatives) - 3])
             if abs(value - OS_correct) > 0.05:
+                show_error = True
                 return
             OS_value = value
+            show_error = False
             renpy.show_screen("eval_trueness_of_expert")
             renpy.hide_screen("ev_al_task3_input")
             renpy.restart_interaction()
@@ -398,6 +412,8 @@ screen ev_al_task2_input:
                     textbutton _("ввод") action Function(rewrite_table_task2, table_input)
                 else:
                     textbutton _("ввод") action Function(rewrite_table_task2_V, table_input)
+    if show_error:
+        text "Ошибка" xpos 1560 ypos 1030  color '#000000'
 
 screen task2_go_to_next:
     frame:
@@ -572,6 +588,8 @@ screen eval_trueness_of_expert:
             
             textbutton _("согласовано") xalign 0.5 action Function(check_sogl, True) 
             textbutton _("не согласовано") xalign 0.5 action Function(check_sogl, False)
+    if show_error:
+        text "Ошибка" xpos 1560 ypos 1030  color '#000000'
 
 screen final_go_to_next(text):
     frame:

@@ -17,6 +17,7 @@ init python:
     req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     ranging_method4_google_data = json.loads(req.text)["sheets"][3]["data"][0]["rowData"]
     EXPERTS_COUNT_METHOD4 = 3
+    show_error = False
     alts_methods4 = method1_task1_alternatives
     ranging_method4_table = list()
     sum_R_index_method4 = 1
@@ -36,6 +37,7 @@ init python:
         alts_methods4_txt += f"A{i+1} - {alts_methods4[i]}, "
     alts_methods4_txt = alts_methods4_txt[:-2]
     def write_sum_R(inp):
+        global show_error
         global sum_R_index_method4
         global allow_forward
         global table_input
@@ -46,11 +48,14 @@ init python:
         global sum_R_values
         global ranging_method4_table
         if abs(sum(ranging_method4_table[sum_R_index_method4-1]) - value) > 1:
+            show_error = True
             return
         sum_R_values.append(value)
         sum_R_index_method4+=1
+        show_error = False
         renpy.restart_interaction()
     def write_r(inp):
+        global show_error
         global r_index_method4
         global allow_forward
         global table_input
@@ -59,10 +64,12 @@ init python:
         value = int(inp)
         table_input = ''
         global r_values
+        show_error = False
         r_values.append(value)
         r_index_method4 += 1
         renpy.restart_interaction()
     def write_W(inp):
+        global show_error
         global sum_R_values
         global allow_forward
         global EXPERTS_COUNT_METHOD4
@@ -75,10 +82,13 @@ init python:
             sum_sq += ((sum_R_values[i] - 0.5 * (len(sum_R_values) + 1) * EXPERTS_COUNT_METHOD4) ** 2)
         W_corr = 12*sum_sq/((EXPERTS_COUNT_METHOD4 ** 2) * (len(sum_R_values)**3 - len(sum_R_values)))
         if abs(value - W_corr) > 0.1:
+            show_error = True
             return
         W_data = value
+        show_error = False
         renpy.restart_interaction()
     def write_Pearson(inp):
+        global show_error
         global table_input
         global sum_R_values
         global allow_forward
@@ -91,8 +101,10 @@ init python:
         table_input = ''
         Pearson_corr = W_data * EXPERTS_COUNT_METHOD4 * (len(sum_R_values) - 1)
         if abs(value - Pearson_corr) > 0.1:
+            show_error = True
             return
         pearson_data = value
+        show_error = False
         renpy.show_screen("pearson_table_image")
         renpy.restart_interaction()
     def pearson_90_table(n_m1):
@@ -268,7 +280,8 @@ screen method4_input:
                     else:
                         textbutton _("значим") action Function(check_correctness, True)
                         textbutton _("не значим") action Function(check_correctness, False)
-
+    if show_error:
+        text "Ошибка" xpos 1560 ypos 1030  color '#000000'
 screen final_go_to_next_method4(text):
     frame:
         xpos 1450 ypos 810
