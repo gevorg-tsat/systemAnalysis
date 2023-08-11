@@ -44,12 +44,14 @@ init python:
         renpy.pause()
     def check_mean(inp):
         global x_data
+        global table_input
         global alpha_data
         global EXPERTS_COUNT_METHOD5
         global mean_exps
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         mean_corr = sum([x_data[i] * alpha_data[i] for i in range(len(x_data))])/sum(alpha_data)
         if abs(value - mean_corr) > 0.1:
             return
@@ -61,10 +63,12 @@ init python:
         global alpha_data
         global EXPERTS_COUNT_METHOD5
         global mean_exps
+        global table_input
         global despersion_exps
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         despersion_corr = sum([((x_data[i] - mean_exps)**2) * alpha_data[i] for i in range(len(x_data))])/sum(alpha_data)
         if abs(value - despersion_corr) > 0.1:
             return
@@ -77,10 +81,12 @@ init python:
         global alpha_data
         global despersion_exps
         global delta_exps
+        global table_input
         global EXPERTS_COUNT_METHOD5
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         delta_corr = student_coef[EXPERTS_COUNT_METHOD5 - 2] * math.sqrt(despersion_exps)/ math.sqrt(EXPERTS_COUNT_METHOD5)
         if abs(value - delta_corr) > 0.1:
             return
@@ -93,11 +99,13 @@ init python:
         global despersion_exps
         global delta_exps
         global mean_exps
+        global table_input
         global EXPERTS_COUNT_METHOD5
         global left_diaposon
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         left_corr = mean_exps - delta_exps
         if abs(value - left_corr) > 0.1:
             return
@@ -113,9 +121,11 @@ init python:
         global EXPERTS_COUNT_METHOD5
         global right_diaposon
         global allow_forward
+        global table_input
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         right_corr = mean_exps + delta_exps
         if abs(value - right_corr) > 0.1:
             return

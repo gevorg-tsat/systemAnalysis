@@ -57,9 +57,11 @@ init python:
         global fir
         global sec
         global allow_forward
+        global table_input
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         global ev_al_task1_table_data
         ev_al_task1_table_data[fir-1][sec-1] = value
         ev_al_task1_table_data[sec-1][fir-1] = 1/value
@@ -77,11 +79,13 @@ init python:
             renpy.show_screen("task1_go_to_next")
         renpy.restart_interaction()
     def rewrite_table_task2(inp):
+        global table_input
         global C_index
         global allow_forward
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         global ev_al_task2_C_index_data
         global ev_al_task1_table_data
         if abs(geom_mean(ev_al_task1_table_data[C_index-1]) - value) > 0.2:
@@ -95,9 +99,11 @@ init python:
     def rewrite_table_task2_V(inp):
         global V_index
         global allow_forward
+        global table_input
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         global ev_al_task2_C_index_data
         global ev_al_task2_V_index_data
         global ev_al_task1_table_data
@@ -112,6 +118,7 @@ init python:
         renpy.restart_interaction()
     
     def rewrite_data_task3(inp):
+        global table_input
         global I_value
         global IS_value
         global OS_value
@@ -120,6 +127,7 @@ init python:
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         if I_value is None:
             I_correct = get_I_value(ev_al_task1_table_data, ev_al_task2_V_index_data)
             if abs(value - I_correct) > 0.1:

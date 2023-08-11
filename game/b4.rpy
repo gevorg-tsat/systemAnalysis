@@ -38,9 +38,11 @@ init python:
     def write_sum_R(inp):
         global sum_R_index_method4
         global allow_forward
+        global table_input
         if not inp:
             return
         value = int(inp)
+        table_input = ''
         global sum_R_values
         global ranging_method4_table
         if abs(sum(ranging_method4_table[sum_R_index_method4-1]) - value) > 1:
@@ -51,9 +53,11 @@ init python:
     def write_r(inp):
         global r_index_method4
         global allow_forward
+        global table_input
         if not inp:
             return
         value = int(inp)
+        table_input = ''
         global r_values
         r_values.append(value)
         r_index_method4 += 1
@@ -75,6 +79,7 @@ init python:
         W_data = value
         renpy.restart_interaction()
     def write_Pearson(inp):
+        global table_input
         global sum_R_values
         global allow_forward
         global EXPERTS_COUNT_METHOD4
@@ -83,6 +88,7 @@ init python:
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         Pearson_corr = W_data * EXPERTS_COUNT_METHOD4 * (len(sum_R_values) - 1)
         if abs(value - Pearson_corr) > 0.1:
             return

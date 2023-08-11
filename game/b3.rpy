@@ -57,9 +57,11 @@ init python:
     def rewrite_table_method3_C(inp):
         global C_index_method3
         global allow_forward
+        global table_input
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         global C_values_method3
         global experts_evals
         if abs(sum_all_exps(C_index_method3) - value) > 0.1:
@@ -73,9 +75,11 @@ init python:
     def rewrite_table_method3_V(inp):
         global V_index_method3
         global allow_forward
+        global table_input
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         global C_values_method3
         global V_values_method3
         if abs(C_values_method3[V_index_method3-1]/sum(C_values_method3) - value) > 0.05:
@@ -88,12 +92,14 @@ init python:
         global R_values_method3
         global R_method3
         global allow_forward
+        global table_input
         if not inp:
             return
         try:
             value = int(inp)
         except:
             return
+        table_input = ''
         if value == 0:
             return
         R_values_method3.append(value)

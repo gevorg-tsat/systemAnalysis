@@ -87,9 +87,11 @@ init python:
         global rangs_method1
         global R_index
         global allow_forward
+        global table_input
         if not inp:
             return
         value = int(inp)
+        table_input = ''
         rangs_method1[R_index-1] = value
         R_index += 1
         while R_index - 1 < len(pareto_table_line_status) and pareto_table_line_status[R_index-1]:
@@ -122,16 +124,16 @@ init python:
         K_corr = 0
         if not inp:
             return
+        data = float(inp)
+        table_input = ''
         for i in range(len(pareto_table[K_index-1])):
             K_corr += pareto_table[K_index-1][i] * alphas_task2[i]
-        if abs(K_corr - float(inp)) > 0.1:
-            table_input = ''
+        if abs(K_corr - data) > 0.1:
             return
-        K_index_data[K_index-1] = float(inp)
+        K_index_data[K_index-1] = data
         K_index += 1
         while K_index - 1 < len(pareto_table_line_status) and pareto_table_line_status[K_index-1]:
             K_index+=1
-        table_input = ''
         renpy.restart_interaction()
         
 
