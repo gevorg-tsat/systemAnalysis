@@ -11,7 +11,7 @@
 screen start:
     modal True
     imagemap:
-        ground "kadr start_.png"
+        # ground "kadr start_.png"
         idle "kadr start.png"
         hover "kadr start_.png"
         hotspot(1016,364,253,150) action Call("startb2")

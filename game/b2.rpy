@@ -1,4 +1,5 @@
 define pareto_task1 = "Выбор лучшей альтернативы из множества Парето. Чтобы исключить альтернативу, нажми на номер строки"
+define answer_input = VariableInputValue("table_input", returnable=True)
 label b2kadr1:
     $ screens = ["check_pareto_table_answer", "butforwardback", "relevance_definition"]
     $ allow_forward = False
@@ -27,6 +28,7 @@ init python:
     pareto_task2 = "Формирование обобщающего критерия Ki. Весовые коэффициенты i-о критерия: "
     req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     # TODO дергает ручку с гугл таблицы
+    table_input = ''
     google_sheet_data = json.loads(req.text)["sheets"][1]["data"][row_number]["rowData"][0]["values"]
     second_row_data = json.loads(req.text)["sheets"][1]["data"][0]["rowData"][1]["values"]
     third_row_data = json.loads(req.text)["sheets"][1]["data"][0]["rowData"][2]["values"]
@@ -116,17 +118,20 @@ init python:
         global K_index_data
         global pareto_table
         global K_index
+        global table_input
         K_corr = 0
         if not inp:
             return
         for i in range(len(pareto_table[K_index-1])):
             K_corr += pareto_table[K_index-1][i] * alphas_task2[i]
         if abs(K_corr - float(inp)) > 0.1:
+            table_input = ''
             return
         K_index_data[K_index-1] = float(inp)
         K_index += 1
         while K_index - 1 < len(pareto_table_line_status) and pareto_table_line_status[K_index-1]:
             K_index+=1
+        table_input = ''
         renpy.restart_interaction()
         
 
@@ -311,7 +316,7 @@ screen scolar_method_input:
             input:
                 default "None"
                 color "#000000"
-                value VariableInputValue("table_input", returnable=True)
+                value answer_input
                 xalign 0.5
                 length 8
                 if K_index <= len(method1_task1_alternatives):
