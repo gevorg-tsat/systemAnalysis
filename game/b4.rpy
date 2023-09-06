@@ -135,6 +135,7 @@ init python:
         for scr in screens:
             renpy.hide_screen(scr) 
         if not renpy.has_label(f"b4kadr{nkadr}"):
+            renpy.call("startgame")
             return
         renpy.call(f"b4kadr{nkadr}")
         #renpy.with_statement(fade)
