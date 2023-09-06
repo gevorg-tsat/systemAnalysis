@@ -67,7 +67,7 @@ init python:
         table_input = ''
         global C_values_method3
         global experts_evals
-        if abs(sum_all_exps(C_index_method3) - value) > 0.1:
+        if round(sum_all_exps(C_index_method3), 2) != round(value,2):
             show_error = True
             return
         C_values_method3.append(value)
@@ -87,7 +87,7 @@ init python:
         table_input = ''
         global C_values_method3
         global V_values_method3
-        if abs(C_values_method3[V_index_method3-1]/sum(C_values_method3) - value) > 0.05:
+        if round(C_values_method3[V_index_method3-1]/sum(C_values_method3), 2) -  round(value,2):
             show_error = True
             return
         V_values_method3.append(value)

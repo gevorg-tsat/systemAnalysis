@@ -130,7 +130,7 @@ init python:
         table_input = ''
         for i in range(len(pareto_table[K_index-1])):
             K_corr += pareto_table[K_index-1][i] * alphas_task2[i]
-        if abs(K_corr - data) > 0.1:
+        if round(value, 2) != round(K_corr, 2):
             show_error = True
             return
         K_index_data[K_index-1] = data

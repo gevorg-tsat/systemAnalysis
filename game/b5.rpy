@@ -56,7 +56,7 @@ init python:
         value = float(inp)
         table_input = ''
         mean_corr = sum([x_data[i] * alpha_data[i] for i in range(len(x_data))])/sum(alpha_data)
-        if abs(value - mean_corr) > 0.1:
+        if round(value, 2) != round(mean_corr, 2):
             show_error = True
             return
         mean_exps = value
@@ -76,7 +76,7 @@ init python:
         value = float(inp)
         table_input = ''
         despersion_corr = sum([((x_data[i] - mean_exps)**2) * alpha_data[i] for i in range(len(x_data))])/sum(alpha_data)
-        if abs(value - despersion_corr) > 0.1:
+        if round(value, 2) != round(despersion_corr, 2):
             show_error = True
             return
         show_error = False
@@ -97,7 +97,7 @@ init python:
         value = float(inp)
         table_input = ''
         delta_corr = student_coef[EXPERTS_COUNT_METHOD5 - 2] * math.sqrt(despersion_exps)/ math.sqrt(EXPERTS_COUNT_METHOD5)
-        if abs(value - delta_corr) > 0.1:
+        if round(value, 2) != round(delta_corr, 2):
             show_error = True
             return
         delta_exps = value
@@ -119,7 +119,7 @@ init python:
         value = float(inp)
         table_input = ''
         left_corr = mean_exps - delta_exps
-        if abs(value - left_corr) > 0.1:
+        if round(value, 2) != round(left_corr, 2):
             show_error = True
             return
         left_diaposon = value
@@ -142,7 +142,7 @@ init python:
         value = float(inp)
         table_input = ''
         right_corr = mean_exps + delta_exps
-        if abs(value - right_corr) > 0.1:
+        if round(value, 2) != round(right_corr, 2):
             show_error = True
             return
         right_diaposon = value

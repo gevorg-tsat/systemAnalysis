@@ -47,7 +47,7 @@ init python:
         table_input = ''
         global sum_R_values
         global ranging_method4_table
-        if abs(sum(ranging_method4_table[sum_R_index_method4-1]) - value) > 1:
+        if round(sum(ranging_method4_table[sum_R_index_method4-1]), 2) != round(value,2):
             show_error = True
             return
         sum_R_values.append(value)
@@ -81,7 +81,7 @@ init python:
         for i in range(len(sum_R_values)):
             sum_sq += ((sum_R_values[i] - 0.5 * (len(sum_R_values) + 1) * EXPERTS_COUNT_METHOD4) ** 2)
         W_corr = 12*sum_sq/((EXPERTS_COUNT_METHOD4 ** 2) * (len(sum_R_values)**3 - len(sum_R_values)))
-        if abs(value - W_corr) > 0.1:
+        if round(value,2) != round(W_corr, 2):
             show_error = True
             return
         W_data = value
@@ -100,7 +100,7 @@ init python:
         value = float(inp)
         table_input = ''
         Pearson_corr = W_data * EXPERTS_COUNT_METHOD4 * (len(sum_R_values) - 1)
-        if abs(value - Pearson_corr) > 0.1:
+        if round(value,2) != round(Pearson_corr, 2):
             show_error = True
             return
         pearson_data = value
