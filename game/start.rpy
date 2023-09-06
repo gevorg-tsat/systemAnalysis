@@ -12,9 +12,9 @@
 screen start:
     modal True
     imagemap:
-        ground "kadr start_.png"
-        idle "kadr start.png"
-        hover "kadr start_.png"
+        ground "kadr start_blocked.png"
+        idle "kadr start_nopick.png"
+        hover "kadr start_picked.png"
         if not b1_done:
             hotspot(1016,364,253,150) action Call("startb2")
         if not b2_done:
