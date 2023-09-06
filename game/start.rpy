@@ -3,6 +3,7 @@
     $ screens = ["task", "butforwardback"]
     scene white
     hide screen main_menu
+    $ b1_done = b2_done = b3_done = b4_done = b5_done = False
     show screen task(task_text1)
     $ vkadr = "start"
     show screen butforwardback
@@ -11,14 +12,19 @@
 screen start:
     modal True
     imagemap:
-        # ground "kadr start_.png"
+        ground "kadr start_.png"
         idle "kadr start.png"
         hover "kadr start_.png"
-        hotspot(1016,364,253,150) action Call("startb2")
-        hotspot(1325,364,253,150) action Call("startb7")
-        hotspot(1636,364,253,150) action Call("startb3")
-        hotspot(1016,575,253,150) action Call("startb4")
-        hotspot(1325,575,253,150) action Call("startb5")
+        if not b1_done:
+            hotspot(1016,364,253,150) action Call("startb2")
+        if not b2_done:
+            hotspot(1325,364,253,150) action Call("startb7")
+        if not b3_done:
+            hotspot(1636,364,253,150) action Call("startb3")
+        if not b4_done:
+            hotspot(1016,575,253,150) action Call("startb4")
+        if not b5_done:
+            hotspot(1325,575,253,150) action Call("startb5")
         text "{size=+10}{cps=10}Итак, ты — в Игре!\nЭтот путь будет только твоим. Качай задания, смотри подсказки, следи за волшебными кнопкам, стань лучшим!\nУдачи!{/cps}{/size}" xpos 50 ypos 50 xsize 830 ysize 400 color "#000000"
 
 

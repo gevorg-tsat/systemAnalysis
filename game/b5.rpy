@@ -137,6 +137,7 @@ init python:
         global allow_forward
         global table_input
         global show_error
+        global b5_done
         if not inp:
             return
         value = float(inp)
@@ -149,6 +150,7 @@ init python:
         show_error = False
         text = "Верно! Поздравляю! переходи вперед, в меню"
         allow_forward = True
+        b5_done = True
         renpy.hide_screen("method5_input")
         renpy.show_screen("final_go_to_next_method4", text)
         renpy.restart_interaction()

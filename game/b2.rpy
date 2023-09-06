@@ -89,6 +89,7 @@ init python:
         global R_index
         global allow_forward
         global table_input
+        global b1_done
         if not inp:
             return
         value = int(inp)
@@ -101,6 +102,7 @@ init python:
             allow_forward = True
             renpy.hide_screen("scolar_method_input")
             renpy.show_screen("task2_go_to_next")
+            b1_done = True
         renpy.restart_interaction()
 
     def get_valid_alernatives(parreto_table, alternative, min_maxing_criteries):
@@ -130,7 +132,7 @@ init python:
         table_input = ''
         for i in range(len(pareto_table[K_index-1])):
             K_corr += pareto_table[K_index-1][i] * alphas_task2[i]
-        if round(value, 2) != round(K_corr, 2):
+        if round(data, 2) != round(K_corr, 2):
             show_error = True
             return
         K_index_data[K_index-1] = data

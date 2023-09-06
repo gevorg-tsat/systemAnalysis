@@ -1,5 +1,4 @@
 label b4kadr1:
-    # TODO
     $ screens = ["ranging_method", "butforwardback", "method4_input", "pearson_table_image", "final_go_to_next_method4"]
     $ allow_forward = False
     $ xy_ev_al_table = [50, 300]
@@ -116,12 +115,14 @@ init python:
     def check_correctness(signif):
         global allow_forward
         global pearson_data
+        global b4_done
         pearson_from_table = pearson_90_table(len(sum_R_values) - 2)
         if (signif and pearson_data > pearson_from_table) or (signif == False and pearson_data <= pearson_from_table):
             text = "Верно! Поздравляю! переходи вперед, в меню"
         else:
             text = "К сожалению ты ошибься. переходи вперед, в меню"
         allow_forward = True
+        b4_done = True
         renpy.hide_screen("method4_input")
         renpy.show_screen("final_go_to_next_method4", text)
         renpy.restart_interaction()

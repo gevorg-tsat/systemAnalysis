@@ -101,6 +101,7 @@ init python:
         global R_method3
         global allow_forward
         global table_input
+        global b3_done
         if not inp:
             return
         try:
@@ -119,6 +120,7 @@ init python:
             allow_forward = True
             renpy.hide_screen("method3_input")
             renpy.show_screen("method3_go_to_next")
+            b3_done = True
         renpy.restart_interaction()
 
 
