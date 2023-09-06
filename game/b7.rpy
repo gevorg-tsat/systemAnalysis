@@ -90,7 +90,7 @@ init python:
         table_input = ''
         global ev_al_task2_C_index_data
         global ev_al_task1_table_data
-        if abs(geom_mean(ev_al_task1_table_data[C_index-1]) - value) > 0.2:
+        if round(geom_mean(ev_al_task1_table_data[C_index-1]), 2) != round(value,2):
             show_error = True
             return
         show_error = False
@@ -112,7 +112,7 @@ init python:
         global ev_al_task2_C_index_data
         global ev_al_task2_V_index_data
         global ev_al_task1_table_data
-        if abs(ev_al_task2_C_index_data[V_index-1]/sum(ev_al_task2_C_index_data) - value) > 0.05:
+        if round(ev_al_task2_C_index_data[V_index-1]/sum(ev_al_task2_C_index_data), 2) != round(value,2):
             show_error = True
             return
         ev_al_task2_V_index_data.append(value)
@@ -138,7 +138,7 @@ init python:
         table_input = ''
         if I_value is None:
             I_correct = get_I_value(ev_al_task1_table_data, ev_al_task2_V_index_data)
-            if abs(value - I_correct) > 0.1:
+            if round(value, 2) != round(I_correct, 2):
                 show_error = True
                 return
             I_value = value
@@ -147,7 +147,7 @@ init python:
             return
         if IS_value is None:
             IS_correct = ((I_value - len(ev_al_task1_alternatives))/ (len(ev_al_task1_alternatives) - 1))
-            if abs(value - IS_correct) > 0.1:
+            if round(value, 2) != round(IS_correct, 2):
                 show_error = True
                 return
             IS_value = value
@@ -156,7 +156,7 @@ init python:
             return
         if OS_value is None:
             OS_correct = (IS_value)/(sls_info_table[len(ev_al_task1_alternatives) - 3])
-            if abs(value - OS_correct) > 0.05:
+            if round(value, 2) != round(OS_correct, 2):
                 show_error = True
                 return
             OS_value = value
