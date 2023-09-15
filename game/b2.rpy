@@ -27,7 +27,6 @@ label b2kadr2:
 init python:
     pareto_task2 = "Формирование обобщающего критерия Ki. Весовые коэффициенты i-о критерия: "
     req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
-    # TODO дергает ручку с гугл таблицы
     table_input = ''
     show_error = False
     google_sheet_data = json.loads(req.text)["sheets"][1]["data"][row_number]["rowData"][0]["values"]
@@ -90,10 +89,17 @@ init python:
         global allow_forward
         global table_input
         global b1_done
+        global show_error
+        K_sorted = K_index_data[:]
+        K_sorted.sort(reverse=True)
         if not inp:
             return
         value = int(inp)
         table_input = ''
+        if value != K_sorted.index(K_index_data[R_index-1]) + 1:
+            show_error = True
+            return
+        show_error = False
         rangs_method1[R_index-1] = value
         R_index += 1
         while R_index - 1 < len(pareto_table_line_status) and pareto_table_line_status[R_index-1]:
@@ -104,6 +110,14 @@ init python:
             renpy.show_screen("task2_go_to_next")
             b1_done = True
         renpy.restart_interaction()
+
+    def get_max_val_in_column(column_id):
+        maxim = -1
+        for i in range(len(pareto_table)):
+            if pareto_table_line_status[i] == 1:
+                continue
+            maxim = max(pareto_table[i][column_id], maxim)
+        return maxim
 
     def get_valid_alernatives(parreto_table, alternative, min_maxing_criteries):
         result = []
@@ -131,7 +145,7 @@ init python:
         data = float(inp)
         table_input = ''
         for i in range(len(pareto_table[K_index-1])):
-            K_corr += pareto_table[K_index-1][i] * alphas_task2[i]
+            K_corr += alphas_task2[i] * ((pareto_table[K_index-1][i]/get_max_val_in_column(i)) ** (-1 if min_maxing_criteries[i] == 0 else 1))
         if round(data, 2) != round(K_corr, 2):
             show_error = True
             return

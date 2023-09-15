@@ -1,5 +1,5 @@
 label b5kadr1:
-    $ screens = ["processing_of_eval", "butforwardback", "method5_input", "student_table_image", "task2_go_to_next"]
+    $ screens = ["processing_of_eval", "butforwardback", "method5_input", "student_table_image", "task2_go_to_next", "final_go_to_next_method4"]
     $ allow_forward = False
     $ xy_ev_al_table = [50, 400]
     $ xsize_ev_al_table = 700
