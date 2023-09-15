@@ -298,7 +298,8 @@ screen ev_al_task1_input:
                 spacing 100
 
                 textbutton _("ввод") action Function(rewrite_table, table_input)
-            
+    if show_error:
+        text "Ошибка" xpos 1560 ypos 1030  color '#000000'    
                 
                 # input default "":
                 #     color "#000000"
@@ -573,7 +574,8 @@ screen ev_al_task3_input:
                 xalign 0.5
                 spacing 100
                 textbutton _("ввод") action Function(rewrite_data_task3, table_input)
-
+    if show_error:
+        text "Ошибка" xpos 1560 ypos 1030  color '#000000'
 screen eval_trueness_of_expert:
     zorder 100
     frame:
