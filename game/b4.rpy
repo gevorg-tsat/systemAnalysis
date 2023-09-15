@@ -61,8 +61,13 @@ init python:
         if not inp:
             return
         value = int(inp)
+        R_sorted = sum_R_values[:]
+        R_sorted.sort()
         table_input = ''
         global r_values
+        if value != R_sorted.index(sum_R_values[r_index_method4-1]) + 1:
+            show_error = True
+            return
         show_error = False
         r_values.append(value)
         r_index_method4 += 1

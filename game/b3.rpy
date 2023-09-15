@@ -102,6 +102,8 @@ init python:
         global allow_forward
         global table_input
         global b3_done
+        V_sorted = V_values_method3[:]
+        V_sorted.sort(reverse=True)
         if not inp:
             return
         try:
@@ -110,7 +112,7 @@ init python:
             show_error = True
             return
         table_input = ''
-        if value == 0:
+        if value != V_sorted.index(V_values_method3[R_method3-1]) + 1:
             show_error = True
             return
         R_values_method3.append(value)
