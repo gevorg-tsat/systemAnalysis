@@ -111,13 +111,14 @@ init python:
             b1_done = True
         renpy.restart_interaction()
 
-    def get_max_val_in_column(column_id):
-        maxim = -1
+    def get_max_val_in_column(column_id, min_max):
+        value = -1 if min_max == 1 else float('inf')
+        comp = max if min_max == 1 else min
         for i in range(len(pareto_table)):
             if pareto_table_line_status[i] == 1:
                 continue
-            maxim = max(pareto_table[i][column_id], maxim)
-        return maxim
+            value = comp(pareto_table[i][column_id], value)
+        return value
 
     def get_valid_alernatives(parreto_table, alternative, min_maxing_criteries):
         result = []
@@ -145,7 +146,7 @@ init python:
         data = float(inp)
         table_input = ''
         for i in range(len(pareto_table[K_index-1])):
-            K_corr += alphas_task2[i] * ((pareto_table[K_index-1][i]/get_max_val_in_column(i)) ** (-1 if min_maxing_criteries[i] == 0 else 1))
+            K_corr += alphas_task2[i] * ((pareto_table[K_index-1][i]/get_max_val_in_column(i, min_maxing_criteries[i])) ** (-1 if min_maxing_criteries[i] == 0 else 1))
         if round(data, 2) != round(K_corr, 2):
             show_error = True
             return
