@@ -37,7 +37,7 @@ init python:
         for i in range(len(table)):
             sum_var = 0
             for j in range(len(table)):
-                sum_var += table[i][j]
+                sum_var += table[j][i]
             result += (sum_var * V_table[i])
         return result
     def kadrb7():
