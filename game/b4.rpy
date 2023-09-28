@@ -78,9 +78,11 @@ init python:
         global allow_forward
         global EXPERTS_COUNT_METHOD4
         global W_data
+        global table_input
         if not inp:
             return
         value = float(inp)
+        table_input = ''
         sum_sq = 0
         for i in range(len(sum_R_values)):
             sum_sq += ((sum_R_values[i] - 0.5 * (len(sum_R_values) + 1) * EXPERTS_COUNT_METHOD4) ** 2)
@@ -121,7 +123,7 @@ init python:
         global allow_forward
         global pearson_data
         global b4_done
-        pearson_from_table = pearson_90_table(len(sum_R_values) - 1)
+        pearson_from_table = pearson_90_table(len(sum_R_values) - 2)
         if (signif and pearson_data > pearson_from_table) or (signif == False and pearson_data <= pearson_from_table):
             text = "Верно! Поздравляю! переходи вперед, в меню"
         else:
