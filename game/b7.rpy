@@ -168,14 +168,15 @@ init python:
         global OS_value
         global b2_done
         global allow_forward
+        global show_error
         if (sogl and OS_value <=0.2) or (sogl == False and OS_value > 0.2):
             text = "Верно! Поздравляю! переходи вперед, в меню"
+            b2_done = True
+            allow_forward = True
+            renpy.hide_screen("eval_trueness_of_expert")
+            renpy.show_screen("final_go_to_next", text)
         else:
-            text = "К сожалению ты ошибься. переходи вперед, в меню"
-        b2_done = True
-        allow_forward = True
-        renpy.hide_screen("eval_trueness_of_expert")
-        renpy.show_screen("final_go_to_next", text)
+            show_error = True
         renpy.restart_interaction()
 
     
