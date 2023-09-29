@@ -19,6 +19,8 @@ init python:
     I_value = None
     IS_value = None
     OS_value = None
+    rangs_method2 = [0] * len(method1_task1_alternatives)
+    R_index_method2 = 1
     for i in range(len(ev_al_task1_alternatives)):
         ev_al_task1_alternatives_info += f"\nA{i+1} - {ev_al_task1_alternatives[i]}"
     # init table
@@ -27,6 +29,32 @@ init python:
     ev_al_task2_V_index_data = list()
     sls_info_table = [0.58, 0.9, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49]
     #ev_al_task1_correct_answers = list(map(str.strip, google_sheet_data[1]["userEnteredValue"]["stringValue"].split(";")))
+    
+    # TODO REWRITE
+    def ranging_b2(inp):
+        global rangs_method2
+        global R_index_method2
+        global allow_forward
+        global table_input
+        global show_error
+        V_sorted = ev_al_task2_V_index_data[:]
+        V_sorted.sort(reverse=True)
+        if not inp:
+            return
+        value = int(inp)
+        table_input = ''
+        if value != V_sorted.index(ev_al_task2_V_index_data[R_index_method2-1]) + 1:
+            show_error = True
+            return
+        show_error = False
+        rangs_method2[R_index_method2-1] = value
+        R_index_method2 += 1
+        if R_index_method2 > len(ev_al_task1_alternatives):
+            allow_forward = True
+            renpy.hide_screen("ev_al_task2_input")
+            renpy.show_screen("task2_go_to_next")
+        renpy.restart_interaction()
+    
     def geom_mean(myList):
         result = 1
         for x in myList:
@@ -118,10 +146,6 @@ init python:
         ev_al_task2_V_index_data.append(value)
         V_index+=1
         show_error = False
-        if V_index == len(ev_al_task1_alternatives) + 1:
-            allow_forward = True
-            renpy.hide_screen("ev_al_task2_input")
-            renpy.show_screen("task2_go_to_next")
         renpy.restart_interaction()
     
     def rewrite_data_task3(inp):
@@ -200,7 +224,7 @@ label b7kadr1:
 label b7kadr2:
     $ screens = ["check_exp_eval", "butforwardback", "ev_al_task2_input", "task2_go_to_next"]
     $ allow_forward = False
-    $ xy_ev_al_table = [100, 225]
+    $ xy_ev_al_table = [30, 225]
     $ xsize_ev_al_table = 800
     $ ysize_ev_al_table = 600
     show screen check_exp_eval(ev_al_task2_label)
@@ -215,8 +239,8 @@ label b7kadr2:
 label b7kadr3:
     $ screens = ["check_sls_eval", "butforwardback", "ev_al_task3_input","final_go_to_next" , "eval_trueness_of_expert"]
     $ allow_forward = False
-    $ xy_ev_al_table = [100, 225]
-    $ xsize_ev_al_table = 800
+    $ xy_ev_al_table = [30, 225]
+    $ xsize_ev_al_table = 750
     $ ysize_ev_al_table = 600
     $ xy_sls_info = [1200, 225]
     $ xsize_sls_info = 700
@@ -353,6 +377,13 @@ screen check_exp_eval(text):
             ypos xy_ev_al_table[1]
             xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
             ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+    if V_index == len(ev_al_task1_alternatives) + 1:
+        frame:
+            text "Ri" color "#000000" xalign 0.5 yalign 0.5 
+            xpos int(xy_ev_al_table[0] + int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)) * (len(ev_al_task1_alternatives) + 3))
+            ypos xy_ev_al_table[1]
+            xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+            ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
     for i in range(len(ev_al_task1_alternatives)):
         for j in range(len(ev_al_task1_alternatives)):
             frame:
@@ -379,6 +410,13 @@ screen check_exp_eval(text):
             ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
             xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
             ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+    for i in range(R_index_method2-1):
+        frame:
+            text str(round(rangs_method2[i], 2)) color "#000000" xalign 0.5 yalign 0.5 
+            xpos int(xy_ev_al_table[0] + int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)) * (len(ev_al_task1_alternatives) + 3))
+            ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
+            xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+            ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
 
 
 screen ev_al_task2_input:
@@ -394,11 +432,14 @@ screen ev_al_task2_input:
                 label _("C{size=-10}[C_index]{/size}"):
                     style "confirm_prompt"
                     xalign 0.5
-            else:
+            elif V_index != len(ev_al_task1_alternatives) + 1:
                 label _("V{size=-10}[V_index]{/size}"):
                     style "confirm_prompt"
                     xalign 0.5
-
+            else:
+                label _("R{size=-10}[V_index]{/size}"):
+                    style "confirm_prompt"
+                    xalign 0.5
             input:
                 default "None"
                 color "#000000"
@@ -414,8 +455,10 @@ screen ev_al_task2_input:
                 spacing 100
                 if C_index != len(ev_al_task1_alternatives) + 1:
                     textbutton _("ввод") action Function(rewrite_table_task2, table_input)
-                else:
+                elif V_index != len(ev_al_task1_alternatives) + 1:
                     textbutton _("ввод") action Function(rewrite_table_task2_V, table_input)
+                else:
+                    textbutton _("ввод") action Function(ranging_b2, table_input)
     if show_error:
         text "Ошибка" xpos 1560 ypos 1030  color '#000000'
 
@@ -462,6 +505,12 @@ screen check_sls_eval(text):
         ypos xy_ev_al_table[1]
         xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
         ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+    frame:
+        text "Ri" color "#000000" xalign 0.5 yalign 0.5 
+        xpos int(xy_ev_al_table[0] + int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)) * (len(ev_al_task1_alternatives) + 3))
+        ypos xy_ev_al_table[1]
+        xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+        ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
     for i in range(len(ev_al_task1_alternatives)):
         for j in range(len(ev_al_task1_alternatives)):
             frame:
@@ -485,6 +534,13 @@ screen check_sls_eval(text):
         frame:
             text str(round(ev_al_task2_V_index_data[i], 2)) color "#000000" xalign 0.5 yalign 0.5 
             xpos int(xy_ev_al_table[0] + int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)) * (len(ev_al_task1_alternatives) + 2))
+            ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
+            xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+            ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
+    for i in range(len(ev_al_task2_V_index_data)):
+        frame:
+            text str(round(rangs_method2[i], 2)) color "#000000" xalign 0.5 yalign 0.5 
+            xpos int(xy_ev_al_table[0] + int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)) * (len(ev_al_task1_alternatives) + 3))
             ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
             xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
             ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
