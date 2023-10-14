@@ -11,7 +11,7 @@ label b3kadr1:
 
 
 init python:
-    req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
+    # req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     alts_methods3_txt = ""
     show_error = False
     for i in range(len(method1_task1_valid_alternatives)):

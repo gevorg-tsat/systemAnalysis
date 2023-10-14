@@ -13,7 +13,7 @@ label b4kadr1:
 
 
 init python:
-    req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
+    # req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     ranging_method4_google_data = json.loads(req.text)["sheets"][3]["data"][0]["rowData"]
     EXPERTS_COUNT_METHOD4 = 3
     show_error = False

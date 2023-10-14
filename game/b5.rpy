@@ -14,7 +14,7 @@ label b5kadr1:
 init python:
     import math
     show_error = False
-    req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
+    # req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     method5_google_data = json.loads(req.text)["sheets"][4]["data"][0]["rowData"]
     EXPERTS_COUNT_METHOD5 = method5_google_data[0]["values"][1]["userEnteredValue"]["numberValue"]
     method5_text = "Задача состоит в сопоставлении оцениваемой альтернативе одного числа. N экспертов изолированы; обратная связь отсутствует. Найти интервал, в который оцениваемая величина попадет с вероятностью P = 90%"
