@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "radiant-mercury-303720",
+  "private_key_id": "8f5d514d724fd49624f8df1c76799a79c2fad8d6",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC1DKLXHxmEVhu8\nndFgcc6SEZ9N/l2h+YUh0k68ltukw3Zw50Gs6o8thv7IJ0jwdxXoKs2IfYnpOuq+\nbg6ihAW+O+kwuD4vE/Uht4v4awJ4OgtKtrzQgNXIVDP0e8Ac1fO0tp9iFAg5FrhR\npv6qwmi9uQVZoIa3ngu3mB0LXlVsLm+fvuB0rpLCDlhGmy4sPrORmNdP5Pf42kgp\nfLzBhC88JNU1jbnQCiZ61pfxC8ZLgduCJfzDyN+MKe3a4/f/GvCRS6pwUHAOFLlp\nFcxnxGLDieLfJBertvFuicHJzhzV5jVpHjkZ5sdpS0FdVMjLj0esA8rzF+bZrw68\n0bWDqSPLAgMBAAECggEAARpLxEdTtqB2+HNLoFdBHKxPzeqj3lswijqyMRLde/JB\nfpbh/wV0tssbh9OOwwGEAs8pQ6YOw3q7jZ+0+3IWE4kLjA5AjrUuk98pfUCwRKmH\nLRQnhUDrocCQNR0rLTceY2DjX/Zi8G9o0v0okENb3kqfXjg3Pyy5bIuteEbBpXAw\n/sA3wbqgGrKtlDa+FsZE/m8cDOlrB0Thhip1al30uO54CWm35sGYodR3ST2dFh6a\niyw2hFpgv4NwFt3uHpJYHVImya8zbthNF6N1HOsWcEZ9InWt5li3w3slxMA7yaer\nPlOS+9mXzx/ldFiFLsLu0LmOsho+ES5oYXe22LFCPQKBgQDwVJYHczj+Z8jPdPHx\n/UkSJfCUhh6BTCC+I3j25DIJtgdw2xORvhqdOs8kJ2W4qKTueKAqfNyVhhiTOj5M\njfnN1LCn8EJZP8xUpuOc8L3XFq5qNhnYmzO237Pre5wmCONBK9ar0lkPebF2FjDU\n+Ws0yEyMvmuhhUlk/Cum/T4bzwKBgQDA2pNN+g14I+XMOobxdPS10BEhGrXvIDkw\n2QZ/9rxxs4bpgaYZqAKG8iaW7bwTlE+e1KlmmN4daePcMhxuukPcuaffpxOtz6EL\ni2/OYdb2+R2xjvizITgDz1i5MJXhfpUjD1PAhzXcPuNIgPvZxeGlcMjS5KcIBiuV\nGI7EZ1pLRQKBgCrHw9Ubq5+Nte9H7/GVlrZGTqcBoNh/RqzR/6xjPoz//B8YwEkH\nQBGQ8GKNKMxQKNvSWSB3DYUIU8ORcJmMBFWhcLjUSds9QhAnjQjYydJJ1U5OxxcJ\nuZDqDUrzu/4BQwLM3O/FB9l7Xh2ZIaQnqe/BX+8Fzn74DPKO+O5G0hF9AoGARnQT\neFsvbIKAwvlmrvMxKvKWL2fYq0E0Y3oFe94hvc/+K3QnwBu2wKHaIy06llSKOdYr\nBMY37rrueVT9Oh5mCE7y2yvoboj5poQMFnN72sHrbSB0DszF7+5h1VXAi5540VQa\nHq3GqW14DtbAKzC1XIE1fIX312CZr2BHV80CGZkCgYEA3+k5npRYv5ugpsR5kbOb\nn7bdN916Zburlwmfnoh9VPwFpsA/jl27pFuZJivtRbNs01W9r4iAtjaENU0QpQmw\nSHwST6ge1ZwKO1t8A8EA0o1RZ4tJ+5l0RzgbZCbvmHeYJ72keR6Mf40EmwYSKBwK\nZ7WHbb9AQyQEMsQlqUru3aU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "system-analysis-game@radiant-mercury-303720.iam.gserviceaccount.com",
+  "client_id": "116022548704162720315",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/system-analysis-game%40radiant-mercury-303720.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

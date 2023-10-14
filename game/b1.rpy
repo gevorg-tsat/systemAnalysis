@@ -4,6 +4,45 @@ transform mmove(x0, x1):
     linear 1 xpos x1[0] ypos x1[1]
     
 init python:
+    # from jwcrypto import jwt
+    from jose import jwt
+
+    import requests
+    import json
+    import datetime
+    # from jwt.algorithms import RSAAlgorithm
+    filepath = "radiant-mercury-303720-8f5d514d724f.json"
+    fp = renpy.file(filepath)
+    jwt_data = json.load(fp)
+    now = datetime.datetime.now().timestamp()
+    jwt_fields = {
+        "iss":"system-analysis-game@radiant-mercury-303720.iam.gserviceaccount.com",
+        "scope":"https://www.googleapis.com/auth/spreadsheets",
+        "aud":"https://oauth2.googleapis.com/token",
+        "exp": now + 3598,
+        "iat": now - 1
+    }
+    # jwt.register_algorithm('RS256', RSAAlgorithm(RSAAlgorithm.SHA256))
+    encoded = jwt.encode(jwt_fields, jwt_data['private_key'], algorithm="RS256")
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    get_token_req = requests.post("https://oauth2.googleapis.com/token", headers=headers, data="grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion="+encoded)
+    with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
+        fw.write("curl -d '" + f"grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion={encoded}' https://oauth2.googleapis.com/token" )
+        fw.write(get_token_req.text)
+    ACCESS_TOKEN = json.loads(get_token_req.text)['access_token']
+    url = 'https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA/values/%27%D0%9B%D0%B8%D1%81%D1%821%27:append?valueInputOption=RAW'
+    headers = {
+        "Authorization": f"Bearer {ACCESS_TOKEN}",
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    }
+    body = '{"values":[["HII"]]}'
+    test_req = requests.post(url, headers=headers, data=body)
+    with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
+    #     fw.write("curl -d '" + f"grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion={encoded}' https://oauth2.googleapis.com/token" )
+        fw.write(test_req.text)
     debet0 = ""
     kredit0 = ""
     summa0 = ""    
@@ -18,12 +57,7 @@ init python:
     #lim = [Image(f"m{i+1}.png", pos=mXY0) for i in range(2)]
     b1immy = 0
     b1imyet = 0
-    import requests
-    import json
-    TOKEN = 'AIzaSyDKUQ4mmvMcjY2ed3BaR-y_m2vc-Z8I6G8'
-    header = {"Authorization" : f"Bearer {TOKEN}"}
-    req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
-    # TODO дергает ручку с гугл таблицы
+    req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true", headers=headers)
     row_number = 0
     google_sheet_data = json.loads(req.text)["sheets"][0]["data"][row_number]["rowData"][0]["values"]
     symptoms_task1_label = "Определите правильно симптомы/причины этого проишествия"
