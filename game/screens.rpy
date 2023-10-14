@@ -1550,6 +1550,7 @@ screen splashscreen_frame():
             ysize 40
 
 screen task(task_text):
+    textbutton _("Enter") action GetText("input","input")
     text "Описание задачи" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 80
     text "[task_text]"  color "#000000" xpos 800 ypos 150 xsize 1000 ysize 900
 

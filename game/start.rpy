@@ -5,9 +5,19 @@
     hide screen main_menu
     $ b1_done = b2_done = b3_done = b4_done = b5_done = False
     show screen task(task_text1)
+    $ hey = renpy.input("Введи свое имя")
     $ vkadr = "start"
     show screen butforwardback
     pause
+
+init -2 python:
+    class GetText(Action):
+        def __init__(self,screen_name,input_id):
+            self.screen_name=screen_name
+            self.input_id=input_id
+        def __call__(self):
+            if renpy.get_widget(self.screen_name,self.input_id):
+                return str(renpy.get_widget(self.screen_name,self.input_id).content)
 
 screen start:
     modal True
