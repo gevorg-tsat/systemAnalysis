@@ -40,7 +40,7 @@ define b1nc = False
 
 define b1tab = False
 
-define task_text1 = "Sample texxt."
+# define task_text1 = "Sample texxt."
 define symptom1 = "Что-то допольнительное про задание"
 define winner_text = "Поздравляю. Верно. Можешь двигаться дальше"
 define loser_text = "Неверно. Можешь попытаться еще раз"
@@ -80,7 +80,6 @@ screen butforwardback:
                     idle "butforward.png"
                     hover "butforward_.png"
                     action Call("KadrForward")
-            # if vkadr == "ha" or (vkadr != "rez"):
             imagebutton:
                 xalign 0.3 yalign 0.8
                 idle "butback.png"
@@ -131,21 +130,6 @@ label KadrForward:
     elif vkadr == "b8":
         $ nkadr += 1
         $ kadrb8()
-    elif vkadr == "b9":
-        $ nkadr += 1
-        $ kadrb9()
-    elif vkadr == "b10":
-        $ nkadr += 1
-        $ kadrb10()
-    elif vkadr == "b11":
-        $ nkadr += 1
-        $ kadr11()
-    elif vkadr == "b12":
-        $ nkadr += 1
-        $ kadrb12()
-    elif vkadr == "b13":
-        $ nkadr += 1
-        $ kadrb13()
     elif vkadr == "start":
         hide screen butforwardback
         call startgame

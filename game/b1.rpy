@@ -59,10 +59,10 @@ init python:
     b1imyet = 0
     req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true", headers=headers)
     row_number = 0
-    google_sheet_data = json.loads(req.text)["sheets"][0]["data"][row_number]["rowData"][0]["values"]
-    symptoms_task1_label = "Определите правильно симптомы/причины этого проишествия"
-    symptoms_task1_options = list(map(str.strip, google_sheet_data[0]["userEnteredValue"]["stringValue"].split(";")))
-    symptoms_task1_correct_answers = list(map(str.strip, google_sheet_data[1]["userEnteredValue"]["stringValue"].split(";")))
+    # google_sheet_data = json.loads(req.text)["sheets"][0]["data"][row_number]["rowData"][0]["values"]
+    # symptoms_task1_label = "Определите правильно симптомы/причины этого проишествия"
+    # symptoms_task1_options = list(map(str.strip, google_sheet_data[0]["userEnteredValue"]["stringValue"].split(";")))
+    # symptoms_task1_correct_answers = list(map(str.strip, google_sheet_data[1]["userEnteredValue"]["stringValue"].split(";")))
 
     def kadrb1():
         global nkadr
