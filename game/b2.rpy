@@ -29,14 +29,26 @@ init python:
     # req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     table_input = ''
     show_error = False
-    google_sheet_data = json.loads(req.text)["sheets"][1]["data"][row_number]["rowData"][1]["values"]
-    second_row_data = json.loads(req.text)["sheets"][1]["data"][0]["rowData"][2]["values"]
-    third_row_data = json.loads(req.text)["sheets"][1]["data"][0]["rowData"][3]["values"]
-    second_sheet_data= json.loads(req.text)["sheets"][1]["data"]
-    with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
-        fw.write(str(google_sheet_data[0]))
-    VARIANTS_AMOUNT = json.loads(req.text)["sheets"][1]["data"][row_number]["rowData"][0]["values"][0]["userEnteredValue"]["numberValue"]
-    method1_task1_alternatives = list(map(str.strip, google_sheet_data[0]["userEnteredValue"]["stringValue"].split(";")))
+    VARIANTS_AMOUNT = json.loads(req.text)["sheets"][1]["data"][0]["rowData"][0]["values"][0]["userEnteredValue"]["numberValue"]
+    google_sheet_data = json.loads(req.text)["sheets"][1]["data"][0]["rowData"]#[1]["values"]
+    variant_starting_row = 0
+    CURRENT_VARIANT = renpy.random.randint(1, VARIANTS_AMOUNT)
+    vr_counter = 0
+    for i in range(len(google_sheet_data)):
+        if google_sheet_data[i]["values"][0]:
+            cell_data = google_sheet_data[i]["values"][0]["userEnteredValue"].get("stringValue", False)
+            if cell_data and ";" in cell_data:
+                vr_counter += 1
+        if vr_counter == CURRENT_VARIANT:
+            variant_starting_row = i
+            break
+    first_row_data = google_sheet_data[variant_starting_row]["values"]
+    second_row_data = google_sheet_data[variant_starting_row+1]["values"]
+    third_row_data = google_sheet_data[variant_starting_row+2]["values"]
+    second_sheet_data = json.loads(req.text)["sheets"][1]["data"]
+    insert_row_number = None
+    
+    method1_task1_alternatives = list(map(str.strip, first_row_data[0]["userEnteredValue"]["stringValue"].split(";")))
     method1_task1_valid_alternatives = list() #list(map(str.strip, google_sheet_data[1]["userEnteredValue"]["stringValue"].split(";")))
     criteries = list(map(str.strip, second_row_data[2]["userEnteredValue"]["stringValue"].split(";")))
     min_maxing_criteries = list(map(int,map(str.strip, third_row_data[2]["userEnteredValue"]["stringValue"].split(";"))))
@@ -59,7 +71,9 @@ init python:
     for i in range(len(method1_task1_alternatives)):
         pareto_table.append(list())
         for j in range(len(criteries)):
-            cell_data = second_sheet_data[0]["rowData"][4+i]["values"][j]["userEnteredValue"]["numberValue"]
+            # with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
+            #     fw.write(str(second_sheet_data[0]["rowData"][variant_starting_row+3+i]["values"][j]))
+            cell_data = second_sheet_data[0]["rowData"][variant_starting_row+3+i]["values"][j]["userEnteredValue"]["numberValue"]
             if not cell_data:
                 raise Exception()
             pareto_table[i].append(cell_data)
