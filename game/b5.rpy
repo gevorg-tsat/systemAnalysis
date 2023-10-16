@@ -16,7 +16,7 @@ init python:
     show_error = False
     # req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     method5_google_data = json.loads(req.text)["sheets"][4]["data"][0]["rowData"]
-    EXPERTS_COUNT_METHOD5 = method5_google_data[0]["values"][1]["userEnteredValue"]["numberValue"]
+    EXPERTS_COUNT_METHOD5 = method5_google_data[(CURRENT_VARIANT-1)*3]["values"][1]["userEnteredValue"]["numberValue"]
     method5_text = "Задача состоит в сопоставлении оцениваемой альтернативе одного числа. N экспертов изолированы; обратная связь отсутствует. Найти интервал, в который оцениваемая величина попадет с вероятностью P = 90%"
     x_data = []
     alpha_data = []
@@ -26,13 +26,14 @@ init python:
     left_diaposon = None
     right_diaposon = None
     for i in range(EXPERTS_COUNT_METHOD5):
-        x_data.append(method5_google_data[1]["values"][i+1]["userEnteredValue"]["numberValue"])
+        x_data.append(method5_google_data[(CURRENT_VARIANT-1)*3 + 1]["values"][i+1]["userEnteredValue"]["numberValue"])
     for i in range(EXPERTS_COUNT_METHOD5):
-        alpha_data.append(method5_google_data[2]["values"][i+1]["userEnteredValue"]["numberValue"])
+        alpha_data.append(method5_google_data[(CURRENT_VARIANT-1)*3 + 2]["values"][i+1]["userEnteredValue"]["numberValue"])
     def kadrb5():
         global nkadr
         global vkadr
         global screens
+        write_score()
         dnk = 2 if nkadr == 9 and not b1bt and b1amcor == 0 else "" # and b1scores0
         # renpy.show(f"kadr b1{nkadr}{dnk}",at_list=[top])
         for scr in screens:
@@ -45,12 +46,14 @@ init python:
         
         renpy.pause()
     def check_mean(inp):
+        global all_answers, right_answers
         global show_error
         global x_data
         global table_input
         global alpha_data
         global EXPERTS_COUNT_METHOD5
         global mean_exps
+        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -59,11 +62,13 @@ init python:
         if round(value, 2) != round(mean_corr, 2):
             show_error = True
             return
+        right_answers += 1
         mean_exps = value
         show_error = False
         renpy.restart_interaction()
 
     def check_desp(inp):
+        global all_answers, right_answers
         global show_error
         global x_data
         global alpha_data
@@ -71,6 +76,7 @@ init python:
         global mean_exps
         global table_input
         global despersion_exps
+        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -79,6 +85,7 @@ init python:
         if round(value, 2) != round(despersion_corr, 2):
             show_error = True
             return
+        right_answers += 1
         show_error = False
         despersion_exps = value
         renpy.restart_interaction()
@@ -92,6 +99,8 @@ init python:
         global delta_exps
         global table_input
         global EXPERTS_COUNT_METHOD5
+        global all_answers, right_answers
+        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -100,6 +109,7 @@ init python:
         if round(value, 2) != round(delta_corr, 2):
             show_error = True
             return
+        right_answers += 1
         delta_exps = value
         show_error = False
         renpy.restart_interaction()
@@ -114,6 +124,8 @@ init python:
         global table_input
         global EXPERTS_COUNT_METHOD5
         global left_diaposon
+        global all_answers, right_answers
+        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -122,11 +134,13 @@ init python:
         if round(value, 2) != round(left_corr, 2):
             show_error = True
             return
+        right_answers += 1
         left_diaposon = value
         show_error = False
         renpy.restart_interaction()
     
     def check_right_diap(inp):
+        global all_answers, right_answers
         global x_data
         global alpha_data
         global despersion_exps
@@ -138,6 +152,7 @@ init python:
         global table_input
         global show_error
         global b5_done
+        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -146,6 +161,7 @@ init python:
         if round(value, 2) != round(right_corr, 2):
             show_error = True
             return
+        right_answers += 1
         right_diaposon = value
         show_error = False
         text = "Верно! Поздравляю! переходи вперед, в меню"

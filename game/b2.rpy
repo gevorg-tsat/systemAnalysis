@@ -34,19 +34,23 @@ init python:
     variant_starting_row = 0
     CURRENT_VARIANT = renpy.random.randint(1, VARIANTS_AMOUNT)
     vr_counter = 0
+    amnt_alt_before = 0
     for i in range(len(google_sheet_data)):
         if google_sheet_data[i]["values"][0]:
             cell_data = google_sheet_data[i]["values"][0]["userEnteredValue"].get("stringValue", False)
             if cell_data and ";" in cell_data:
                 vr_counter += 1
+        else:
+            cell_data = False
         if vr_counter == CURRENT_VARIANT:
             variant_starting_row = i
             break
+        if cell_data:
+            amnt_alt_before += len(cell_data.split(";"))
     first_row_data = google_sheet_data[variant_starting_row]["values"]
     second_row_data = google_sheet_data[variant_starting_row+1]["values"]
     third_row_data = google_sheet_data[variant_starting_row+2]["values"]
     second_sheet_data = json.loads(req.text)["sheets"][1]["data"]
-    insert_row_number = None
     
     method1_task1_alternatives = list(map(str.strip, first_row_data[0]["userEnteredValue"]["stringValue"].split(";")))
     method1_task1_valid_alternatives = list() #list(map(str.strip, google_sheet_data[1]["userEnteredValue"]["stringValue"].split(";")))
@@ -71,8 +75,6 @@ init python:
     for i in range(len(method1_task1_alternatives)):
         pareto_table.append(list())
         for j in range(len(criteries)):
-            # with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
-            #     fw.write(str(second_sheet_data[0]["rowData"][variant_starting_row+3+i]["values"][j]))
             cell_data = second_sheet_data[0]["rowData"][variant_starting_row+3+i]["values"][j]["userEnteredValue"]["numberValue"]
             if not cell_data:
                 raise Exception()
@@ -107,6 +109,8 @@ init python:
         global table_input
         global b1_done
         global show_error
+        global all_answers, right_answers
+        all_answers += 1
         K_sorted = K_index_data[:]
         K_sorted.sort(reverse=True)
         if not inp:
@@ -116,6 +120,7 @@ init python:
         if value != K_sorted.index(K_index_data[R_index-1]) + 1:
             show_error = True
             return
+        right_answers += 1
         show_error = False
         rangs_method1[R_index-1] = value
         R_index += 1
@@ -151,12 +156,14 @@ init python:
     method1_task1_valid_alternatives = get_valid_alernatives(pareto_table, method1_task1_alternatives, min_maxing_criteries)
     
     def add_data_K_index(inp):
+        global all_answers, right_answers
         global alphas_task2
         global K_index_data
         global pareto_table
         global K_index
         global table_input
         global show_error
+        all_answers += 1
         K_corr = 0
         if not inp:
             return
@@ -167,6 +174,7 @@ init python:
         if round(data, 2) != round(K_corr, 2):
             show_error = True
             return
+        right_answers += 1
         K_index_data[K_index-1] = data
         K_index += 1
         while K_index - 1 < len(pareto_table_line_status) and pareto_table_line_status[K_index-1]:
@@ -179,6 +187,7 @@ init python:
         global nkadr
         global vkadr
         global screens
+        write_score()
         dnk = 2 if nkadr == 9 and not b1bt and b1amcor == 0 else "" # and b1scores0
         # renpy.show(f"kadr b1{nkadr}{dnk}",at_list=[top])
         for scr in screens:
@@ -200,6 +209,7 @@ init python:
         return
     
     def check_pareto_answ():
+        global all_answers, right_answers
         global is_correct_pareto_table_answer
         global pareto_table_line_status
         global pareto_table
@@ -207,6 +217,7 @@ init python:
         global method1_task1_valid_alternatives
         global allow_forward
         init_K_index()
+        all_answers += 1
         user_answer = []
         for i in range(len(pareto_table_line_status)):
             if not pareto_table_line_status[i]:
@@ -214,6 +225,7 @@ init python:
         if len(user_answer) == len(method1_task1_valid_alternatives) and set(user_answer) == set(method1_task1_valid_alternatives):
             is_correct_pareto_table_answer = True
             allow_forward = True
+            right_answers += 1
         else:
             is_correct_pareto_table_answer = False
         renpy.restart_interaction()

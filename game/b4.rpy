@@ -30,16 +30,18 @@ init python:
     for i in range(len(alts_methods4)):
         ranging_method4_table.append(list())
         for j in range(EXPERTS_COUNT_METHOD4):
-            ranging_method4_table[i].append(int(ranging_method4_google_data[i]["values"][j]["userEnteredValue"]["numberValue"]))
+            ranging_method4_table[i].append(int(ranging_method4_google_data[amnt_alt_before+i]["values"][j]["userEnteredValue"]["numberValue"]))
     alts_methods4_txt = "Задача состоит в сопоставлении оцениваемой альтернативе ранга: чем меньше ранг, тем альтернатива приоритетнее по мнению эксперта. "
     for i in range(len(alts_methods4)):
         alts_methods4_txt += f"A{i+1} - {alts_methods4[i]}, "
     alts_methods4_txt = alts_methods4_txt[:-2]
     def write_sum_R(inp):
+        global all_answers, right_answers
         global show_error
         global sum_R_index_method4
         global allow_forward
         global table_input
+        all_answers += 1
         if not inp:
             return
         value = int(inp)
@@ -49,15 +51,18 @@ init python:
         if round(sum(ranging_method4_table[sum_R_index_method4-1]), 2) != round(value,2):
             show_error = True
             return
+        right_answers += 1
         sum_R_values.append(value)
         sum_R_index_method4+=1
         show_error = False
         renpy.restart_interaction()
     def write_r(inp):
+        global all_answers, right_answers
         global show_error
         global r_index_method4
         global allow_forward
         global table_input
+        all_answers += 1
         if not inp:
             return
         value = int(inp)
@@ -68,17 +73,20 @@ init python:
         if value != R_sorted.index(sum_R_values[r_index_method4-1]) + 1:
             show_error = True
             return
+        right_answers += 1
         show_error = False
         r_values.append(value)
         r_index_method4 += 1
         renpy.restart_interaction()
     def write_W(inp):
+        global all_answers, right_answers
         global show_error
         global sum_R_values
         global allow_forward
         global EXPERTS_COUNT_METHOD4
         global W_data
         global table_input
+        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -90,10 +98,12 @@ init python:
         if round(value,2) != round(W_corr, 2):
             show_error = True
             return
+        right_answers += 1
         W_data = value
         show_error = False
         renpy.restart_interaction()
     def write_Pearson(inp):
+        global all_answers, right_answers
         global show_error
         global table_input
         global sum_R_values
@@ -101,6 +111,7 @@ init python:
         global EXPERTS_COUNT_METHOD4
         global W_data
         global pearson_data
+        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -109,6 +120,7 @@ init python:
         if round(value,2) != round(Pearson_corr, 2):
             show_error = True
             return
+        right_answers +=1
         pearson_data = value
         show_error = False
         renpy.show_screen("pearson_table_image")
@@ -120,12 +132,15 @@ init python:
         global method4_sogl
         method4_sogl = inp
     def check_correctness(signif):
+        global all_answers, right_answers
         global allow_forward
         global pearson_data
         global b4_done
+        all_answers += 1
         pearson_from_table = pearson_90_table(len(sum_R_values) - 2)
         if (signif and pearson_data > pearson_from_table) or (signif == False and pearson_data <= pearson_from_table):
             text = "Верно! Поздравляю! переходи вперед, в меню"
+            right_answers += 1
         else:
             text = "К сожалению ты ошибься. переходи вперед, в меню"
         allow_forward = True
@@ -138,6 +153,7 @@ init python:
         global nkadr
         global vkadr
         global screens
+        write_score()
         dnk = 2 if nkadr == 9 and not b1bt and b1amcor == 0 else "" # and b1scores0
         # renpy.show(f"kadr b1{nkadr}{dnk}",at_list=[top])
         for scr in screens:

@@ -15,6 +15,9 @@ init python:
     fp = renpy.file(filepath)
     jwt_data = json.load(fp)
     now = datetime.datetime.now().timestamp()
+    right_answers = 0
+    insert_row_number = None
+    all_answers = 0
     jwt_fields = {
         "iss":"system-analysis-game@radiant-mercury-303720.iam.gserviceaccount.com",
         "scope":"https://www.googleapis.com/auth/spreadsheets",
@@ -28,21 +31,15 @@ init python:
         "Content-Type": "application/x-www-form-urlencoded"
     }
     get_token_req = requests.post("https://oauth2.googleapis.com/token", headers=headers, data="grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion="+encoded)
-    with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
-        fw.write("curl -d '" + f"grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion={encoded}' https://oauth2.googleapis.com/token" )
-        fw.write(get_token_req.text)
-    ACCESS_TOKEN = json.loads(get_token_req.text)['access_token']
-    url = 'https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA/values/%27%D0%9B%D0%B8%D1%81%D1%821%27:append?valueInputOption=RAW'
-    headers = {
-        "Authorization": f"Bearer {ACCESS_TOKEN}",
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-    }
-    body = '{"values":[["HII"]]}'
-    test_req = requests.post(url, headers=headers, data=body)
-    with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
+    # with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
     #     fw.write("curl -d '" + f"grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion={encoded}' https://oauth2.googleapis.com/token" )
-        fw.write(test_req.text)
+    #     fw.write(get_token_req.text)
+    ACCESS_TOKEN = json.loads(get_token_req.text)['access_token']
+    headers = {
+            "Authorization": f"Bearer {ACCESS_TOKEN}",
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
     debet0 = ""
     kredit0 = ""
     summa0 = ""    
@@ -63,6 +60,44 @@ init python:
     # symptoms_task1_label = "Определите правильно симптомы/причины этого проишествия"
     # symptoms_task1_options = list(map(str.strip, google_sheet_data[0]["userEnteredValue"]["stringValue"].split(";")))
     # symptoms_task1_correct_answers = list(map(str.strip, google_sheet_data[1]["userEnteredValue"]["stringValue"].split(";")))
+    def write_score():
+        global right_answers
+        global all_answers
+        global your_name
+        global ACCESS_TOKEN
+        global insert_row_number
+        global headers
+        if insert_row_number is None:
+            url = "https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA/values/'Students':append?valueInputOption=RAW"
+        else:
+            url = f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA/values/{insert_row_number}?valueInputOption=RAW"
+        # body = '{"values":[[your_name, ]]}'
+        body = {"values": [[your_name, f"{right_answers} из {all_answers}"]]}
+        if insert_row_number is None:
+            text_req = requests.post(url, headers=headers, json=body)
+        else:
+            text_req = requests.put(url, headers=headers, json=body)
+        if text_req.status_code == 200:
+            with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
+                fw.write(text_req.text)
+            resp = json.loads(text_req.text)
+            resp = resp.get("updates", resp)
+            insert_row_number = resp["updatedRange"]
+            
+        elif text_req.status_code == 403:
+            tmp_headers = {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+            get_token_req = requests.post("https://oauth2.googleapis.com/token", headers=tmp_headers, data="grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion="+encoded)
+            ACCESS_TOKEN = json.loads(get_token_req.text)["access_token"]
+            write_score()
+        else:
+            with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
+                fw.write(text_req.text)
+            raise Exception
+
+
+        
 
     def kadrb1():
         global nkadr

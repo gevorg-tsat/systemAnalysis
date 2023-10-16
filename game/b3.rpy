@@ -31,11 +31,12 @@ init python:
         for j in range(len(method1_task1_valid_alternatives)):
             experts_evals[i].append(list())
             for k in range(len(method1_task1_valid_alternatives)):
-                experts_evals[i][j].append(float(experts_evals_google_data[j]["values"][i*EXPERTS_COUNT + k]["userEnteredValue"]["stringValue"]))
+                experts_evals[i][j].append(float(experts_evals_google_data[(CURRENT_VARIANT - 1)*3 + j]["values"][i*EXPERTS_COUNT + k]["userEnteredValue"]["stringValue"]))
     def kadrb3():
         global nkadr
         global vkadr
         global screens
+        write_score()
         dnk = 2 if nkadr == 9 and not b1bt and b1amcor == 0 else "" # and b1scores0
         # renpy.show(f"kadr b1{nkadr}{dnk}",at_list=[top])
         for scr in screens:
@@ -57,10 +58,12 @@ init python:
         return res
 
     def rewrite_table_method3_C(inp):
+        global all_answers, right_answers
         global show_error
         global C_index_method3
         global allow_forward
         global table_input
+        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -70,6 +73,7 @@ init python:
         if round(sum_all_exps(C_index_method3), 2) != round(value,2):
             show_error = True
             return
+        right_answers += 1
         C_values_method3.append(value)
         C_index_method3+=1
         show_error = False
@@ -77,10 +81,12 @@ init python:
         renpy.restart_interaction()
     
     def rewrite_table_method3_V(inp):
+        global all_answers, right_answers
         global show_error
         global V_index_method3
         global allow_forward
         global table_input
+        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -90,12 +96,14 @@ init python:
         if round(C_values_method3[V_index_method3-1]/sum(C_values_method3), 2) -  round(value,2):
             show_error = True
             return
+        right_answers += 1
         V_values_method3.append(value)
         show_error = False
         V_index_method3 += 1
         renpy.restart_interaction()
 
     def rewrite_table_method3_R(inp):
+        global all_answers, right_answers
         global show_error
         global R_values_method3
         global R_method3
@@ -104,6 +112,7 @@ init python:
         global b3_done
         V_sorted = V_values_method3[:]
         V_sorted.sort(reverse=True)
+        all_answers += 1
         if not inp:
             return
         try:
@@ -115,6 +124,7 @@ init python:
         if value != V_sorted.index(V_values_method3[R_method3-1]) + 1:
             show_error = True
             return
+        right_answers += 1
         R_values_method3.append(value)
         R_method3 += 1
         show_error = False

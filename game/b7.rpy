@@ -1,14 +1,11 @@
 default table_input = ""
 init python:
     show_error = False
-    # req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
-    # TODO дергает ручку с гугл таблицы
     row_number = 0
-    google_sheet_data = json.loads(req.text)["sheets"][1]["data"][row_number]["rowData"][1]["values"]
     ev_al_task1_label = "Представьте себя в роли эксперта, рассматривающие альтернативы. Вам надо сравнить их между собой и дать оценку. Для этого необходимо заполнить таблицу, рекомендуется это делать следующим образом:"
     ev_al_task1_info = "Ставь:\n1, если A{size=-10}i{/size} и A{size=-10}j{/size} примерно равноценны\n3 - A{size=-10}i{/size} немного предпочтительнее A{size=-10}j{/size}\n5 - A{size=-10}i{/size} предпочтительнее A{size=-10}j{/size}\n7 - A{size=-10}i{/size} значительно предпочтительнее A{size=-10}j{/size}\n9 - A{size=-10}i{/size} явно предпочтительнее A{size=-10}j{/size}"
     ev_al_task1_info += "\nМожно ставить промежуточные баллы. И обратные(0.2, 0.33 и тд)"
-    ev_al_task1_alternatives = list(map(str.strip, google_sheet_data[0]["userEnteredValue"]["stringValue"].split(";")))
+    ev_al_task1_alternatives = method1_task1_alternatives[:]
     ev_al_task1_alternatives_info = "Альтерантивы:"
     ev_al_task2_label = "Теперь необходимо провести обработку этих данных. Для каждой строки матрицы попарных сравнений определяется цена альтернативы Ci - среднее геометрическое строки матрицы. Определяется сумма цен альтернатив: C = ΣCi. Определяется вес каждой альтернативы: Vi = Ci/C, i=1,...,N"
     ev_al_task3_label = "Проверка позволяет выявить ошибки, которые мог допустить эксперт при заполнении матрицы парных сравнений. Рассчитывается вспомогательная величина I путем суммирования произведений сумм столбцов матрицы на веса альтернатив. Находится величина, называемая индексом согласованности ИС = (I-N)/(N-1). Отношение согласованности: ОС = ИС / СлС. Если оно превышает 0,2, то допушена экспертная ошибка."
@@ -32,11 +29,13 @@ init python:
     
     # TODO REWRITE
     def ranging_b2(inp):
+        global all_answers, right_answers
         global rangs_method2
         global R_index_method2
         global allow_forward
         global table_input
         global show_error
+        all_answers += 1
         V_sorted = ev_al_task2_V_index_data[:]
         V_sorted.sort(reverse=True)
         if not inp:
@@ -46,6 +45,7 @@ init python:
         if value != V_sorted.index(ev_al_task2_V_index_data[R_index_method2-1]) + 1:
             show_error = True
             return
+        right_answers += 1
         show_error = False
         rangs_method2[R_index_method2-1] = value
         R_index_method2 += 1
@@ -72,6 +72,7 @@ init python:
         global nkadr
         global vkadr
         global screens
+        write_score()
         dnk = 2 if nkadr == 9 and not b1bt and b1amcor == 0 else "" # and b1scores0
         # renpy.show(f"kadr b1{nkadr}{dnk}",at_list=[top])
         for scr in screens:
@@ -108,10 +109,12 @@ init python:
             renpy.show_screen("task1_go_to_next")
         renpy.restart_interaction()
     def rewrite_table_task2(inp):
+        global all_answers, right_answers
         global show_error
         global table_input
         global C_index
         global allow_forward
+        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -121,6 +124,7 @@ init python:
         if round(geom_mean(ev_al_task1_table_data[C_index-1]), 2) != round(value,2):
             show_error = True
             return
+        right_answers += 1
         show_error = False
         ev_al_task2_C_index_data.append(value)
         C_index+=1
@@ -129,10 +133,12 @@ init python:
         renpy.restart_interaction()
     
     def rewrite_table_task2_V(inp):
+        global all_answers, right_answers
         global show_error
         global V_index
         global allow_forward
         global table_input
+        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -143,12 +149,14 @@ init python:
         if round(ev_al_task2_C_index_data[V_index-1]/sum(ev_al_task2_C_index_data), 2) != round(value,2):
             show_error = True
             return
+        right_answers += 1
         ev_al_task2_V_index_data.append(value)
         V_index+=1
         show_error = False
         renpy.restart_interaction()
     
     def rewrite_data_task3(inp):
+        global all_answers, right_answers
         global show_error
         global table_input
         global I_value
@@ -156,6 +164,7 @@ init python:
         global OS_value
         global ev_al_task2_V_index_data
         global ev_al_task1_table_data
+        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -166,6 +175,7 @@ init python:
                 show_error = True
                 return
             I_value = value
+            right_answers += 1
             show_error = False
             renpy.restart_interaction()
             return
@@ -174,15 +184,17 @@ init python:
             if round(value, 2) != round(IS_correct, 2):
                 show_error = True
                 return
+            right_answers +=1
             IS_value = value
-            renpy.restart_interaction()
             show_error = False
+            renpy.restart_interaction()
             return
         if OS_value is None:
             OS_correct = (IS_value)/(sls_info_table[len(ev_al_task1_alternatives) - 3])
             if round(value, 2) != round(OS_correct, 2):
                 show_error = True
                 return
+            right_answers += 1
             OS_value = value
             show_error = False
             renpy.show_screen("eval_trueness_of_expert")
@@ -193,10 +205,13 @@ init python:
         global b2_done
         global allow_forward
         global show_error
+        global all_answers, right_answers
+        all_answers += 1
         if (sogl and OS_value <=0.2) or (sogl == False and OS_value > 0.2):
             text = "Верно! Поздравляю! переходи вперед, в меню"
             b2_done = True
             allow_forward = True
+            right_answers += 1
             renpy.hide_screen("eval_trueness_of_expert")
             renpy.show_screen("final_go_to_next", text)
         else:
