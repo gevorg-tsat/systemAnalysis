@@ -16,6 +16,7 @@ init python:
     I_value = None
     IS_value = None
     OS_value = None
+    b2_task_number = 1
     rangs_method2 = [0] * len(method1_task1_alternatives)
     R_index_method2 = 1
     for i in range(len(ev_al_task1_alternatives)):
@@ -27,15 +28,15 @@ init python:
     sls_info_table = [0.58, 0.9, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49]
     #ev_al_task1_correct_answers = list(map(str.strip, google_sheet_data[1]["userEnteredValue"]["stringValue"].split(";")))
     
-    # TODO REWRITE
     def ranging_b2(inp):
-        global all_answers, right_answers
         global rangs_method2
         global R_index_method2
         global allow_forward
         global table_input
         global show_error
-        all_answers += 1
+        global statistics
+        global b2_task_number
+        statistics.append([your_name, f"b2_{b2_task_number}", f"{datetime.datetime.now()}"])
         V_sorted = ev_al_task2_V_index_data[:]
         V_sorted.sort(reverse=True)
         if not inp:
@@ -45,7 +46,7 @@ init python:
         if value != V_sorted.index(ev_al_task2_V_index_data[R_index_method2-1]) + 1:
             show_error = True
             return
-        right_answers += 1
+        b2_task_number += 1
         show_error = False
         rangs_method2[R_index_method2-1] = value
         R_index_method2 += 1
@@ -88,8 +89,12 @@ init python:
         global sec
         global allow_forward
         global table_input
+        global statistics
+        global b2_task_number
+        statistics.append([your_name, f"b2_{b2_task_number}", f"{datetime.datetime.now()}"])
         if not inp:
             return
+        b2_task_number += 1
         value = float(inp)
         table_input = ''
         global ev_al_task1_table_data
@@ -109,12 +114,13 @@ init python:
             renpy.show_screen("task1_go_to_next")
         renpy.restart_interaction()
     def rewrite_table_task2(inp):
-        global all_answers, right_answers
+        global statistics
+        global b2_task_number
+        statistics.append([your_name, f"b2_{b2_task_number}", f"{datetime.datetime.now()}"])
         global show_error
         global table_input
         global C_index
         global allow_forward
-        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -124,7 +130,7 @@ init python:
         if round(geom_mean(ev_al_task1_table_data[C_index-1]), 2) != round(value,2):
             show_error = True
             return
-        right_answers += 1
+        b2_task_number += 1
         show_error = False
         ev_al_task2_C_index_data.append(value)
         C_index+=1
@@ -133,12 +139,13 @@ init python:
         renpy.restart_interaction()
     
     def rewrite_table_task2_V(inp):
-        global all_answers, right_answers
+        global statistics
+        global b2_task_number
+        statistics.append([your_name, f"b2_{b2_task_number}", f"{datetime.datetime.now()}"])
         global show_error
         global V_index
         global allow_forward
         global table_input
-        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -149,14 +156,13 @@ init python:
         if round(ev_al_task2_C_index_data[V_index-1]/sum(ev_al_task2_C_index_data), 2) != round(value,2):
             show_error = True
             return
-        right_answers += 1
+        b2_task_number += 1
         ev_al_task2_V_index_data.append(value)
         V_index+=1
         show_error = False
         renpy.restart_interaction()
     
     def rewrite_data_task3(inp):
-        global all_answers, right_answers
         global show_error
         global table_input
         global I_value
@@ -164,7 +170,9 @@ init python:
         global OS_value
         global ev_al_task2_V_index_data
         global ev_al_task1_table_data
-        all_answers += 1
+        global statistics
+        global b2_task_number
+        statistics.append([your_name, f"b2_{b2_task_number}", f"{datetime.datetime.now()}"])
         if not inp:
             return
         value = float(inp)
@@ -175,7 +183,7 @@ init python:
                 show_error = True
                 return
             I_value = value
-            right_answers += 1
+            b2_task_number += 1
             show_error = False
             renpy.restart_interaction()
             return
@@ -184,7 +192,7 @@ init python:
             if round(value, 2) != round(IS_correct, 2):
                 show_error = True
                 return
-            right_answers +=1
+            b2_task_number +=1
             IS_value = value
             show_error = False
             renpy.restart_interaction()
@@ -194,7 +202,7 @@ init python:
             if round(value, 2) != round(OS_correct, 2):
                 show_error = True
                 return
-            right_answers += 1
+            b2_task_number += 1
             OS_value = value
             show_error = False
             renpy.show_screen("eval_trueness_of_expert")
@@ -205,13 +213,14 @@ init python:
         global b2_done
         global allow_forward
         global show_error
-        global all_answers, right_answers
-        all_answers += 1
+        global statistics
+        global b2_task_number
+        statistics.append([your_name, f"b2_{b2_task_number}", f"{datetime.datetime.now()}"])
         if (sogl and OS_value <=0.2) or (sogl == False and OS_value > 0.2):
             text = "Верно! Поздравляю! переходи вперед, в меню"
             b2_done = True
             allow_forward = True
-            right_answers += 1
+            b2_task_number += 1
             renpy.hide_screen("eval_trueness_of_expert")
             renpy.show_screen("final_go_to_next", text)
         else:

@@ -25,6 +25,7 @@ init python:
     delta_exps = None
     left_diaposon = None
     right_diaposon = None
+    b5_task_number = 1
     for i in range(EXPERTS_COUNT_METHOD5):
         x_data.append(method5_google_data[(CURRENT_VARIANT-1)*3 + 1]["values"][i+1]["userEnteredValue"]["numberValue"])
     for i in range(EXPERTS_COUNT_METHOD5):
@@ -46,7 +47,9 @@ init python:
         
         renpy.pause()
     def check_mean(inp):
-        global all_answers, right_answers
+        global statistics
+        global b5_task_number
+        statistics.append([your_name, f"b5_{b5_task_number}", f"{datetime.datetime.now()}"])
         global show_error
         global x_data
         global table_input
@@ -62,13 +65,12 @@ init python:
         if round(value, 2) != round(mean_corr, 2):
             show_error = True
             return
-        right_answers += 1
+        b5_task_number += 1
         mean_exps = value
         show_error = False
         renpy.restart_interaction()
 
     def check_desp(inp):
-        global all_answers, right_answers
         global show_error
         global x_data
         global alpha_data
@@ -76,7 +78,9 @@ init python:
         global mean_exps
         global table_input
         global despersion_exps
-        all_answers += 1
+        global statistics
+        global b5_task_number
+        statistics.append([your_name, f"b5_{b5_task_number}", f"{datetime.datetime.now()}"])
         if not inp:
             return
         value = float(inp)
@@ -85,7 +89,7 @@ init python:
         if round(value, 2) != round(despersion_corr, 2):
             show_error = True
             return
-        right_answers += 1
+        b5_task_number += 1
         show_error = False
         despersion_exps = value
         renpy.restart_interaction()
@@ -99,8 +103,9 @@ init python:
         global delta_exps
         global table_input
         global EXPERTS_COUNT_METHOD5
-        global all_answers, right_answers
-        all_answers += 1
+        global statistics
+        global b5_task_number
+        statistics.append([your_name, f"b5_{b5_task_number}", f"{datetime.datetime.now()}"])
         if not inp:
             return
         value = float(inp)
@@ -109,7 +114,7 @@ init python:
         if round(value, 2) != round(delta_corr, 2):
             show_error = True
             return
-        right_answers += 1
+        b5_task_number += 1
         delta_exps = value
         show_error = False
         renpy.restart_interaction()
@@ -124,8 +129,9 @@ init python:
         global table_input
         global EXPERTS_COUNT_METHOD5
         global left_diaposon
-        global all_answers, right_answers
-        all_answers += 1
+        global statistics
+        global b5_task_number
+        statistics.append([your_name, f"b5_{b5_task_number}", f"{datetime.datetime.now()}"])
         if not inp:
             return
         value = float(inp)
@@ -134,13 +140,12 @@ init python:
         if round(value, 2) != round(left_corr, 2):
             show_error = True
             return
-        right_answers += 1
+        b5_task_number += 1
         left_diaposon = value
         show_error = False
         renpy.restart_interaction()
     
     def check_right_diap(inp):
-        global all_answers, right_answers
         global x_data
         global alpha_data
         global despersion_exps
@@ -152,7 +157,9 @@ init python:
         global table_input
         global show_error
         global b5_done
-        all_answers += 1
+        global statistics
+        global b5_task_number
+        statistics.append([your_name, f"b5_{b5_task_number}", f"{datetime.datetime.now()}"])
         if not inp:
             return
         value = float(inp)
@@ -161,7 +168,7 @@ init python:
         if round(value, 2) != round(right_corr, 2):
             show_error = True
             return
-        right_answers += 1
+        b5_task_number += 1
         right_diaposon = value
         show_error = False
         text = "Верно! Поздравляю! переходи вперед, в меню"

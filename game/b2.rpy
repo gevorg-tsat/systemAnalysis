@@ -35,6 +35,7 @@ init python:
     CURRENT_VARIANT = renpy.random.randint(1, VARIANTS_AMOUNT)
     vr_counter = 0
     amnt_alt_before = 0
+    b1_task_number = 1
     for i in range(len(google_sheet_data)):
         if google_sheet_data[i]["values"][0]:
             cell_data = google_sheet_data[i]["values"][0]["userEnteredValue"].get("stringValue", False)
@@ -109,8 +110,9 @@ init python:
         global table_input
         global b1_done
         global show_error
-        global all_answers, right_answers
-        all_answers += 1
+        global statistics
+        global b1_task_number
+        statistics.append([your_name, f"b1_{b1_task_number}", f"{datetime.datetime.now()}"])
         K_sorted = K_index_data[:]
         K_sorted.sort(reverse=True)
         if not inp:
@@ -120,7 +122,7 @@ init python:
         if value != K_sorted.index(K_index_data[R_index-1]) + 1:
             show_error = True
             return
-        right_answers += 1
+        b1_task_number += 1
         show_error = False
         rangs_method1[R_index-1] = value
         R_index += 1
@@ -156,14 +158,15 @@ init python:
     method1_task1_valid_alternatives = get_valid_alernatives(pareto_table, method1_task1_alternatives, min_maxing_criteries)
     
     def add_data_K_index(inp):
-        global all_answers, right_answers
         global alphas_task2
         global K_index_data
         global pareto_table
         global K_index
         global table_input
         global show_error
-        all_answers += 1
+        global statistics
+        global b1_task_number
+        statistics.append([your_name, f"b1_{b1_task_number}", f"{datetime.datetime.now()}"])
         K_corr = 0
         if not inp:
             return
@@ -174,7 +177,7 @@ init python:
         if round(data, 2) != round(K_corr, 2):
             show_error = True
             return
-        right_answers += 1
+        b1_task_number += 1
         K_index_data[K_index-1] = data
         K_index += 1
         while K_index - 1 < len(pareto_table_line_status) and pareto_table_line_status[K_index-1]:
@@ -209,7 +212,6 @@ init python:
         return
     
     def check_pareto_answ():
-        global all_answers, right_answers
         global is_correct_pareto_table_answer
         global pareto_table_line_status
         global pareto_table
@@ -217,7 +219,9 @@ init python:
         global method1_task1_valid_alternatives
         global allow_forward
         init_K_index()
-        all_answers += 1
+        global statistics
+        global b1_task_number
+        statistics.append([your_name, f"b1_{b1_task_number}", f"{datetime.datetime.now()}"])
         user_answer = []
         for i in range(len(pareto_table_line_status)):
             if not pareto_table_line_status[i]:
@@ -225,7 +229,7 @@ init python:
         if len(user_answer) == len(method1_task1_valid_alternatives) and set(user_answer) == set(method1_task1_valid_alternatives):
             is_correct_pareto_table_answer = True
             allow_forward = True
-            right_answers += 1
+            b1_task_number += 1
         else:
             is_correct_pareto_table_answer = False
         renpy.restart_interaction()

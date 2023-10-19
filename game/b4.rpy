@@ -26,6 +26,7 @@ init python:
     r_values = list()
     method4_sogl = 0 # 0 == None, 1 == weak, 2 == medium, 3 == strong
     pearson_data = -1
+    b4_task_number = 1
 
     for i in range(len(alts_methods4)):
         ranging_method4_table.append(list())
@@ -36,12 +37,13 @@ init python:
         alts_methods4_txt += f"A{i+1} - {alts_methods4[i]}, "
     alts_methods4_txt = alts_methods4_txt[:-2]
     def write_sum_R(inp):
-        global all_answers, right_answers
+        global statistics
+        global b4_task_number
+        statistics.append([your_name, f"b4_{b4_task_number}", f"{datetime.datetime.now()}"])
         global show_error
         global sum_R_index_method4
         global allow_forward
         global table_input
-        all_answers += 1
         if not inp:
             return
         value = int(inp)
@@ -51,18 +53,19 @@ init python:
         if round(sum(ranging_method4_table[sum_R_index_method4-1]), 2) != round(value,2):
             show_error = True
             return
-        right_answers += 1
+        b4_task_number += 1
         sum_R_values.append(value)
         sum_R_index_method4+=1
         show_error = False
         renpy.restart_interaction()
     def write_r(inp):
-        global all_answers, right_answers
         global show_error
         global r_index_method4
         global allow_forward
         global table_input
-        all_answers += 1
+        global statistics
+        global b4_task_number
+        statistics.append([your_name, f"b4_{b4_task_number}", f"{datetime.datetime.now()}"])
         if not inp:
             return
         value = int(inp)
@@ -73,20 +76,21 @@ init python:
         if value != R_sorted.index(sum_R_values[r_index_method4-1]) + 1:
             show_error = True
             return
-        right_answers += 1
+        b4_task_number += 1
         show_error = False
         r_values.append(value)
         r_index_method4 += 1
         renpy.restart_interaction()
     def write_W(inp):
-        global all_answers, right_answers
+        global statistics
+        global b4_task_number
+        statistics.append([your_name, f"b4_{b4_task_number}", f"{datetime.datetime.now()}"])
         global show_error
         global sum_R_values
         global allow_forward
         global EXPERTS_COUNT_METHOD4
         global W_data
         global table_input
-        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -98,12 +102,14 @@ init python:
         if round(value,2) != round(W_corr, 2):
             show_error = True
             return
-        right_answers += 1
+        b4_task_number += 1
         W_data = value
         show_error = False
         renpy.restart_interaction()
     def write_Pearson(inp):
-        global all_answers, right_answers
+        global statistics
+        global b4_task_number
+        statistics.append([your_name, f"b4_{b4_task_number}", f"{datetime.datetime.now()}"])
         global show_error
         global table_input
         global sum_R_values
@@ -111,7 +117,6 @@ init python:
         global EXPERTS_COUNT_METHOD4
         global W_data
         global pearson_data
-        all_answers += 1
         if not inp:
             return
         value = float(inp)
@@ -120,7 +125,7 @@ init python:
         if round(value,2) != round(Pearson_corr, 2):
             show_error = True
             return
-        right_answers +=1
+        b4_task_number +=1
         pearson_data = value
         show_error = False
         renpy.show_screen("pearson_table_image")
@@ -130,17 +135,35 @@ init python:
         return table[n_m1-1]
     def write_sogl(inp):
         global method4_sogl
+        global statistics
+        global b4_task_number
+        global show_error
+        global W_data
         method4_sogl = inp
+        statistics.append([your_name, f"b4_{b4_task_number}", f"{datetime.datetime.now()}"])
+        if W_data > 0.7 and method4_sogl == 3:
+            show_error = False
+            b4_task_number += 1
+        elif W_data < 0.3 and method4_sogl == 1:
+            show_error = False
+            b4_task_number += 1
+        elif W_data >= 0.3 and W_data <= 0.7 and method4_sogl == 2:
+            show_error = False
+            b4_task_number += 1
+        else:
+            method4_sogl = 0
+            show_error = True
     def check_correctness(signif):
-        global all_answers, right_answers
+        global statistics
+        global b4_task_number
+        statistics.append([your_name, f"b4_{b4_task_number}", f"{datetime.datetime.now()}"])
         global allow_forward
         global pearson_data
         global b4_done
-        all_answers += 1
-        pearson_from_table = pearson_90_table(len(sum_R_values) - 2)
+        pearson_from_table = pearson_90_table(len(sum_R_values) - 1)
         if (signif and pearson_data > pearson_from_table) or (signif == False and pearson_data <= pearson_from_table):
             text = "Верно! Поздравляю! переходи вперед, в меню"
-            right_answers += 1
+            b4_task_number += 1
         else:
             text = "К сожалению ты ошибься. переходи вперед, в меню"
         allow_forward = True
