@@ -92,7 +92,7 @@ init python:
         global statistics
         global b2_task_number
         statistics.append([your_name, f"b2_{b2_task_number}", f"{datetime.datetime.now()}"])
-        if not inp:
+        if not inp or float(inp) == 0:
             return
         b2_task_number += 1
         value = float(inp)
@@ -286,7 +286,7 @@ screen eval_alternative(text):
     text "Метод парных сравнений (Саати)" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
     text "[text]"  color "#000000" xpos 50 ypos 100 xsize 1800 ysize 100
     text "[ev_al_task1_info]" color "#000000" xpos 900 ypos 200 xsize 700 ysize 300
-    text "[ev_al_task1_alternatives_info]" color "#000000" xpos 900 ypos 500 xsize 700 ysize 300
+    text "[ev_al_task1_alternatives_info]" color "#000000" xpos 900 ypos 750 xsize 700 ysize 300
     frame:
         xpos xy_ev_al_table[0]
         ypos xy_ev_al_table[1]
@@ -315,7 +315,7 @@ screen eval_alternative(text):
                 if sec - 1 == j and fir - 1 == i:
                     background "#FFA12B"
                 if ev_al_task1_table_data[i][j] != 0:
-                    text str(round(ev_al_task1_table_data[i][j], 2)) color "#000000" xalign 0.5 yalign 0.5
+                    text str(round(ev_al_task1_table_data[i][j], 3)) color "#000000" xalign 0.5 yalign 0.5
                 elif i == j:
                     text "1" color "#000000" xalign 0.5 yalign 0.5
 screen ev_al_task1_input:
@@ -416,12 +416,12 @@ screen check_exp_eval(text):
                 xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
                 ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
                 if ev_al_task1_table_data[i][j] != 0:
-                    text str(round(ev_al_task1_table_data[i][j], 2)) color "#000000" xalign 0.5 yalign 0.5
+                    text str(round(ev_al_task1_table_data[i][j], 3)) color "#000000" xalign 0.5 yalign 0.5
                 elif i == j:
                     text "1" color "#000000" xalign 0.5 yalign 0.5
     for i in range(len(ev_al_task2_C_index_data)):
         frame:
-            text str(round(ev_al_task2_C_index_data[i], 2)) color "#000000" xalign 0.5 yalign 0.5 
+            text str(round(ev_al_task2_C_index_data[i], 3)) color "#000000" xalign 0.5 yalign 0.5 
             xpos int(xy_ev_al_table[0] + int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)) * (len(ev_al_task1_alternatives) + 1))
             ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
             xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
@@ -429,14 +429,14 @@ screen check_exp_eval(text):
 
     for i in range(len(ev_al_task2_V_index_data)):
         frame:
-            text str(round(ev_al_task2_V_index_data[i], 2)) color "#000000" xalign 0.5 yalign 0.5 
+            text str(round(ev_al_task2_V_index_data[i], 3)) color "#000000" xalign 0.5 yalign 0.5 
             xpos int(xy_ev_al_table[0] + int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)) * (len(ev_al_task1_alternatives) + 2))
             ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
             xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
             ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
     for i in range(R_index_method2-1):
         frame:
-            text str(round(rangs_method2[i], 2)) color "#000000" xalign 0.5 yalign 0.5 
+            text str(round(rangs_method2[i], 3)) color "#000000" xalign 0.5 yalign 0.5 
             xpos int(xy_ev_al_table[0] + int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)) * (len(ev_al_task1_alternatives) + 3))
             ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
             xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
@@ -543,12 +543,12 @@ screen check_sls_eval(text):
                 xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
                 ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
                 if ev_al_task1_table_data[i][j] != 0:
-                    text str(round(ev_al_task1_table_data[i][j], 2)) color "#000000" xalign 0.5 yalign 0.5
+                    text str(round(ev_al_task1_table_data[i][j], 3)) color "#000000" xalign 0.5 yalign 0.5
                 elif i == j:
                     text "1" color "#000000" xalign 0.5 yalign 0.5
     for i in range(len(ev_al_task2_C_index_data)):
         frame:
-            text str(round(ev_al_task2_C_index_data[i], 2)) color "#000000" xalign 0.5 yalign 0.5 
+            text str(round(ev_al_task2_C_index_data[i], 3)) color "#000000" xalign 0.5 yalign 0.5 
             xpos int(xy_ev_al_table[0] + int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)) * (len(ev_al_task1_alternatives) + 1))
             ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
             xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
@@ -556,14 +556,14 @@ screen check_sls_eval(text):
 
     for i in range(len(ev_al_task2_V_index_data)):
         frame:
-            text str(round(ev_al_task2_V_index_data[i], 2)) color "#000000" xalign 0.5 yalign 0.5 
+            text str(round(ev_al_task2_V_index_data[i], 3)) color "#000000" xalign 0.5 yalign 0.5 
             xpos int(xy_ev_al_table[0] + int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)) * (len(ev_al_task1_alternatives) + 2))
             ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
             xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
             ysize int(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
     for i in range(len(ev_al_task2_V_index_data)):
         frame:
-            text str(round(rangs_method2[i], 2)) color "#000000" xalign 0.5 yalign 0.5 
+            text str(round(rangs_method2[i], 3)) color "#000000" xalign 0.5 yalign 0.5 
             xpos int(xy_ev_al_table[0] + int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1)) * (len(ev_al_task1_alternatives) + 3))
             ypos int(xy_ev_al_table[1]  + (i+1)*(ysize_ev_al_table/(len(ev_al_task1_alternatives) + 1)))
             xsize int(xsize_ev_al_table/(len(ev_al_task1_alternatives) + 1))
@@ -599,21 +599,21 @@ screen check_sls_eval(text):
             ypos int(xy_sls_info[1] + ysize_sls_info)
             xsize int(2*xsize_sls_info/(len(sls_info_table) + 1))
             ysize int(ysize_sls_info/2)
-            text "I = " + str(round(I_value, 2)) color "#000000" xalign 0.5 yalign 0.5
+            text "I = " + str(round(I_value, 3)) color "#000000" xalign 0.5 yalign 0.5
     if IS_value is not None:
         frame:
             xpos xy_sls_info[0]
             ypos int(xy_sls_info[1] + 1.5*ysize_sls_info)
             xsize int(2*xsize_sls_info/(len(sls_info_table) + 1))
             ysize int(ysize_sls_info/2)
-            text "ИС = " + str(round(IS_value, 2)) color "#000000" xalign 0.5 yalign 0.5
+            text "ИС = " + str(round(IS_value, 3)) color "#000000" xalign 0.5 yalign 0.5
     if OS_value is not None:
         frame:
             xpos xy_sls_info[0]
             ypos int(xy_sls_info[1] + 2*ysize_sls_info)
             xsize int(2*xsize_sls_info/(len(sls_info_table) + 1))
             ysize int(ysize_sls_info/2)
-            text "ОС = " + str(round(OS_value, 2)) color "#000000" xalign 0.5 yalign 0.5
+            text "ОС = " + str(round(OS_value, 3)) color "#000000" xalign 0.5 yalign 0.5
     
 
     
