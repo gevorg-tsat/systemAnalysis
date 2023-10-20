@@ -160,12 +160,16 @@ init python:
         global allow_forward
         global pearson_data
         global b4_done
+        global show_error
         pearson_from_table = pearson_90_table(len(sum_R_values) - 1)
         if (signif and pearson_data > pearson_from_table) or (signif == False and pearson_data <= pearson_from_table):
             text = "Верно! Поздравляю! переходи вперед, в меню"
             b4_task_number += 1
         else:
-            text = "К сожалению ты ошибься. переходи вперед, в меню"
+            # text = "К сожалению ты ошибься. переходи вперед, в меню"
+            show_error = True
+            return
+        show_error = False
         allow_forward = True
         b4_done = True
         renpy.hide_screen("method4_input")

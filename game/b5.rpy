@@ -56,7 +56,6 @@ init python:
         global alpha_data
         global EXPERTS_COUNT_METHOD5
         global mean_exps
-        all_answers += 1
         if not inp:
             return
         value = float(inp)

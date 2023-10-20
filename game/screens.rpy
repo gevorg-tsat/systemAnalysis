@@ -1533,7 +1533,7 @@ screen splashscreen_frame():
         yalign 0.5
         hbox:
         #т.к. в label нельзя задать цвет, то пишем с помощью text
-            text "СИСТЕМНЫЙ АНАЛИЗ" color "#FFFFFF" style style.big_text
+            text "МЕТОДЫ ПРИНЯТИЯ РЕШЕНИЙ" color "#FFFFFF" style style.big_text
             #null height 20
             xsize 550
             ysize 100
@@ -1544,7 +1544,7 @@ screen splashscreen_frame():
         yalign 0.625
         hbox:
         #т.к. в label нельзя задать цвет, то пишем с помощью text
-            text "ИГРА-ТРЕНАЖЕР" color "#FFFFFF"
+            text "ТРЕНАЖЕР" color "#FFFFFF"
             #null height 10
             xsize 260
             ysize 40
@@ -1552,7 +1552,7 @@ screen splashscreen_frame():
 screen task(task_text):
     if your_name == "":
         textbutton _("Enter") action GetText("input","input") xpos 1600 ypos 900
-    text "ПРИИИИВЕТ" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 80
+    text "Для дальнейшей простановки баллов введите свою фамилию, имя" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 80
     text "[task_text]"  color "#000000" xpos 800 ypos 150 xsize 1000 ysize 900
 
 

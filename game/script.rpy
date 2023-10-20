@@ -42,8 +42,8 @@ define b1tab = False
 
 # define task_text1 = "Sample texxt."
 define symptom1 = "Что-то допольнительное про задание"
-define winner_text = "Поздравляю. Верно. Можешь двигаться дальше"
-define loser_text = "Неверно. Можешь попытаться еще раз"
+define winner_text = "Поздравляю! Верно! Можешь двигаться дальше"
+define loser_text = "Неверно! Нужно попытаться еще раз"
 define loser_no_tries_text = "Неверно. Попытки закончилось, повезет в следующий раз"
 
 init python:
@@ -132,7 +132,7 @@ label KadrForward:
         $ kadrb8()
     elif vkadr == "start":
         hide screen butforwardback
-        call startgame
+        call startgame from _call_startgame
     elif vkadr == "ha":
         hide kadr ha3 at top with dissolve
         $ vkadr = ""
@@ -258,12 +258,12 @@ screen main_menu():
         ground "gui/main_menu.jpeg"
         idle "gui/main_menu_button.png"
         hover "gui/main_menu_button_.png"
-        hotspot(1457,59,430,75) action Call("AboutCompany")
-        hotspot(1457,169,430,75) action Call("RulesGame")#[Hide("main_menu"),SetVariable("nkadr",0),Function(kadr)]#Call("RulesGame")
-        hotspot(1457,289,430,75) action Call("ha")
-        hotspot(1457,404,430,75) action Call("rez")
-        hotspot(1457,524,430,75) action Call("sg")
-        hotspot(1457,639,430,75) action Quit(confirm=True)
+        #hotspot(1457,59,430,75) action Call("AboutCompany")
+        #hotspot(1457,169,430,75) action Call("RulesGame")#[Hide("main_menu"),SetVariable("nkadr",0),Function(kadr)]#Call("RulesGame")
+        #hotspot(1457,289,430,75) action Call("ha")
+        #hotspot(1457,404,430,75) action Call("rez")
+        #hotspot(1457,524,430,75) action Call("sg")
+        #hotspot(1457,639,430,75) action Quit(confirm=True)
         hotspot(1495,850,355,205) action Call("task")
 
     #text "{size=+5}Текст {b}Текст ТекстТекст{/b} Текст Текст Текст{/size}" xpos 40 ypos 950 xsize 800 ysize 50 color "#000000"

@@ -1,4 +1,4 @@
-define pareto_task1 = "Выбор лучшей альтернативы из множества Парето. Чтобы исключить альтернативу, нажми на номер строки"
+define pareto_task1 = "Сформируйте множество Парето, исключив неподходящие альтернативы. Чтобы исключить альтернативу, нажми на номер строки."
 define answer_input = VariableInputValue("table_input", returnable=True)
 label b2kadr1:
     $ screens = ["check_pareto_table_answer", "butforwardback", "relevance_definition"]
@@ -25,7 +25,7 @@ label b2kadr2:
     pause
 
 init python:
-    pareto_task2 = "Формирование обобщающего критерия Ki. Весовые коэффициенты i-о критерия: "
+    pareto_task2 = "Сформируйте обобщающий критерий (Ki) аддитивным методом скаляризации (неоднородные частные критерии) и проранжируйте альтернативы (Ri). Используйте следующие весовые коэффициенты каждого критерия: "
     # req = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA?includeGridData=true&key={TOKEN}")
     table_input = ''
     show_error = False
@@ -238,7 +238,7 @@ init python:
 
 
 screen relevance_definition(task):
-    text "Метод скаляризации" color "#000000" xpos 40 ypos 10 xsize 1920 ysize 50 size 80
+    text "Формирование множества Парето" color "#000000" xpos 40 ypos 10 xsize 1920 ysize 50 size 80
     text "[task]"  color "#000000" xpos 40 ypos 100 xsize 1000 ysize 900
     text "[alts_txt]" color "#000000" xpos 1100 ypos xy_ev_al_table[1] xsize 800 ysize 50*(len(criteries) + len(method1_task1_alternatives))
     zorder 100
