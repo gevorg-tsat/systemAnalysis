@@ -6,7 +6,7 @@
     $ b1_done = b2_done = b3_done = b4_done = b5_done = False
     show screen task("")
     $ your_name = ""
-    $ your_name = renpy.input("Введи свое имя", default="Иванов Иван")
+    $ your_name = renpy.input("Введи свое имя")
     $ vkadr = "start"
     show screen butforwardback
     pause
