@@ -63,6 +63,7 @@ init python:
         global your_name
         global ACCESS_TOKEN
         global headers
+        global jwt_data
         if len(statistics) == 0:
             return
         url = "https://sheets.googleapis.com/v4/spreadsheets/1lc29xReSQYCmZ9cf8PdmAr-mu02LHvx-Uq-dRSVb0QA/values/'Students':append?valueInputOption=RAW"
@@ -76,7 +77,18 @@ init python:
             tmp_headers = {
                 "Content-Type": "application/x-www-form-urlencoded"
             }
+            now = datetime.datetime.now().timestamp()
+            jwt_fields = {
+                "iss":"system-analysis-game@radiant-mercury-303720.iam.gserviceaccount.com",
+                "scope":"https://www.googleapis.com/auth/spreadsheets",
+                "aud":"https://oauth2.googleapis.com/token",
+                "exp": now + 3598,
+                "iat": now - 1
+            }
+            encoded = jwt.encode(jwt_fields, jwt_data['private_key'], algorithm="RS256")
             get_token_req = requests.post("https://oauth2.googleapis.com/token", headers=tmp_headers, data="grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion="+encoded)
+            # with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
+            #     fw.write("uraaaa\n" + get_token_req.text)
             ACCESS_TOKEN = json.loads(get_token_req.text)["access_token"]
             write_score()
         # else:

@@ -189,7 +189,7 @@ init python:
             return
         if IS_value is None:
             IS_correct = ((I_value - len(ev_al_task1_alternatives))/ (len(ev_al_task1_alternatives) - 1))
-            if round(value, 2) != round(IS_correct, 2):
+            if round(round(value,3) 2) != round(round(IS_correct, 3) 2):
                 show_error = True
                 return
             b2_task_number +=1
@@ -232,7 +232,7 @@ init python:
 label b7kadr1:
     $ screens = ["eval_alternative", "butforwardback", "ev_al_task1_input", "task1_go_to_next"]
     $ allow_forward = False
-    $ xy_ev_al_table = [800, 200]
+    $ xy_ev_al_table = [30, 225]
     $ xsize_ev_al_table = 800
     $ ysize_ev_al_table = 600
     $ ev_al_task1_table_data[0][0] = 1
@@ -285,8 +285,8 @@ label b7kadr3:
 screen eval_alternative(text):
     text "Оценка альтернатив" color "#000000" xpos 40 ypos 40 xsize 1920 ysize 50 size 50
     text "[text]"  color "#000000" xpos 50 ypos 100 xsize 1800 ysize 100
-    text "[ev_al_task1_info]" color "#000000" xpos 50 ypos 200 xsize 700 ysize 300
-    text "[ev_al_task1_alternatives_info]" color "#000000" xpos 50 ypos 500 xsize 700 ysize 300
+    text "[ev_al_task1_info]" color "#000000" xpos 900 ypos 200 xsize 700 ysize 300
+    text "[ev_al_task1_alternatives_info]" color "#000000" xpos 900 ypos 500 xsize 700 ysize 300
     frame:
         xpos xy_ev_al_table[0]
         ypos xy_ev_al_table[1]
@@ -321,8 +321,8 @@ screen eval_alternative(text):
 screen ev_al_task1_input:
     zorder 100
     frame:
-        xpos 50 ypos 800
-        xsize 500 ysize 200
+        xpos 1450 ypos 800
+        xsize 400 ysize 200
         vbox:
             xalign .5
             yalign .5
