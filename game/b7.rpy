@@ -358,7 +358,7 @@ screen ev_al_task1_input:
                 #     size 20
 screen task1_go_to_next:
     frame:
-        xpos 50 ypos 800
+        xpos 1450 ypos 800
         xsize 500 ysize 200
         text "Ты заполнил(-а) таблицу, можешь двигаться дальше ->"color "#000000" 
 
