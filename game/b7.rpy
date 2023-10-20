@@ -189,7 +189,7 @@ init python:
             return
         if IS_value is None:
             IS_correct = ((I_value - len(ev_al_task1_alternatives))/ (len(ev_al_task1_alternatives) - 1))
-            if round(round(value,3) 2) != round(round(IS_correct, 3) 2):
+            if round(round(value,3), 2) != round(round(IS_correct, 3) 2):
                 show_error = True
                 return
             b2_task_number +=1
