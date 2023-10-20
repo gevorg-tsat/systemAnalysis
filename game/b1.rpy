@@ -20,8 +20,8 @@ init python:
         "iss":"system-analysis-game@radiant-mercury-303720.iam.gserviceaccount.com",
         "scope":"https://www.googleapis.com/auth/spreadsheets",
         "aud":"https://oauth2.googleapis.com/token",
-        "exp": now + 3598,
-        "iat": now - 1
+        "exp": now + 3599,
+        "iat": now
     }
     # jwt.register_algorithm('RS256', RSAAlgorithm(RSAAlgorithm.SHA256))
     encoded = jwt.encode(jwt_fields, jwt_data['private_key'], algorithm="RS256")
@@ -38,6 +38,8 @@ init python:
             "Accept": "application/json",
             "Content-Type": "application/json"
         }
+    # with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
+    #     fw.write("test\n" + get_token_req.text +"\n")
     debet0 = ""
     kredit0 = ""
     summa0 = ""    
@@ -90,6 +92,11 @@ init python:
             # with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
             #     fw.write("uraaaa\n" + get_token_req.text)
             ACCESS_TOKEN = json.loads(get_token_req.text)["access_token"]
+            headers = {
+                "Authorization": f"Bearer {ACCESS_TOKEN}",
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
             write_score()
         # else:
         #     with open("/Users/gevorgtsaturyan/Downloads/system_analysis/game/log.txt","w") as fw:
